@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EventifyAPI</name>
+    </assembly>
+    <members>
+        <member name="T:EventifyAPI.DTOs.UpdateReportDto">
+            <summary>
+            DTO for updating a report.
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.UpdateReportDto.Title">
+            <summary>
+            Optional new title
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.UpdateReportDto.Content">
+            <summary>
+            Optional new content
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.UpdateReportDto.Status">
+            <summary>
+            Report status: Pending, Reviewed, or Resolved
+            </summary>
+        </member>
+        <member name="T:EventifyAPI.Migrations.InitialCreate">
+            <inheritdoc />
+        </member>
+        <member name="M:EventifyAPI.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:EventifyAPI.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:EventifyAPI.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

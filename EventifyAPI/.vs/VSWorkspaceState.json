@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Controllers",
+    "\\Data",
+    "\\DTOs",
+    "\\Migrations",
+    "\\Models",
+    "\\Properties"
+  ],
+  "SelectedNode": "\\EventifyAPI.csproj",
+  "PreviewInSolutionExplorer": false
+}
