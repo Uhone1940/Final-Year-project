@@ -4939,11 +4939,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\USER.DESKTOP-R2ESL0M\\EventifyAPI\\EventifyAPI.csproj",
+      "projectUniqueName": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\EventifyAPI.csproj",
       "projectName": "EventifyAPI",
-      "projectPath": "C:\\Users\\USER.DESKTOP-R2ESL0M\\EventifyAPI\\EventifyAPI.csproj",
+      "projectPath": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\EventifyAPI.csproj",
       "packagesPath": "C:\\Users\\USER.DESKTOP-R2ESL0M\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\USER.DESKTOP-R2ESL0M\\EventifyAPI\\obj\\",
+      "outputPath": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "D7p3KrPfMek=",
+  "dgSpecHash": "qKnqUeftr40=",
   "success": true,
-  "projectFilePath": "C:\\Users\\USER.DESKTOP-R2ESL0M\\EventifyAPI\\EventifyAPI.csproj",
+  "projectFilePath": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\EventifyAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\USER.DESKTOP-R2ESL0M\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\USER.DESKTOP-R2ESL0M\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
