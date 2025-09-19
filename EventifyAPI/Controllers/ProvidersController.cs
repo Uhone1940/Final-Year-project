@@ -1,5 +1,6 @@
 using EventifyAPI.Data;
 using EventifyAPI.DTOs;
+using EventifyAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,7 @@ namespace EventifyAPI.Controllers
             _context = context;
         }
 
-        // GET: api/providers
+        // ------------------ GET ALL PROVIDERS ------------------
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProviderResponseDto>>> GetProviders()
         {
@@ -46,7 +47,7 @@ namespace EventifyAPI.Controllers
             return Ok(response);
         }
 
-        // GET: api/providers/{id}
+        // ------------------ GET PROVIDER BY ID ------------------
         [HttpGet("{id}")]
         public async Task<ActionResult<ProviderResponseDto>> GetProvider(int id)
         {
@@ -76,7 +77,7 @@ namespace EventifyAPI.Controllers
             return Ok(response);
         }
 
-        // GET: api/providers/filter?categoryId=1
+        // ------------------ GET PROVIDERS BY CATEGORY ------------------
         [HttpGet("filter")]
         public async Task<IActionResult> GetProvidersByCategory([FromQuery] int categoryId)
         {
@@ -107,7 +108,7 @@ namespace EventifyAPI.Controllers
             return Ok(providers);
         }
 
-        // GET: api/providers/me
+        // ------------------ GET LOGGED-IN PROVIDER PROFILE ------------------
         [Authorize]
         [HttpGet("me")]
         public async Task<IActionResult> GetMyProfile()
@@ -139,7 +140,7 @@ namespace EventifyAPI.Controllers
             return Ok(response);
         }
 
-        // PUT: api/providers/update-profile
+        // ------------------ UPDATE LOGGED-IN PROVIDER PROFILE ------------------
         [Authorize]
         [HttpPut("update-profile")]
         public async Task<IActionResult> UpdateProfile(UpdateProviderProfileDto dto)
@@ -161,6 +162,29 @@ namespace EventifyAPI.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { Message = "Profile updated successfully." });
+        }
+
+       
+        // ------------------ DELETE PROVIDER (ADMIN ONLY) ------------------
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProvider(int id)
+        {
+            var provider = await _context.EventServiceProviders
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.EventServiceProviderId == id);
+
+            if (provider == null)
+                return NotFound("Provider not found.");
+
+            _context.EventServiceProviders.Remove(provider);
+
+            if (provider.User != null)
+                _context.Users.Remove(provider.User);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Message = "Provider deleted successfully." });
         }
     }
 }
