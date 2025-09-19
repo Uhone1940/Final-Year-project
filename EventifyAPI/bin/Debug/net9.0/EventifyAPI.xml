@@ -4,31 +4,6 @@
         <name>EventifyAPI</name>
     </assembly>
     <members>
-        <member name="M:EventifyAPI.Controllers.EventsController.GetEvents">
-            <summary>
-            Get all events
-            </summary>
-        </member>
-        <member name="M:EventifyAPI.Controllers.EventsController.GetEvent(System.Int32)">
-            <summary>
-            Get a single event by Id
-            </summary>
-        </member>
-        <member name="M:EventifyAPI.Controllers.EventsController.CreateEvent(EventifyAPI.DTOs.CreateEventDto)">
-            <summary>
-            Create a new event (Customers only)
-            </summary>
-        </member>
-        <member name="M:EventifyAPI.Controllers.EventsController.UpdateEvent(System.Int32,EventifyAPI.DTOs.UpdateEventDto)">
-            <summary>
-            Update an existing event (Customer who created the event only)
-            </summary>
-        </member>
-        <member name="M:EventifyAPI.Controllers.EventsController.DeleteEvent(System.Int32)">
-            <summary>
-            Delete an event (Customer who created the event only)
-            </summary>
-        </member>
         <member name="T:EventifyAPI.DTOs.CreateEventDto">
             <summary>
             DTO for creating a new event

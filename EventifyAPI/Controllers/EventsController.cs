@@ -19,16 +19,19 @@ namespace EventifyAPI.Controllers
             _context = context;
         }
 
-        /// <summary>
-        /// Get all events
-        /// </summary>
+        // ------------------ GET ALL EVENTS ------------------
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EventResponseDto>>> GetEvents()
+        public async Task<ActionResult<IEnumerable<EventResponseDto>>> GetEvents([FromQuery] int? userId = null)
         {
-            var events = await _context.Events
+            var query = _context.Events
                 .Include(e => e.User)
                 .Include(e => e.Bookings)
-                .ToListAsync();
+                .AsQueryable();
+
+            if (userId.HasValue)
+                query = query.Where(e => e.UserId == userId.Value);
+
+            var events = await query.ToListAsync();
 
             var response = events.Select(e => new EventResponseDto
             {
@@ -45,9 +48,7 @@ namespace EventifyAPI.Controllers
             return Ok(response);
         }
 
-        /// <summary>
-        /// Get a single event by Id
-        /// </summary>
+        // ------------------ GET SINGLE EVENT ------------------
         [HttpGet("{id}")]
         public async Task<ActionResult<EventResponseDto>> GetEvent(int id)
         {
@@ -56,7 +57,7 @@ namespace EventifyAPI.Controllers
                 .Include(ev => ev.Bookings)
                 .FirstOrDefaultAsync(ev => ev.EventId == id);
 
-            if (e == null) return NotFound();
+            if (e == null) return NotFound("Event not found.");
 
             var response = new EventResponseDto
             {
@@ -73,9 +74,7 @@ namespace EventifyAPI.Controllers
             return Ok(response);
         }
 
-        /// <summary>
-        /// Create a new event (Customers only)
-        /// </summary>
+        // ------------------ CREATE EVENT ------------------
         [Authorize(Roles = "Customer")]
         [HttpPost]
         public async Task<IActionResult> CreateEvent(CreateEventDto dto)
@@ -94,19 +93,29 @@ namespace EventifyAPI.Controllers
             _context.Events.Add(newEvent);
             await _context.SaveChangesAsync();
 
-            return Ok(new { Message = "Event created successfully.", EventId = newEvent.EventId });
+            var response = new EventResponseDto
+            {
+                EventId = newEvent.EventId,
+                Name = newEvent.Name,
+                Date = newEvent.Date,
+                Location = newEvent.Location,
+                Description = newEvent.Description,
+                UserId = newEvent.UserId,
+                UserFullName = User.Identity.Name ?? string.Empty,
+                BookingCount = 0
+            };
+
+            return Ok(response);
         }
 
-        /// <summary>
-        /// Update an existing event (Customer who created the event only)
-        /// </summary>
+        // ------------------ UPDATE EVENT ------------------
         [Authorize(Roles = "Customer")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateEvent(int id, UpdateEventDto dto)
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var e = await _context.Events.FirstOrDefaultAsync(ev => ev.EventId == id && ev.UserId == userId);
 
+            var e = await _context.Events.FirstOrDefaultAsync(ev => ev.EventId == id && ev.UserId == userId);
             if (e == null) return NotFound("Event not found or you are not authorized.");
 
             e.Name = dto.Name ?? e.Name;
@@ -116,19 +125,29 @@ namespace EventifyAPI.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok(new { Message = "Event updated successfully." });
+            var response = new EventResponseDto
+            {
+                EventId = e.EventId,
+                Name = e.Name,
+                Date = e.Date,
+                Location = e.Location,
+                Description = e.Description,
+                UserId = e.UserId,
+                UserFullName = User.Identity.Name ?? string.Empty,
+                BookingCount = e.Bookings?.Count ?? 0
+            };
+
+            return Ok(response);
         }
 
-        /// <summary>
-        /// Delete an event (Customer who created the event only)
-        /// </summary>
+        // ------------------ DELETE EVENT ------------------
         [Authorize(Roles = "Customer")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEvent(int id)
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var e = await _context.Events.FirstOrDefaultAsync(ev => ev.EventId == id && ev.UserId == userId);
 
+            var e = await _context.Events.FirstOrDefaultAsync(ev => ev.EventId == id && ev.UserId == userId);
             if (e == null) return NotFound("Event not found or you are not authorized.");
 
             _context.Events.Remove(e);
