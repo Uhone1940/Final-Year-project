@@ -4,6 +4,126 @@
         <name>EventifyAPI</name>
     </assembly>
     <members>
+        <member name="M:EventifyAPI.Controllers.EventsController.GetEvents">
+            <summary>
+            Get all events
+            </summary>
+        </member>
+        <member name="M:EventifyAPI.Controllers.EventsController.GetEvent(System.Int32)">
+            <summary>
+            Get a single event by Id
+            </summary>
+        </member>
+        <member name="M:EventifyAPI.Controllers.EventsController.CreateEvent(EventifyAPI.DTOs.CreateEventDto)">
+            <summary>
+            Create a new event (Customers only)
+            </summary>
+        </member>
+        <member name="M:EventifyAPI.Controllers.EventsController.UpdateEvent(System.Int32,EventifyAPI.DTOs.UpdateEventDto)">
+            <summary>
+            Update an existing event (Customer who created the event only)
+            </summary>
+        </member>
+        <member name="M:EventifyAPI.Controllers.EventsController.DeleteEvent(System.Int32)">
+            <summary>
+            Delete an event (Customer who created the event only)
+            </summary>
+        </member>
+        <member name="T:EventifyAPI.DTOs.CreateEventDto">
+            <summary>
+            DTO for creating a new event
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.CreateEventDto.Name">
+            <summary>
+            Name of the event
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.CreateEventDto.Date">
+            <summary>
+            Event date
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.CreateEventDto.Location">
+            <summary>
+            Event location
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.CreateEventDto.Description">
+            <summary>
+            Event description
+            </summary>
+        </member>
+        <member name="T:EventifyAPI.DTOs.UpdateEventDto">
+            <summary>
+            DTO for updating an existing event
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.UpdateEventDto.Name">
+            <summary>
+            Updated name of the event
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.UpdateEventDto.Date">
+            <summary>
+            Updated event date
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.UpdateEventDto.Location">
+            <summary>
+            Updated location
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.UpdateEventDto.Description">
+            <summary>
+            Updated description
+            </summary>
+        </member>
+        <member name="T:EventifyAPI.DTOs.EventResponseDto">
+            <summary>
+            DTO for returning event info in responses
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.EventResponseDto.EventId">
+            <summary>
+            Event identifier
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.EventResponseDto.Name">
+            <summary>
+            Event name
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.EventResponseDto.Date">
+            <summary>
+            Event date
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.EventResponseDto.Location">
+            <summary>
+            Event location
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.EventResponseDto.Description">
+            <summary>
+            Event description
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.EventResponseDto.UserId">
+            <summary>
+            Id of the user who created the event
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.EventResponseDto.UserFullName">
+            <summary>
+            Full name of the user who created the event
+            </summary>
+        </member>
+        <member name="P:EventifyAPI.DTOs.EventResponseDto.BookingCount">
+            <summary>
+            Number of bookings associated with this event
+            </summary>
+        </member>
         <member name="T:EventifyAPI.DTOs.UpdateReportDto">
             <summary>
             DTO for updating a report.
