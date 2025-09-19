@@ -1,8 +1,10 @@
 using EventifyAPI.Data;
 using EventifyAPI.DTOs;
 using EventifyAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace EventifyAPI.Controllers
 {
@@ -22,20 +24,20 @@ namespace EventifyAPI.Controllers
         public async Task<ActionResult<IEnumerable<EventResponseDto>>> GetEvents()
         {
             var events = await _context.Events
-                .Include(e => e.User)
-                .Select(e => new EventResponseDto
-                {
-                    EventId = e.EventId,
-                    Title = e.Title,
-                    Description = e.Description,
-                    EventDate = e.EventDate,
-                    Location = e.Location,
-                    UserId = e.UserId,
-                    CreatedBy = e.User.FullName
-                })
+                .Include(e => e.User) // include creator
                 .ToListAsync();
 
-            return Ok(events);
+            var response = events.Select(e => new EventResponseDto
+            {
+                EventId = e.EventId,
+                Title = e.Title,
+                Description = e.Description,
+                EventDate = e.EventDate,
+                Location = e.Location,
+                CreatedBy = e.User.FullName
+            });
+
+            return Ok(response);
         }
 
         // GET: api/events/{id}
@@ -43,82 +45,80 @@ namespace EventifyAPI.Controllers
         public async Task<ActionResult<EventResponseDto>> GetEvent(int id)
         {
             var e = await _context.Events
-                .Include(ev => ev.User)
-                .FirstOrDefaultAsync(ev => ev.EventId == id);
+                .Include(x => x.User)
+                .FirstOrDefaultAsync(x => x.EventId == id);
 
             if (e == null) return NotFound();
 
-            return new EventResponseDto
+            var response = new EventResponseDto
             {
                 EventId = e.EventId,
                 Title = e.Title,
                 Description = e.Description,
                 EventDate = e.EventDate,
                 Location = e.Location,
-                UserId = e.UserId,
                 CreatedBy = e.User.FullName
             };
+
+            return Ok(response);
         }
 
         // POST: api/events
+        [Authorize(Roles = "Customer")] // Only customers create events
         [HttpPost]
-        public async Task<ActionResult<EventResponseDto>> CreateEvent(CreateEventDto dto)
+        public async Task<IActionResult> CreateEvent(CreateEventDto dto)
         {
-            var user = await _context.Users.FindAsync(dto.UserId);
-            if (user == null) return BadRequest("Invalid UserId");
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            var newEvent = new Event
+            var ev = new Event
             {
                 Title = dto.Title,
                 Description = dto.Description,
                 EventDate = dto.EventDate,
                 Location = dto.Location,
-                UserId = dto.UserId
+                UserId = userId
             };
 
-            _context.Events.Add(newEvent);
+            _context.Events.Add(ev);
             await _context.SaveChangesAsync();
 
-            var response = new EventResponseDto
-            {
-                EventId = newEvent.EventId,
-                Title = newEvent.Title,
-                Description = newEvent.Description,
-                EventDate = newEvent.EventDate,
-                Location = newEvent.Location,
-                UserId = newEvent.UserId,
-                CreatedBy = user.FullName
-            };
-
-            return CreatedAtAction(nameof(GetEvent), new { id = newEvent.EventId }, response);
+            return Ok(new { Message = "Event created successfully.", EventId = ev.EventId });
         }
 
         // PUT: api/events/{id}
+        [Authorize(Roles = "Customer")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateEvent(int id, UpdateEventDto dto)
         {
-            var e = await _context.Events.FindAsync(id);
-            if (e == null) return NotFound();
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var ev = await _context.Events.FirstOrDefaultAsync(e => e.EventId == id && e.UserId == userId);
 
-            if (!string.IsNullOrEmpty(dto.Title)) e.Title = dto.Title;
-            if (!string.IsNullOrEmpty(dto.Description)) e.Description = dto.Description;
-            if (dto.EventDate.HasValue) e.EventDate = dto.EventDate.Value;
-            if (!string.IsNullOrEmpty(dto.Location)) e.Location = dto.Location;
+            if (ev == null) return NotFound("Event not found or you don’t own this event.");
+
+            ev.Title = dto.Title ?? ev.Title;
+            ev.Description = dto.Description ?? ev.Description;
+            ev.EventDate = dto.EventDate ?? ev.EventDate;
+            ev.Location = dto.Location ?? ev.Location;
 
             await _context.SaveChangesAsync();
-            return NoContent();
+
+            return Ok(new { Message = "Event updated successfully." });
         }
 
         // DELETE: api/events/{id}
+        [Authorize(Roles = "Customer")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEvent(int id)
         {
-            var e = await _context.Events.FindAsync(id);
-            if (e == null) return NotFound();
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var ev = await _context.Events.FirstOrDefaultAsync(e => e.EventId == id && e.UserId == userId);
 
-            _context.Events.Remove(e);
+            if (ev == null) return NotFound("Event not found or you don’t own this event.");
+
+            _context.Events.Remove(ev);
             await _context.SaveChangesAsync();
-            return NoContent();
+
+            return Ok(new { Message = "Event deleted successfully." });
         }
     }
 }
