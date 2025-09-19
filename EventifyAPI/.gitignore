@@ -1,0 +1,80 @@
+# ---------------------------
+# Visual Studio / .NET stuff
+# ---------------------------
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+*.pdb
+*.cachefile
+
+# Build results
+bin/
+obj/
+Debug/
+Release/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio Code
+.vscode/
+
+# ---------------------------
+# Entity Framework Core
+# ---------------------------
+**/Migrations/*.Designer.cs
+**/Migrations/*Snapshot.cs
+
+# EF Core generated database files
+*.mdf
+*.ldf
+
+# ---------------------------
+# ASP.NET Core
+# ---------------------------
+appsettings.*.json
+launchSettings.json
+
+# ---------------------------
+# React / Node.js frontend
+# ---------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+.env
+.next/
+dist/
+build/
+
+# ---------------------------
+# Other System files
+# ---------------------------
+*.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------------------------
+# Rider / JetBrains
+# ---------------------------
+.idea/
+*.iml
+out/
+
+# ---------------------------
+# Docker
+# ---------------------------
+docker-compose.override.yml
