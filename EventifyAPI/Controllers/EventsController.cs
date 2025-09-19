@@ -42,7 +42,7 @@ namespace EventifyAPI.Controllers
                 Description = e.Description,
                 UserId = e.UserId,
                 UserFullName = e.User.FullName,
-                BookingCount = e.Bookings.Count
+                BookingCount = e.Bookings?.Count ?? 0
             }).ToList();
 
             return Ok(response);
@@ -68,7 +68,7 @@ namespace EventifyAPI.Controllers
                 Description = e.Description,
                 UserId = e.UserId,
                 UserFullName = e.User.FullName,
-                BookingCount = e.Bookings.Count
+                BookingCount = e.Bookings?.Count ?? 0
             };
 
             return Ok(response);
@@ -101,11 +101,11 @@ namespace EventifyAPI.Controllers
                 Location = newEvent.Location,
                 Description = newEvent.Description,
                 UserId = newEvent.UserId,
-                UserFullName = User.Identity.Name ?? string.Empty,
+                UserFullName = User.Identity?.Name ?? string.Empty,
                 BookingCount = 0
             };
 
-            return Ok(response);
+            return Ok(new { Message = "Event created successfully.", Event = response });
         }
 
         // ------------------ UPDATE EVENT ------------------
@@ -133,11 +133,11 @@ namespace EventifyAPI.Controllers
                 Location = e.Location,
                 Description = e.Description,
                 UserId = e.UserId,
-                UserFullName = User.Identity.Name ?? string.Empty,
+                UserFullName = User.Identity?.Name ?? string.Empty,
                 BookingCount = e.Bookings?.Count ?? 0
             };
 
-            return Ok(response);
+            return Ok(new { Message = "Event updated successfully.", Event = response });
         }
 
         // ------------------ DELETE EVENT ------------------
