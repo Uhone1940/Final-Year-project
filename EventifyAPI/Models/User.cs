@@ -14,13 +14,16 @@ namespace EventifyAPI.Models
         // Foreign keys
         public int RoleId { get; set; }
         public Role Role { get; set; }
-        // New property for Suspention
+
+        // New property for Suspension
         public bool IsSuspended { get; set; } = false;
 
         // Navigation properties
-        public ICollection<Event> Events { get; set; }
-        public ICollection<Booking> Bookings { get; set; }
-        public ICollection<Review> Reviews { get; set; }
+        public ICollection<Event> Events { get; set; } = new List<Event>();
+        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
 
+        // Optional navigation for providers
+        public EventServiceProvider? EventServiceProvider { get; set; }
     }
 }

@@ -154,7 +154,8 @@ namespace EventifyAPI.Migrations
 
                     b.HasIndex("ServiceCategoryId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("EventServiceProviders");
                 });
@@ -391,6 +392,9 @@ namespace EventifyAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsSuspended")
+                        .HasColumnType("bit");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -416,6 +420,7 @@ namespace EventifyAPI.Migrations
                             UserId = 1,
                             Email = "admin@eventify.com",
                             FullName = "System Admin",
+                            IsSuspended = false,
                             PasswordHash = "6G94qKPK8LYNjnTllCqm2G3BUM08AzOK7yW30tfjrMc=",
                             Phone = "0000000000",
                             RoleId = 1
@@ -480,8 +485,8 @@ namespace EventifyAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("EventifyAPI.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .WithOne("EventServiceProvider")
+                        .HasForeignKey("EventifyAPI.Models.EventServiceProvider", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -606,6 +611,8 @@ namespace EventifyAPI.Migrations
             modelBuilder.Entity("EventifyAPI.Models.User", b =>
                 {
                     b.Navigation("Bookings");
+
+                    b.Navigation("EventServiceProvider");
 
                     b.Navigation("Events");
 

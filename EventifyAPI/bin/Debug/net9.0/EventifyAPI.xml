@@ -131,5 +131,17 @@
         <member name="M:EventifyAPI.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:EventifyAPI.Migrations.AddNullableProviderToUser">
+            <inheritdoc />
+        </member>
+        <member name="M:EventifyAPI.Migrations.AddNullableProviderToUser.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:EventifyAPI.Migrations.AddNullableProviderToUser.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:EventifyAPI.Migrations.AddNullableProviderToUser.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>

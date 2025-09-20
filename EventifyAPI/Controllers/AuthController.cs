@@ -57,7 +57,7 @@ namespace EventifyAPI.Controllers
         {
             if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
                 return BadRequest("Email already exists.");
-            // checks if category exists
+
             var category = await _context.ServiceCategories
                 .FirstOrDefaultAsync(c => c.ServiceCategoryId == dto.ServiceCategoryId);
 
@@ -77,16 +77,14 @@ namespace EventifyAPI.Controllers
             var eventProvider = new EventServiceProvider
             {
                 BusinessName = dto.BusinessName,
-                ServiceCategoryId = dto.ServiceCategoryId,  // correct link
+                ServiceCategoryId = dto.ServiceCategoryId,
                 Description = dto.Description,
                 PricingDetails = dto.PricingDetails,
                 PortfolioLink = dto.PortfolioLink,
                 Location = dto.Location,
                 PhoneNumber = dto.PhoneNumber,
                 ProfilePictureUrl = dto.ProfilePictureUrl,
-
                 User = providerUser
-                
             };
 
             _context.Users.Add(providerUser);
@@ -101,32 +99,26 @@ namespace EventifyAPI.Controllers
         public async Task<IActionResult> Login(LoginDto dto)
         {
             var user = await _context.Users
-                .Include(u => u.Roles)
+                .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Email == dto.Email);
 
-            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+            if (user == null || HashPassword(dto.Password) != user.PasswordHash)
                 return Unauthorized("Invalid email or password.");
 
-            // Block suspended accounts
             if (user.IsSuspended)
                 return Unauthorized("Your account has been suspended. Contact support.");
 
-            var token = _tokenService.GenerateToken(user);
+            var token = GenerateJwtToken(user);
 
-            return Ok(new
+            return Ok(new AuthResponseDto
             {
-                Message = "Login successful.",
                 Token = token,
-                User = new
-                {
-                    user.Id,
-                    user.FullName,
-                    user.Email,
-                    Roles = user.Roles.Select(r => r.Name).ToList()
-                }
+                Expiration = DateTime.Now.AddHours(2),
+                Role = user.Role.Name,
+                FullName = user.FullName,
+                Email = user.Email
             });
         }
-
 
         // ----------------- GET PROFILE (protected) -----------------
         [Authorize]
@@ -161,7 +153,7 @@ namespace EventifyAPI.Controllers
             };
 
             var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+                Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured")));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
