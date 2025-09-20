@@ -143,5 +143,17 @@
         <member name="M:EventifyAPI.Migrations.AddNullableProviderToUser.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:EventifyAPI.Migrations.AddIsSuspendedToUsers">
+            <inheritdoc />
+        </member>
+        <member name="M:EventifyAPI.Migrations.AddIsSuspendedToUsers.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:EventifyAPI.Migrations.AddIsSuspendedToUsers.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:EventifyAPI.Migrations.AddIsSuspendedToUsers.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>
