@@ -14,6 +14,8 @@ namespace EventifyAPI.Models
         // Foreign keys
         public int RoleId { get; set; }
         public Role Role { get; set; }
+        // New property for Suspention
+        public bool IsSuspended { get; set; } = false;
 
         // Navigation properties
         public ICollection<Event> Events { get; set; }

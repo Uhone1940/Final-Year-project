@@ -100,25 +100,33 @@ namespace EventifyAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto dto)
         {
-            var user = await _context.Users.Include(r => r.Role)
+            var user = await _context.Users
+                .Include(u => u.Roles)
                 .FirstOrDefaultAsync(u => u.Email == dto.Email);
 
-            if (user == null || user.PasswordHash != HashPassword(dto.Password))
-                return Unauthorized("Invalid credentials.");
+            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+                return Unauthorized("Invalid email or password.");
 
-            var token = GenerateJwtToken(user);
+            // Block suspended accounts
+            if (user.IsSuspended)
+                return Unauthorized("Your account has been suspended. Contact support.");
 
-            var response = new AuthResponseDto
+            var token = _tokenService.GenerateToken(user);
+
+            return Ok(new
             {
+                Message = "Login successful.",
                 Token = token,
-                Expiration = DateTime.Now.AddHours(2),
-                Role = user.Role.Name,
-                FullName = user.FullName,
-                Email = user.Email
-            };
-
-            return Ok(response);
+                User = new
+                {
+                    user.Id,
+                    user.FullName,
+                    user.Email,
+                    Roles = user.Roles.Select(r => r.Name).ToList()
+                }
+            });
         }
+
 
         // ----------------- GET PROFILE (protected) -----------------
         [Authorize]

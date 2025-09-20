@@ -88,7 +88,7 @@ app.UseHttpsRedirection();
 //Allows us to Enable authentication + authorization
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseCheckUserSuspended(); // <-- our middleware
 app.MapControllers();
 
 app.Run();
