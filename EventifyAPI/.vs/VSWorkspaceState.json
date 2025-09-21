@@ -4,10 +4,11 @@
     "\\Controllers",
     "\\Data",
     "\\DTOs",
+    "\\Middleware",
     "\\Migrations",
     "\\Models",
     "\\Properties"
   ],
-  "SelectedNode": "\\DTOs\\EventDtos.cs",
+  "SelectedNode": "\\Data\\EventifyDbContext.cs",
   "PreviewInSolutionExplorer": false
 }
