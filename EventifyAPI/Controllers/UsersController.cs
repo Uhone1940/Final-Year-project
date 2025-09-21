@@ -28,8 +28,8 @@ namespace EventifyAPI.Controllers
         {
             var query = _context.Users
                 .Include(u => u.Role)
-                .Include(u => u.EventServiceProvider) // include provider info if it exists
-                .ThenInclude(p => p.ServiceCategory) // include category name for provider
+                .Include(u => u.EventServiceProvider)
+                .ThenInclude(p => p.ServiceCategory)
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(role))
@@ -44,7 +44,7 @@ namespace EventifyAPI.Controllers
                 "name" => query.OrderBy(u => u.FullName),
                 "email" => query.OrderBy(u => u.Email),
                 "role" => query.OrderBy(u => u.Role.Name),
-                _ => query.OrderBy(u => u.UserId) // default sort
+                _ => query.OrderBy(u => u.UserId)
             };
 
             var users = await query.ToListAsync();
@@ -94,36 +94,30 @@ namespace EventifyAPI.Controllers
             return Ok(response);
         }
 
-        // ------------------ SUSPEND / UNSUSPEND USER ------------------
+        // ------------------ SUSPEND USER ------------------
         [HttpPut("{id}/suspend")]
         public async Task<IActionResult> SuspendUser(int id)
         {
-            var user = await _context.Users
-                .Include(u => u.Role)
-                .Include(u => u.EventServiceProvider)
-                .ThenInclude(p => p.ServiceCategory)
-                .FirstOrDefaultAsync(u => u.UserId == id);
-
+            var user = await _context.Users.FindAsync(id);
             if (user == null) return NotFound("User not found.");
 
-            user.IsSuspended = !user.IsSuspended;
+            user.IsSuspended = true;
             await _context.SaveChangesAsync();
 
-            var response = new AdminUserResponseDto
-            {
-                UserId = user.UserId,
-                FullName = user.FullName,
-                Email = user.Email,
-                Role = user.Role.Name,
-                IsSuspended = user.IsSuspended,
-                BusinessName = user.EventServiceProvider?.BusinessName,
-                CategoryName = user.EventServiceProvider?.ServiceCategory?.Name,
-                Location = user.EventServiceProvider?.Location,
-                PhoneNumber = user.EventServiceProvider?.PhoneNumber
-            };
+            return Ok(new { Message = "User suspended successfully." });
+        }
 
-            var status = user.IsSuspended ? "suspended" : "active";
-            return Ok(new { Message = $"User account is now {status}.", User = response });
+        // ------------------ UNSUSPEND USER ------------------
+        [HttpPut("{id}/unsuspend")]
+        public async Task<IActionResult> UnsuspendUser(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null) return NotFound("User not found.");
+
+            user.IsSuspended = false;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Message = "User unsuspended successfully." });
         }
 
         // ------------------ DELETE USER ------------------
@@ -162,6 +156,5 @@ namespace EventifyAPI.Controllers
 
             return Ok(new { Message = "User deleted successfully.", User = response });
         }
-
     }
 }
