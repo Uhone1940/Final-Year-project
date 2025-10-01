@@ -227,12 +227,10 @@ C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\bi
 C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\bin\Debug\net9.0\System.Composition.Runtime.dll
 C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\bin\Debug\net9.0\System.Composition.TypedParts.dll
 C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
-C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\bin\Debug\net9.0\System.Formats.Asn1.dll
 C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\bin\Debug\net9.0\System.Memory.Data.dll
 C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\bin\Debug\net9.0\System.Runtime.Caching.dll
 C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\bin\Debug\net9.0\System.Text.Json.dll
 C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\bin\Debug\net9.0\cs\Microsoft.CodeAnalysis.resources.dll
 C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\bin\Debug\net9.0\de\Microsoft.CodeAnalysis.resources.dll
 C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\bin\Debug\net9.0\es\Microsoft.CodeAnalysis.resources.dll
@@ -325,3 +323,7 @@ C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\ob
 C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\obj\Debug\net9.0\EventifyAPI.pdb
 C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\obj\Debug\net9.0\EventifyAPI.genruntimeconfig.cache
 C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\obj\Debug\net9.0\ref\EventifyAPI.dll
+C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\obj\Debug\net9.0\rpswa.dswa.cache.json
+C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\obj\Debug\net9.0\rjimswa.dswa.cache.json
+C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
+C:\Users\USER.DESKTOP-R2ESL0M\Documents\GitHub\Final-Year-project\EventifyAPI\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
