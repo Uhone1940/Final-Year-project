@@ -194,8 +194,7 @@
               "RelativeToolTip": "Controllers\\UsersController.cs",
               "ViewState": "AgIAAIEAAAAAAAAAAAAwwKAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T18:05:57.652Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-20T18:05:57.652Z"
             },
             {
               "$type": "Document",
@@ -205,7 +204,7 @@
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAADwAAAAAAAAAAAAAAFsAAAAcAAAAAAAAAA==",
+              "ViewState": "AgIAADwAAAAAAAAAAAAAAEMAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-03T00:48:55.227Z",
               "EditorCaption": ""
@@ -220,8 +219,7 @@
               "RelativeToolTip": "Data\\EventifyDbContext.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAL4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-03T00:52:41.68Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-03T00:52:41.68Z"
             },
             {
               "$type": "Document",
@@ -233,8 +231,7 @@
               "RelativeToolTip": "appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-09-03T00:50:23.583Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-03T00:50:23.583Z"
             },
             {
               "$type": "Document",
@@ -246,8 +243,7 @@
               "RelativeToolTip": "Middleware\\CheckUserSuspendedMiddleware.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAC4AAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T18:31:59.558Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-20T18:31:59.558Z"
             },
             {
               "$type": "Document",
@@ -259,8 +255,7 @@
               "RelativeToolTip": "DTOs\\AdminUserResponseDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T18:10:06.783Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-20T18:10:06.783Z"
             },
             {
               "$type": "Document",
@@ -272,8 +267,7 @@
               "RelativeToolTip": "Models\\User.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T01:38:32.524Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-07T01:38:32.524Z"
             },
             {
               "$type": "Document",
@@ -285,8 +279,7 @@
               "RelativeToolTip": "Controllers\\AuthController.cs",
               "ViewState": "AgIAAFoAAAAAAAAAAAAwwLIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T00:38:57.547Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-07T00:38:57.547Z"
             },
             {
               "$type": "Document",
@@ -298,8 +291,7 @@
               "RelativeToolTip": "DTOs\\AuthResponseDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T00:37:53.923Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-07T00:37:53.923Z"
             },
             {
               "$type": "Document",
@@ -311,8 +303,7 @@
               "RelativeToolTip": "Controllers\\ProvidersController.cs",
               "ViewState": "AgIAAGgAAAAAAAAAAAAAAJYAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-13T23:54:17.456Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-13T23:54:17.456Z"
             },
             {
               "$type": "Document",
@@ -324,8 +315,7 @@
               "RelativeToolTip": "DTOs\\ProviderResponseDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-14T00:34:16.495Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-14T00:34:16.495Z"
             },
             {
               "$type": "Document",
@@ -337,8 +327,7 @@
               "RelativeToolTip": "DTOs\\EventDtos.cs",
               "ViewState": "AgIAAE4AAAAAAAAAAAAAAGsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-19T01:25:42.041Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-19T01:25:42.041Z"
             },
             {
               "$type": "Document",
@@ -350,8 +339,7 @@
               "RelativeToolTip": "Controllers\\EventsController.cs",
               "ViewState": "AgIAAHIAAAAAAAAAAAAAAHkAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-19T01:28:22.961Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-19T01:28:22.961Z"
             },
             {
               "$type": "Document",
@@ -363,8 +351,7 @@
               "RelativeToolTip": "Controllers\\BookingsController.cs",
               "ViewState": "AgIAAPUAAAAAAAAAAAAAAB0BAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-19T02:45:19.754Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-19T02:45:19.754Z"
             },
             {
               "$type": "Document",
@@ -376,8 +363,7 @@
               "RelativeToolTip": "DTOs\\BookingsResponseDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-19T02:51:29.7Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-19T02:51:29.7Z"
             },
             {
               "$type": "Document",
@@ -389,8 +375,7 @@
               "RelativeToolTip": "DTOs\\UpdateBookingStatus.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-19T02:49:26.866Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-19T02:49:26.866Z"
             },
             {
               "$type": "Document",
@@ -402,8 +387,7 @@
               "RelativeToolTip": "DTOs\\CreateBookingDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-19T02:46:55.497Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-19T02:46:55.497Z"
             },
             {
               "$type": "Document",
@@ -415,8 +399,7 @@
               "RelativeToolTip": "Models\\Event.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-03T23:35:15.42Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-03T23:35:15.42Z"
             },
             {
               "$type": "Document",
@@ -428,8 +411,7 @@
               "RelativeToolTip": "Models\\Booking.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-03T23:36:44.635Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-03T23:36:44.635Z"
             },
             {
               "$type": "Document",
@@ -441,8 +423,7 @@
               "RelativeToolTip": "DTOs\\UpdateReportDto.cs",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-17T12:22:39.433Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-17T12:22:39.433Z"
             },
             {
               "$type": "Document",
@@ -454,8 +435,7 @@
               "RelativeToolTip": "DTOs\\ReportResponseDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-17T13:56:07.862Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-17T13:56:07.862Z"
             },
             {
               "$type": "Document",
@@ -467,8 +447,7 @@
               "RelativeToolTip": "Models\\ReportStatus.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-17T12:42:26.227Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-17T12:42:26.227Z"
             },
             {
               "$type": "Document",
@@ -480,8 +459,7 @@
               "RelativeToolTip": "EventifyAPI.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-09-03T00:50:29.387Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-03T00:50:29.387Z"
             },
             {
               "$type": "Document",
@@ -493,8 +471,7 @@
               "RelativeToolTip": "Models\\ServiceCategory.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T01:40:23.178Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-07T01:40:23.178Z"
             },
             {
               "$type": "Document",
@@ -506,8 +483,7 @@
               "RelativeToolTip": "Models\\Report.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T01:43:26.964Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-07T01:43:26.964Z"
             },
             {
               "$type": "Document",
@@ -519,8 +495,7 @@
               "RelativeToolTip": "Controllers\\ReportsController.cs",
               "ViewState": "AgIAAE4AAAAAAAAAAAAAAFgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-17T12:26:02.073Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-17T12:26:02.073Z"
             },
             {
               "$type": "Document",
@@ -532,8 +507,7 @@
               "RelativeToolTip": "Models\\EventServiceProvider.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-03T23:33:48.978Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-03T23:33:48.978Z"
             },
             {
               "$type": "Document",
@@ -545,8 +519,7 @@
               "RelativeToolTip": "Models\\Payment.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T01:41:44.987Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-07T01:41:44.987Z"
             },
             {
               "$type": "Document",
@@ -558,8 +531,7 @@
               "RelativeToolTip": "DTOs\\CreateReportDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-17T12:14:06.707Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-17T12:14:06.707Z"
             },
             {
               "$type": "Document",
@@ -571,8 +543,7 @@
               "RelativeToolTip": "Properties\\launchSettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-09-11T01:46:23.439Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-11T01:46:23.439Z"
             },
             {
               "$type": "Document",
@@ -584,8 +555,7 @@
               "RelativeToolTip": "Controllers\\CategoriesController.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAACcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-13T23:34:03.705Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-13T23:34:03.705Z"
             },
             {
               "$type": "Document",
@@ -597,8 +567,7 @@
               "RelativeToolTip": "Models\\CustomerProfile.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T00:29:00.264Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-07T00:29:00.264Z"
             },
             {
               "$type": "Document",
@@ -610,8 +579,7 @@
               "RelativeToolTip": "DTOs\\UpdateProviderProfileDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-14T02:52:44.426Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-14T02:52:44.426Z"
             },
             {
               "$type": "Document",
@@ -623,8 +591,7 @@
               "RelativeToolTip": "Models\\ApplicationUser.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-14T02:07:19.69Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-14T02:07:19.69Z"
             },
             {
               "$type": "Document",
@@ -636,8 +603,7 @@
               "RelativeToolTip": "Models\\Role.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T01:37:55.41Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-07T01:37:55.41Z"
             },
             {
               "$type": "Document",
@@ -649,8 +615,7 @@
               "RelativeToolTip": "DTOs\\RegisterProviderDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAABXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T00:34:42.974Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-07T00:34:42.974Z"
             },
             {
               "$type": "Document",
@@ -662,8 +627,7 @@
               "RelativeToolTip": "appsettings.Development.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-09-03T00:50:49.355Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-03T00:50:49.355Z"
             },
             {
               "$type": "Document",
@@ -675,8 +639,7 @@
               "RelativeToolTip": "DTOs\\LoginDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T00:37:12.421Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-07T00:37:12.421Z"
             },
             {
               "$type": "Document",
@@ -688,8 +651,7 @@
               "RelativeToolTip": "DTOs\\RegisterCustomerDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T00:36:01.033Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-07T00:36:01.033Z"
             },
             {
               "$type": "Document",
@@ -701,8 +663,7 @@
               "RelativeToolTip": "Models\\Availability.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T01:43:53.093Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-07T01:43:53.093Z"
             },
             {
               "$type": "Document",
@@ -714,8 +675,7 @@
               "RelativeToolTip": "Models\\Notification.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T01:42:44.299Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-07T01:42:44.299Z"
             },
             {
               "$type": "Document",
@@ -727,8 +687,7 @@
               "RelativeToolTip": "Models\\Review.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T01:42:17.692Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-07T01:42:17.692Z"
             },
             {
               "$type": "Document",
@@ -740,8 +699,7 @@
               "RelativeToolTip": "EventifyAPI.http",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
-              "WhenOpened": "2025-09-03T00:50:38.653Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-03T00:50:38.653Z"
             }
           ]
         }
