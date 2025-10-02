@@ -1,4 +1,3 @@
-// Controllers/AvailabilitiesController.cs
 using EventifyAPI.Data;
 using EventifyAPI.DTOs;
 using EventifyAPI.Models;
@@ -23,7 +22,7 @@ namespace EventifyAPI.Controllers
         // Provider adds availability
         [HttpPost]
         [Authorize(Roles = "EventServiceProvider")]
-        public async Task<IActionResult> CreateAvailability(CreateAvailabilityDto dto)
+        public async Task<IActionResult> CreateAvailability(AvailabilityDto.CreateAvailability dto)
         {
             var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!int.TryParse(userIdClaim, out var userId)) return Unauthorized();
@@ -41,7 +40,7 @@ namespace EventifyAPI.Controllers
             _context.Availabilities.Add(availability);
             await _context.SaveChangesAsync();
 
-            var resp = new AvailabilityResponseDto
+            var resp = new AvailabilityDto.AvailabilityResponse
             {
                 AvailabilityId = availability.AvailabilityId,
                 StartDate = availability.StartDate,
@@ -64,7 +63,7 @@ namespace EventifyAPI.Controllers
 
             var avail = await _context.Availabilities
                 .Where(a => a.EventServiceProviderId == provider.EventServiceProviderId)
-                .Select(a => new AvailabilityResponseDto
+                .Select(a => new AvailabilityDto.AvailabilityResponse
                 {
                     AvailabilityId = a.AvailabilityId,
                     StartDate = a.StartDate,

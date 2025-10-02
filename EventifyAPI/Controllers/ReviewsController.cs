@@ -22,12 +22,11 @@ namespace EventifyAPI.Controllers
         // Create a review (customer)
         [HttpPost]
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> CreateReview(CreateReviewDto dto)
+        public async Task<IActionResult> CreateReview(ReviewDto.CreateReview dto)
         {
             var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!int.TryParse(userIdClaim, out var userId)) return Unauthorized();
 
-            // Basic validation: provider exists
             var provider = await _context.EventServiceProviders.FindAsync(dto.EventServiceProviderId);
             if (provider == null) return BadRequest("Provider not found.");
 
@@ -45,7 +44,7 @@ namespace EventifyAPI.Controllers
             _context.Reviews.Add(review);
             await _context.SaveChangesAsync();
 
-            var resp = new ReviewResponseDto
+            var resp = new ReviewDto.ReviewResponse
             {
                 ReviewId = review.ReviewId,
                 ProviderId = review.EventServiceProviderId,
@@ -66,7 +65,7 @@ namespace EventifyAPI.Controllers
             var reviews = await _context.Reviews
                 .Include(r => r.User)
                 .Where(r => r.EventServiceProviderId == providerId)
-                .Select(r => new ReviewResponseDto
+                .Select(r => new ReviewDto.ReviewResponse
                 {
                     ReviewId = r.ReviewId,
                     ProviderId = r.EventServiceProviderId,

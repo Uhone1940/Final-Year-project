@@ -1,4 +1,3 @@
-// Controllers/PaymentsController.cs
 using EventifyAPI.Data;
 using EventifyAPI.DTOs;
 using EventifyAPI.Models;
@@ -24,9 +23,8 @@ namespace EventifyAPI.Controllers
         // Create a payment for a booking (Customer)
         [HttpPost]
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> CreatePayment(CreatePaymentDto dto)
+        public async Task<IActionResult> CreatePayment(PaymentDto.CreatePayment dto)
         {
-            // validate booking exists and belongs to customer
             var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!int.TryParse(userIdClaim, out var userId)) return Unauthorized();
 
@@ -44,13 +42,14 @@ namespace EventifyAPI.Controllers
             _context.Payments.Add(payment);
             await _context.SaveChangesAsync();
 
-            var resp = new PaymentResponseDto
+            var resp = new PaymentDto.PaymentResponse
             {
                 PaymentId = payment.PaymentId,
                 BookingId = payment.BookingId,
                 Amount = payment.Amount,
                 Currency = payment.Currency,
-                PaidAt = payment.PaidAt
+                PaidAt = payment.PaidAt,
+                ProviderTransactionId = dto.ProviderTransactionId
             };
 
             return Ok(resp);
@@ -62,13 +61,14 @@ namespace EventifyAPI.Controllers
         {
             var payments = await _context.Payments
                 .Where(p => p.BookingId == bookingId)
-                .Select(p => new PaymentResponseDto
+                .Select(p => new PaymentDto.PaymentResponse
                 {
                     PaymentId = p.PaymentId,
                     BookingId = p.BookingId,
                     Amount = p.Amount,
                     Currency = p.Currency,
-                    PaidAt = p.PaidAt
+                    PaidAt = p.PaidAt,
+                    ProviderTransactionId = null
                 })
                 .ToListAsync();
 
@@ -87,13 +87,14 @@ namespace EventifyAPI.Controllers
             var payments = await _context.Payments
                 .Include(p => p.Booking)
                 .Where(p => p.Booking.UserId == userId)
-                .Select(p => new PaymentResponseDto
+                .Select(p => new PaymentDto.PaymentResponse
                 {
                     PaymentId = p.PaymentId,
                     BookingId = p.BookingId,
                     Amount = p.Amount,
                     Currency = p.Currency,
-                    PaidAt = p.PaidAt
+                    PaidAt = p.PaidAt,
+                    ProviderTransactionId = null
                 })
                 .ToListAsync();
 

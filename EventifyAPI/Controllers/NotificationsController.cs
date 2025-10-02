@@ -22,7 +22,7 @@ namespace EventifyAPI.Controllers
         // Admin/system creates notification for a user
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> CreateNotification(CreateNotificationDto dto)
+        public async Task<IActionResult> CreateNotification(NotificationDto.CreateNotification dto)
         {
             var user = await _context.Users.FindAsync(dto.UserId);
             if (user == null) return BadRequest("User not found.");
@@ -51,13 +51,13 @@ namespace EventifyAPI.Controllers
             var notes = await _context.Notifications
                 .Where(n => n.UserId == userId)
                 .OrderByDescending(n => n.CreatedAt)
-                .Select(n => new NotificationResponseDto
+                .Select(n => new NotificationDto.NotificationResponse
                 {
                     NotificationId = n.NotificationId,
                     Title = n.Title,
                     Body = n.Body,
                     CreatedAt = n.CreatedAt,
-                    IsRead = false // add IsRead on model if you want persistent read state
+                    IsRead = false
                 })
                 .ToListAsync();
 
@@ -75,7 +75,6 @@ namespace EventifyAPI.Controllers
             var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!int.TryParse(userIdClaim, out var userId)) return Unauthorized();
 
-            // allow admin or owner
             var user = await _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.UserId == userId);
             if (user == null) return Unauthorized();
 
