@@ -175,6 +175,8 @@ namespace EventifyAPI.Data
                 new ServiceCategory { ServiceCategoryId = 6, Name = "Event Planning" }
             );
 
+            // Automatically exclude soft-deleted service categories from all queries:
+            modelBuilder.Entity<ServiceCategory>().HasQueryFilter(c => !c.IsDeleted);
         }
 
         // -------------------------
