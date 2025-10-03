@@ -10,23 +10,18 @@ namespace EventifyAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
     public class PaymentsController : ControllerBase
     {
         private readonly EventifyDbContext _context;
+        public PaymentsController(EventifyDbContext context) => _context = context;
 
-        public PaymentsController(EventifyDbContext context)
-        {
-            _context = context;
-        }
-
-        // Create a payment for a booking (Customer)
+        // Customer makes a payment for a booking they own
         [HttpPost]
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> CreatePayment(PaymentDto.CreatePayment dto)
+        public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentDto dto)
         {
-            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!int.TryParse(userIdClaim, out var userId)) return Unauthorized();
+            var uid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(uid, out var userId)) return Unauthorized();
 
             var booking = await _context.Bookings.FirstOrDefaultAsync(b => b.BookingId == dto.BookingId && b.UserId == userId);
             if (booking == null) return BadRequest("Booking not found or not owned by you.");
@@ -35,68 +30,92 @@ namespace EventifyAPI.Controllers
             {
                 BookingId = dto.BookingId,
                 Amount = dto.Amount,
-                Currency = dto.Currency,
-                PaidAt = DateTime.UtcNow
+                Method = dto.Method,
+                PaymentDate = DateTime.UtcNow
             };
 
             _context.Payments.Add(payment);
             await _context.SaveChangesAsync();
 
-            var resp = new PaymentDto.PaymentResponse
+            var resp = new PaymentDto
             {
                 PaymentId = payment.PaymentId,
-                BookingId = payment.BookingId,
                 Amount = payment.Amount,
-                Currency = payment.Currency,
-                PaidAt = payment.PaidAt,
-                ProviderTransactionId = dto.ProviderTransactionId
+                Method = payment.Method,
+                PaymentDate = payment.PaymentDate,
+                BookingId = payment.BookingId
+            };
+
+            return CreatedAtAction(nameof(GetPayment), new { id = resp.PaymentId }, resp);
+        }
+
+        // Get payment by id (authorized: owner or admin)
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetPayment(int id)
+        {
+            var pay = await _context.Payments.Include(p => p.Booking).FirstOrDefaultAsync(p => p.PaymentId == id);
+            if (pay == null) return NotFound();
+
+            // owner or admin allowed
+            var uid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            _ = int.TryParse(uid, out var userId);
+            var user = await _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.UserId == userId);
+
+            if (user?.Role?.Name != "Admin" && pay.Booking.UserId != userId)
+                return Forbid();
+
+            var resp = new PaymentDto
+            {
+                PaymentId = pay.PaymentId,
+                Amount = pay.Amount,
+                Method = pay.Method,
+                PaymentDate = pay.PaymentDate,
+                BookingId = pay.BookingId
             };
 
             return Ok(resp);
         }
 
-        // Get payments for a booking (customer or admin)
+        // Get payments for a booking (owner or admin)
         [HttpGet("booking/{bookingId}")]
+        [Authorize]
         public async Task<IActionResult> GetPaymentsForBooking(int bookingId)
         {
-            var payments = await _context.Payments
+            var list = await _context.Payments
                 .Where(p => p.BookingId == bookingId)
-                .Select(p => new PaymentDto.PaymentResponse
+                .Select(p => new PaymentDto
                 {
                     PaymentId = p.PaymentId,
-                    BookingId = p.BookingId,
                     Amount = p.Amount,
-                    Currency = p.Currency,
-                    PaidAt = p.PaidAt,
-                    ProviderTransactionId = null
-                })
-                .ToListAsync();
+                    Method = p.Method,
+                    PaymentDate = p.PaymentDate,
+                    BookingId = p.BookingId
+                }).ToListAsync();
 
-            if (!payments.Any()) return NotFound("No payments found for this booking.");
-            return Ok(payments);
+            if (!list.Any()) return NotFound("No payments found for this booking.");
+            return Ok(list);
         }
 
-        // Get payments for logged-in user (customer)
+        // Customer gets their payments
         [HttpGet("me")]
         [Authorize(Roles = "Customer")]
         public async Task<IActionResult> GetMyPayments()
         {
-            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!int.TryParse(userIdClaim, out var userId)) return Unauthorized();
+            var uid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(uid, out var userId)) return Unauthorized();
 
             var payments = await _context.Payments
                 .Include(p => p.Booking)
                 .Where(p => p.Booking.UserId == userId)
-                .Select(p => new PaymentDto.PaymentResponse
+                .Select(p => new PaymentDto
                 {
                     PaymentId = p.PaymentId,
-                    BookingId = p.BookingId,
                     Amount = p.Amount,
-                    Currency = p.Currency,
-                    PaidAt = p.PaidAt,
-                    ProviderTransactionId = null
-                })
-                .ToListAsync();
+                    Method = p.Method,
+                    PaymentDate = p.PaymentDate,
+                    BookingId = p.BookingId
+                }).ToListAsync();
 
             return Ok(payments);
         }

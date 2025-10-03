@@ -13,19 +13,15 @@ namespace EventifyAPI.Controllers
     public class ReviewsController : ControllerBase
     {
         private readonly EventifyDbContext _context;
+        public ReviewsController(EventifyDbContext context) => _context = context;
 
-        public ReviewsController(EventifyDbContext context)
-        {
-            _context = context;
-        }
-
-        // Create a review (customer)
+        // Customer creates a review for a provider
         [HttpPost]
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> CreateReview(ReviewDto.CreateReview dto)
+        public async Task<IActionResult> CreateReview([FromBody] CreateReviewDto dto)
         {
-            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!int.TryParse(userIdClaim, out var userId)) return Unauthorized();
+            var uid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(uid, out var userId)) return Unauthorized();
 
             var provider = await _context.EventServiceProviders.FindAsync(dto.EventServiceProviderId);
             if (provider == null) return BadRequest("Provider not found.");
@@ -34,25 +30,41 @@ namespace EventifyAPI.Controllers
 
             var review = new Review
             {
-                EventServiceProviderId = dto.EventServiceProviderId,
                 UserId = userId,
+                EventServiceProviderId = dto.EventServiceProviderId,
                 Rating = dto.Rating,
-                Comment = dto.Comment,
-                CreatedAt = DateTime.UtcNow
+                Comment = dto.Comment
             };
 
             _context.Reviews.Add(review);
             await _context.SaveChangesAsync();
 
-            var resp = new ReviewDto.ReviewResponse
+            var resp = new ReviewDto
             {
                 ReviewId = review.ReviewId,
-                ProviderId = review.EventServiceProviderId,
                 Rating = review.Rating,
                 Comment = review.Comment,
-                CreatedAt = review.CreatedAt,
                 UserId = review.UserId,
-                UserFullName = (await _context.Users.FindAsync(review.UserId))?.FullName ?? string.Empty
+                EventServiceProviderId = review.EventServiceProviderId
+            };
+
+            return CreatedAtAction(nameof(GetReview), new { id = resp.ReviewId }, resp);
+        }
+
+        // Get single review
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetReview(int id)
+        {
+            var r = await _context.Reviews.Include(rv => rv.User).FirstOrDefaultAsync(rv => rv.ReviewId == id);
+            if (r == null) return NotFound();
+
+            var resp = new ReviewDto
+            {
+                ReviewId = r.ReviewId,
+                Rating = r.Rating,
+                Comment = r.Comment,
+                UserId = r.UserId,
+                EventServiceProviderId = r.EventServiceProviderId
             };
 
             return Ok(resp);
@@ -60,37 +72,33 @@ namespace EventifyAPI.Controllers
 
         // Get reviews for provider
         [HttpGet("provider/{providerId}")]
-        public async Task<IActionResult> GetReviewsForProvider(int providerId)
+        public async Task<IActionResult> GetProviderReviews(int providerId)
         {
-            var reviews = await _context.Reviews
+            var list = await _context.Reviews
                 .Include(r => r.User)
                 .Where(r => r.EventServiceProviderId == providerId)
-                .Select(r => new ReviewDto.ReviewResponse
+                .Select(r => new ReviewDto
                 {
                     ReviewId = r.ReviewId,
-                    ProviderId = r.EventServiceProviderId,
                     Rating = r.Rating,
                     Comment = r.Comment,
-                    CreatedAt = r.CreatedAt,
                     UserId = r.UserId,
-                    UserFullName = r.User.FullName
-                })
-                .ToListAsync();
+                    EventServiceProviderId = r.EventServiceProviderId
+                }).ToListAsync();
 
-            return Ok(reviews);
+            return Ok(list);
         }
 
-        // Delete review (Admin)
+        // Admin deletes a review
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteReview(int id)
         {
-            var review = await _context.Reviews.FindAsync(id);
-            if (review == null) return NotFound("Review not found.");
+            var r = await _context.Reviews.FindAsync(id);
+            if (r == null) return NotFound();
 
-            _context.Reviews.Remove(review);
+            _context.Reviews.Remove(r);
             await _context.SaveChangesAsync();
-
             return Ok(new { Message = "Review deleted." });
         }
     }
