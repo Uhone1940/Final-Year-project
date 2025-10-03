@@ -1,24 +1,22 @@
-using System;
-using System.ComponentModel.DataAnnotations;
-
 namespace EventifyAPI.DTOs
 {
-    public static class AvailabilityDto
+    public class AvailabilityDto
     {
-        public class CreateAvailability
-        {
-            [Required]
-            public DateTime StartDate { get; set; }
+        public int AvailabilityId { get; set; }
+        public DateTime AvailableDate { get; set; }
+        public bool IsBooked { get; set; }
+        public int EventServiceProviderId { get; set; }
+    }
 
-            [Required]
-            public DateTime EndDate { get; set; }
-        }
+    public class CreateAvailabilityDto
+    {
+        public DateTime AvailableDate { get; set; }
+        public int EventServiceProviderId { get; set; }
+    }
 
-        public class AvailabilityResponse
-        {
-            public int AvailabilityId { get; set; }
-            public DateTime StartDate { get; set; }
-            public DateTime EndDate { get; set; }
-        }
+    public class UpdateAvailabilityDto
+    {
+        public DateTime AvailableDate { get; set; }
+        public bool IsBooked { get; set; }
     }
 }
