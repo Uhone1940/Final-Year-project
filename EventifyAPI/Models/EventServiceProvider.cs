@@ -17,6 +17,10 @@ namespace EventifyAPI.Models
         public string? PhoneNumber { get; set; }
         public string? ProfilePictureUrl { get; set; }
 
+        // <-- add this
+        public bool IsDeleted { get; set; } = false;
+        public DateTime? DeletedAt { get; set; }
+
         // Foreign key to User
         public int UserId { get; set; }
         public User User { get; set; }
