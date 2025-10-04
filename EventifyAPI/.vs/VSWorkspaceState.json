@@ -3,12 +3,11 @@
     "",
     "\\Controllers",
     "\\Data",
-    "\\DTOs",
     "\\Middleware",
     "\\Migrations",
     "\\Models",
     "\\Properties"
   ],
-  "SelectedNode": "\\Controllers\\AvailabilitiesController.cs",
+  "SelectedNode": "\\Controllers\\CategoriesController.cs",
   "PreviewInSolutionExplorer": false
 }
