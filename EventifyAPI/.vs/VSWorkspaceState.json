@@ -8,6 +8,6 @@
     "\\Models",
     "\\Properties"
   ],
-  "SelectedNode": "\\Models\\Availability.cs",
+  "SelectedNode": "\\Data\\EventifyDbContext.cs",
   "PreviewInSolutionExplorer": false
 }
