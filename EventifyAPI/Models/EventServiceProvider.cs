@@ -10,11 +10,11 @@ namespace EventifyAPI.Models
         public ServiceCategory ServiceCategory { get; set; }
 
         // Optional Fields, can be updated when a user is setting their profile
-        public string? Description { get; set; }
-        public string? PricingDetails { get; set; }
+        public string Description { get; set; }
+        public string PricingDetails { get; set; }
         public string? PortfolioLink { get; set; }
-        public string? Location { get; set; }
-        public string? PhoneNumber { get; set; }
+        public string Location { get; set; }
+        public string PhoneNumber { get; set; }
         public string? ProfilePictureUrl { get; set; }
 
         // <-- add this

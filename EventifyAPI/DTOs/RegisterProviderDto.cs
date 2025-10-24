@@ -12,11 +12,11 @@ namespace EventifyAPI.DTOs
         public int ServiceCategoryId { get; set; }
 
         // Optional details, you can provide them later on when you update your profile
-        public string? Description { get; set; }
-        public string? PricingDetails { get; set; }
+        public string Description { get; set; }
+        public string PricingDetails { get; set; }
         public string? PortfolioLink { get; set; }
-        public string? Location { get; set; }
-        public string? PhoneNumber { get; set; }
+        public string Location { get; set; }
+        public string PhoneNumber { get; set; }
         public string? ProfilePictureUrl { get; set; }
     }
 }
