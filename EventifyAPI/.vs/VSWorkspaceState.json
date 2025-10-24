@@ -3,11 +3,12 @@
     "",
     "\\Controllers",
     "\\Data",
+    "\\DTOs",
     "\\Middleware",
     "\\Migrations",
     "\\Models",
     "\\Properties"
   ],
-  "SelectedNode": "\\Data\\EventifyDbContext.cs",
+  "SelectedNode": "\\Controllers\\CategoriesController.cs",
   "PreviewInSolutionExplorer": false
 }

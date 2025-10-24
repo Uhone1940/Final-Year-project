@@ -3,6 +3,54 @@
   "WorkspaceRootPath": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\CategoriesController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Controllers\\CategoriesController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Notification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\Notification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\Booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\ProviderResponseDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DTOs\\ProviderResponseDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\UpdateProviderProfileDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DTOs\\UpdateProviderProfileDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\CustomerProfile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\CustomerProfile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\RegisterProviderDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DTOs\\RegisterProviderDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\EventServiceProvider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\EventServiceProvider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\AuthController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Controllers\\AuthController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\User.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\User.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\RegisterCustomerDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DTOs\\RegisterCustomerDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\AuthResponseDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DTOs\\AuthResponseDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Data\\EventifyDbContext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Data\\EventifyDbContext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -23,24 +71,8 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\Availability.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\Booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\CategoriesController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Controllers\\CategoriesController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\UsersController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Controllers\\UsersController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\AuthController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Controllers\\AuthController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\User.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\User.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\ApplicationUser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -49,10 +81,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\ProvidersController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Controllers\\ProvidersController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\EventServiceProvider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\EventServiceProvider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\NotificationsController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -83,20 +111,12 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DTOs\\AvailabilityDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Notification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\Notification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Review.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\Review.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Payment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\Payment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\ProviderResponseDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DTOs\\ProviderResponseDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\ServiceCategoryDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -129,10 +149,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\AdminUserResponseDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DTOs\\AdminUserResponseDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\AuthResponseDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DTOs\\AuthResponseDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\EventsController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -183,28 +199,12 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Properties\\launchSettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\UpdateProviderProfileDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DTOs\\UpdateProviderProfileDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\CustomerProfile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\CustomerProfile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Role.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\Role.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\RegisterProviderDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DTOs\\RegisterProviderDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\appsettings.Development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:appsettings.Development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\RegisterCustomerDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DTOs\\RegisterCustomerDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\LoginDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -222,60 +222,63 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "UsersController.cs",
-              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\UsersController.cs",
-              "RelativeDocumentMoniker": "Controllers\\UsersController.cs",
-              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\UsersController.cs",
-              "RelativeToolTip": "Controllers\\UsersController.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAwwKAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T18:05:57.652Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "CategoriesController.cs",
-              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\CategoriesController.cs",
-              "RelativeDocumentMoniker": "Controllers\\CategoriesController.cs",
-              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\CategoriesController.cs",
-              "RelativeToolTip": "Controllers\\CategoriesController.cs",
-              "ViewState": "AgIAAIoAAAAAAAAAAAAAAKkAAAAJAAAAAAAAAA==",
+              "Title": "RegisterProviderDto.cs",
+              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\RegisterProviderDto.cs",
+              "RelativeDocumentMoniker": "DTOs\\RegisterProviderDto.cs",
+              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\RegisterProviderDto.cs",
+              "RelativeToolTip": "DTOs\\RegisterProviderDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-13T23:34:03.705Z"
+              "WhenOpened": "2025-09-07T00:34:42.974Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "BookingsController.cs",
-              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\BookingsController.cs",
-              "RelativeDocumentMoniker": "Controllers\\BookingsController.cs",
-              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\BookingsController.cs",
-              "RelativeToolTip": "Controllers\\BookingsController.cs",
-              "ViewState": "AgIAAOoAAAAAAAAAAAAAAN4AAAAdAAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "CustomerProfile.cs",
+              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\CustomerProfile.cs",
+              "RelativeDocumentMoniker": "Models\\CustomerProfile.cs",
+              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\CustomerProfile.cs",
+              "RelativeToolTip": "Models\\CustomerProfile.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-19T02:45:19.754Z",
+              "WhenOpened": "2025-09-07T00:29:00.264Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UpdateProviderProfileDto.cs",
+              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\UpdateProviderProfileDto.cs",
+              "RelativeDocumentMoniker": "DTOs\\UpdateProviderProfileDto.cs",
+              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\UpdateProviderProfileDto.cs",
+              "RelativeToolTip": "DTOs\\UpdateProviderProfileDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-14T02:52:44.426Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "AvailabilitiesController.cs",
-              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\AvailabilitiesController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AvailabilitiesController.cs",
-              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\AvailabilitiesController.cs",
-              "RelativeToolTip": "Controllers\\AvailabilitiesController.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAJIAAAAAAAAAAAAAAA==",
+              "Title": "ProviderResponseDto.cs",
+              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\ProviderResponseDto.cs",
+              "RelativeDocumentMoniker": "DTOs\\ProviderResponseDto.cs",
+              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\ProviderResponseDto.cs",
+              "RelativeToolTip": "DTOs\\ProviderResponseDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-01T23:07:31.92Z"
+              "WhenOpened": "2025-09-14T00:34:16.495Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 2,
               "Title": "Booking.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Booking.cs",
               "RelativeDocumentMoniker": "Models\\Booking.cs",
@@ -283,36 +286,103 @@
               "RelativeToolTip": "Models\\Booking.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-03T23:36:44.635Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Availability.cs",
-              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Availability.cs",
-              "RelativeDocumentMoniker": "Models\\Availability.cs",
-              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Availability.cs",
-              "RelativeToolTip": "Models\\Availability.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T01:43:53.093Z"
+              "WhenOpened": "2025-09-03T23:36:44.635Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ServiceCategory.cs",
-              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\ServiceCategory.cs",
-              "RelativeDocumentMoniker": "Models\\ServiceCategory.cs",
-              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\ServiceCategory.cs",
-              "RelativeToolTip": "Models\\ServiceCategory.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Title": "Notification.cs",
+              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Notification.cs",
+              "RelativeDocumentMoniker": "Models\\Notification.cs",
+              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Notification.cs",
+              "RelativeToolTip": "Models\\Notification.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T01:40:23.178Z",
+              "WhenOpened": "2025-09-07T01:42:44.299Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "CategoriesController.cs",
+              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\CategoriesController.cs",
+              "RelativeDocumentMoniker": "Controllers\\CategoriesController.cs",
+              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\CategoriesController.cs",
+              "RelativeToolTip": "Controllers\\CategoriesController.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAAKkAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-13T23:34:03.705Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "EventServiceProvider.cs",
+              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\EventServiceProvider.cs",
+              "RelativeDocumentMoniker": "Models\\EventServiceProvider.cs",
+              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\EventServiceProvider.cs",
+              "RelativeToolTip": "Models\\EventServiceProvider.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABAAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-03T23:33:48.978Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAwwHgAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-07T00:38:57.547Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Models\\User.cs",
+              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\User.cs",
+              "RelativeToolTip": "Models\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-07T01:38:32.524Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "RegisterCustomerDto.cs",
+              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\RegisterCustomerDto.cs",
+              "RelativeDocumentMoniker": "DTOs\\RegisterCustomerDto.cs",
+              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\RegisterCustomerDto.cs",
+              "RelativeToolTip": "DTOs\\RegisterCustomerDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-07T00:36:01.033Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "AuthResponseDto.cs",
+              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\AuthResponseDto.cs",
+              "RelativeDocumentMoniker": "DTOs\\AuthResponseDto.cs",
+              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\AuthResponseDto.cs",
+              "RelativeToolTip": "DTOs\\AuthResponseDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-07T00:37:53.923Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
               "Title": "EventifyDbContext.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Data\\EventifyDbContext.cs",
               "RelativeDocumentMoniker": "Data\\EventifyDbContext.cs",
@@ -325,31 +395,67 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
-              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "Controllers\\AuthController.cs",
-              "ViewState": "AgIAAFEAAAAAAAAAAAAwwHgAAAAJAAAAAAAAAA==",
+              "DocumentIndex": 13,
+              "Title": "ServiceCategory.cs",
+              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\ServiceCategory.cs",
+              "RelativeDocumentMoniker": "Models\\ServiceCategory.cs",
+              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\ServiceCategory.cs",
+              "RelativeToolTip": "Models\\ServiceCategory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T00:38:57.547Z"
+              "WhenOpened": "2025-09-07T01:40:23.178Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "User.cs",
-              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\User.cs",
-              "RelativeDocumentMoniker": "Models\\User.cs",
-              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\User.cs",
-              "RelativeToolTip": "Models\\User.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAABAAAAAAAAAA==",
+              "DocumentIndex": 16,
+              "Title": "Availability.cs",
+              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Availability.cs",
+              "RelativeDocumentMoniker": "Models\\Availability.cs",
+              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Availability.cs",
+              "RelativeToolTip": "Models\\Availability.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T01:38:32.524Z"
+              "WhenOpened": "2025-09-07T01:43:53.093Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 15,
+              "Title": "AvailabilitiesController.cs",
+              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\AvailabilitiesController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AvailabilitiesController.cs",
+              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\AvailabilitiesController.cs",
+              "RelativeToolTip": "Controllers\\AvailabilitiesController.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAJIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-01T23:07:31.92Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "BookingsController.cs",
+              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\BookingsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\BookingsController.cs",
+              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\BookingsController.cs",
+              "RelativeToolTip": "Controllers\\BookingsController.cs",
+              "ViewState": "AgIAAOoAAAAAAAAAAAAAAN4AAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T02:45:19.754Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UsersController.cs",
+              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "Controllers\\UsersController.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAwwKAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-20T18:05:57.652Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
               "Title": "ApplicationUser.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\ApplicationUser.cs",
               "RelativeDocumentMoniker": "Models\\ApplicationUser.cs",
@@ -361,7 +467,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 19,
               "Title": "ProvidersController.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\ProvidersController.cs",
               "RelativeDocumentMoniker": "Controllers\\ProvidersController.cs",
@@ -373,19 +479,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "EventServiceProvider.cs",
-              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\EventServiceProvider.cs",
-              "RelativeDocumentMoniker": "Models\\EventServiceProvider.cs",
-              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\EventServiceProvider.cs",
-              "RelativeToolTip": "Models\\EventServiceProvider.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAwAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-03T23:33:48.978Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 22,
               "Title": "PaymentsController.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\PaymentsController.cs",
               "RelativeDocumentMoniker": "Controllers\\PaymentsController.cs",
@@ -397,7 +491,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 20,
               "Title": "NotificationsController.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\NotificationsController.cs",
               "RelativeDocumentMoniker": "Controllers\\NotificationsController.cs",
@@ -409,7 +503,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 21,
               "Title": "ReviewsController.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\ReviewsController.cs",
               "RelativeDocumentMoniker": "Controllers\\ReviewsController.cs",
@@ -421,7 +515,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 23,
               "Title": "NotificationDto.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\NotificationDto.cs",
               "RelativeDocumentMoniker": "DTOs\\NotificationDto.cs",
@@ -433,7 +527,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 24,
               "Title": "ReviewDto.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\ReviewDto.cs",
               "RelativeDocumentMoniker": "DTOs\\ReviewDto.cs",
@@ -445,7 +539,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 25,
               "Title": "PaymentDto.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\PaymentDto.cs",
               "RelativeDocumentMoniker": "DTOs\\PaymentDto.cs",
@@ -457,7 +551,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 26,
               "Title": "AvailabilityDto.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\AvailabilityDto.cs",
               "RelativeDocumentMoniker": "DTOs\\AvailabilityDto.cs",
@@ -469,7 +563,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 28,
               "Title": "Payment.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Payment.cs",
               "RelativeDocumentMoniker": "Models\\Payment.cs",
@@ -481,7 +575,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 27,
               "Title": "Review.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Review.cs",
               "RelativeDocumentMoniker": "Models\\Review.cs",
@@ -493,31 +587,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "Notification.cs",
-              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Notification.cs",
-              "RelativeDocumentMoniker": "Models\\Notification.cs",
-              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Notification.cs",
-              "RelativeToolTip": "Models\\Notification.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T01:42:44.299Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "ProviderResponseDto.cs",
-              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\ProviderResponseDto.cs",
-              "RelativeDocumentMoniker": "DTOs\\ProviderResponseDto.cs",
-              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\ProviderResponseDto.cs",
-              "RelativeToolTip": "DTOs\\ProviderResponseDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAALAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-14T00:34:16.495Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 29,
               "Title": "ServiceCategoryDto.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\ServiceCategoryDto.cs",
               "RelativeDocumentMoniker": "DTOs\\ServiceCategoryDto.cs",
@@ -529,7 +599,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 30,
               "Title": "RolesController.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\RolesController.cs",
               "RelativeDocumentMoniker": "Controllers\\RolesController.cs",
@@ -541,7 +611,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 31,
               "Title": "RoleDto.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\RoleDto.cs",
               "RelativeDocumentMoniker": "DTOs\\RoleDto.cs",
@@ -553,7 +623,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 35,
               "Title": "CheckUserSuspendedMiddleware.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Middleware\\CheckUserSuspendedMiddleware.cs",
               "RelativeDocumentMoniker": "Middleware\\CheckUserSuspendedMiddleware.cs",
@@ -565,7 +635,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 32,
               "Title": "EventDtos.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\EventDtos.cs",
               "RelativeDocumentMoniker": "DTOs\\EventDtos.cs",
@@ -577,7 +647,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 36,
               "Title": "AdminUserResponseDto.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\AdminUserResponseDto.cs",
               "RelativeDocumentMoniker": "DTOs\\AdminUserResponseDto.cs",
@@ -589,7 +659,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 33,
               "Title": "UpdateReportDto.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\UpdateReportDto.cs",
               "RelativeDocumentMoniker": "DTOs\\UpdateReportDto.cs",
@@ -601,7 +671,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 34,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
@@ -613,19 +683,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
-              "Title": "AuthResponseDto.cs",
-              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\AuthResponseDto.cs",
-              "RelativeDocumentMoniker": "DTOs\\AuthResponseDto.cs",
-              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\AuthResponseDto.cs",
-              "RelativeToolTip": "DTOs\\AuthResponseDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T00:37:53.923Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 37,
               "Title": "EventsController.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\EventsController.cs",
               "RelativeDocumentMoniker": "Controllers\\EventsController.cs",
@@ -637,7 +695,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 38,
               "Title": "BookingsResponseDto.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\BookingsResponseDto.cs",
               "RelativeDocumentMoniker": "DTOs\\BookingsResponseDto.cs",
@@ -649,7 +707,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 39,
               "Title": "UpdateBookingStatus.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\UpdateBookingStatus.cs",
               "RelativeDocumentMoniker": "DTOs\\UpdateBookingStatus.cs",
@@ -661,7 +719,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 40,
               "Title": "CreateBookingDto.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\CreateBookingDto.cs",
               "RelativeDocumentMoniker": "DTOs\\CreateBookingDto.cs",
@@ -673,7 +731,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 41,
               "Title": "Event.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Event.cs",
               "RelativeDocumentMoniker": "Models\\Event.cs",
@@ -685,7 +743,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 42,
               "Title": "ReportResponseDto.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\ReportResponseDto.cs",
               "RelativeDocumentMoniker": "DTOs\\ReportResponseDto.cs",
@@ -697,7 +755,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 40,
+              "DocumentIndex": 44,
               "Title": "ReportStatus.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\ReportStatus.cs",
               "RelativeDocumentMoniker": "Models\\ReportStatus.cs",
@@ -709,7 +767,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 41,
+              "DocumentIndex": 45,
               "Title": "EventifyAPI.csproj",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\EventifyAPI.csproj",
               "RelativeDocumentMoniker": "EventifyAPI.csproj",
@@ -721,7 +779,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 43,
               "Title": "Report.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Report.cs",
               "RelativeDocumentMoniker": "Models\\Report.cs",
@@ -733,7 +791,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 42,
+              "DocumentIndex": 46,
               "Title": "ReportsController.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\ReportsController.cs",
               "RelativeDocumentMoniker": "Controllers\\ReportsController.cs",
@@ -745,7 +803,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 43,
+              "DocumentIndex": 47,
               "Title": "CreateReportDto.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\CreateReportDto.cs",
               "RelativeDocumentMoniker": "DTOs\\CreateReportDto.cs",
@@ -757,7 +815,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 44,
+              "DocumentIndex": 48,
               "Title": "launchSettings.json",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "Properties\\launchSettings.json",
@@ -769,31 +827,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 46,
-              "Title": "CustomerProfile.cs",
-              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\CustomerProfile.cs",
-              "RelativeDocumentMoniker": "Models\\CustomerProfile.cs",
-              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\CustomerProfile.cs",
-              "RelativeToolTip": "Models\\CustomerProfile.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T00:29:00.264Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 45,
-              "Title": "UpdateProviderProfileDto.cs",
-              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\UpdateProviderProfileDto.cs",
-              "RelativeDocumentMoniker": "DTOs\\UpdateProviderProfileDto.cs",
-              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\UpdateProviderProfileDto.cs",
-              "RelativeToolTip": "DTOs\\UpdateProviderProfileDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-14T02:52:44.426Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 47,
+              "DocumentIndex": 49,
               "Title": "Role.cs",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Models\\Role.cs",
               "RelativeDocumentMoniker": "Models\\Role.cs",
@@ -805,19 +839,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 48,
-              "Title": "RegisterProviderDto.cs",
-              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\RegisterProviderDto.cs",
-              "RelativeDocumentMoniker": "DTOs\\RegisterProviderDto.cs",
-              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\RegisterProviderDto.cs",
-              "RelativeToolTip": "DTOs\\RegisterProviderDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAABXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T00:34:42.974Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 49,
+              "DocumentIndex": 50,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\appsettings.Development.json",
               "RelativeDocumentMoniker": "appsettings.Development.json",
@@ -838,18 +860,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-07T00:37:12.421Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 50,
-              "Title": "RegisterCustomerDto.cs",
-              "DocumentMoniker": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\RegisterCustomerDto.cs",
-              "RelativeDocumentMoniker": "DTOs\\RegisterCustomerDto.cs",
-              "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\DTOs\\RegisterCustomerDto.cs",
-              "RelativeToolTip": "DTOs\\RegisterCustomerDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T00:36:01.033Z"
             },
             {
               "$type": "Document",
