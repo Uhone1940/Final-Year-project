@@ -7,7 +7,7 @@
     "\\Middleware",
     "\\Migrations",
     "\\Models",
-    "\\Properties"
+    "\\Services"
   ],
   "SelectedNode": "\\Controllers\\CategoriesController.cs",
   "PreviewInSolutionExplorer": false
