@@ -177,6 +177,8 @@ namespace EventifyAPI.Data
 
             // Automatically exclude soft-deleted service categories from all queries:
             modelBuilder.Entity<ServiceCategory>().HasQueryFilter(c => !c.IsDeleted);
+
+            modelBuilder.Entity<EventServiceProvider>().HasQueryFilter(sp => !sp.IsDeleted && !sp.ServiceCategory.IsDeleted);
         }
 
         // -------------------------
