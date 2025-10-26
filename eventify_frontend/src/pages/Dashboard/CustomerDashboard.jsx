@@ -1,48 +1,125 @@
-import React, { useState } from 'react';
-import { Calendar, Clock, MapPin, DollarSign, User, Bell, Search, Plus, CheckCircle, XCircle, AlertCircle, MessageSquare, Heart, Star, Menu, X, LogOut, Settings, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import apiClient from '../../api/apiClient';
+import { Calendar, Clock, MapPin, DollarSign, Bell, Search, Plus, CheckCircle, AlertCircle, MessageSquare, Heart, Star, Menu, LogOut, Settings, ChevronRight } from 'lucide-react';
 
 export default function CustomerDashboard() {
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
+  const [loading, setLoading] = useState(true);
+  
+  // Data states
+  const [events, setEvents] = useState([]);
+  const [bookings, setBookings] = useState([]);
+  const [providers, setProviders] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [stats, setStats] = useState({
+    upcomingEvents: 0,
+    pendingBookings: 0,
+    completedEvents: 0,
+    favoriteProviders: 0,
+  });
 
-  const stats = [
-    { icon: Calendar, label: 'Upcoming Events', value: '3', color: 'from-purple-500 to-indigo-500' },
-    { icon: Clock, label: 'Pending Bookings', value: '2', color: 'from-yellow-500 to-orange-500' },
-    { icon: CheckCircle, label: 'Completed Events', value: '12', color: 'from-green-500 to-emerald-500' },
-    { icon: Heart, label: 'Favorite Providers', value: '8', color: 'from-pink-500 to-rose-500' },
-  ];
+  // Fetch all dashboard data
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
 
-  const upcomingEvents = [
-    { id: 1, name: 'Wedding Anniversary', date: '2025-06-15', location: 'Grand Plaza Hotel', services: 'DJ, Catering, Photography', status: 'confirmed', budget: '$5,000' },
-    { id: 2, name: 'Birthday Party', date: '2025-07-03', location: 'Home', services: 'Catering, Decoration', status: 'pending', budget: '$1,500' },
-    { id: 3, name: 'Corporate Meeting', date: '2025-08-22', location: 'Business Center', services: 'Catering, Audio/Visual', status: 'draft', budget: '$3,000' },
-  ];
+  const fetchDashboardData = async () => {
+    setLoading(true);
+    try {
+      // Fetch events
+      const eventsResponse = await apiClient.get('/Events');
+      const allEvents = eventsResponse.data;
+      
+      // Filter upcoming events (events in the future)
+      const today = new Date();
+      const upcomingEvents = allEvents.filter(event => new Date(event.eventDate) >= today);
+      
+      // Filter completed events (events in the past)
+      const completedEvents = allEvents.filter(event => new Date(event.eventDate) < today);
+      
+      setEvents(upcomingEvents);
 
-  const recentProviders = [
-    { id: 1, name: 'Elite Catering', category: 'Catering', rating: 4.5, reviews: 120, image: 'https://images.unsplash.com/photo-1555244162-803834f70033?w=100&h=100&fit=crop' },
-    { id: 2, name: 'DJ Groove Masters', category: 'DJ & Music', rating: 4.0, reviews: 85, image: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=100&h=100&fit=crop' },
-    { id: 3, name: 'Capture Moments Photography', category: 'Photography', rating: 5.0, reviews: 42, image: 'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=100&h=100&fit=crop' },
-  ];
+      // Fetch bookings
+      const bookingsResponse = await apiClient.get('/Bookings/my-bookings');
+      const allBookings = bookingsResponse.data;
+      
+      // Filter pending bookings
+      const pendingBookings = allBookings.filter(b => b.status === 'Pending' || b.status === 'pending');
+      
+      setBookings(allBookings);
 
-  const recentActivity = [
-    { id: 1, type: 'confirmed', message: 'Booking confirmed for DJ Groove Masters', time: 'Today, 10:30 AM', icon: CheckCircle, color: 'text-green-600' },
-    { id: 2, type: 'updated', message: 'Updated Wedding Anniversary event details', time: 'Yesterday, 3:45 PM', icon: AlertCircle, color: 'text-blue-600' },
-    { id: 3, type: 'pending', message: 'Sent booking request to Elite Catering', time: 'June 5, 2025, 2:15 PM', icon: Clock, color: 'text-yellow-600' },
-    { id: 4, type: 'created', message: 'Created new event: Birthday Party', time: 'June 3, 2025, 9:20 AM', icon: Plus, color: 'text-purple-600' },
-  ];
+      // Fetch providers (top 3 for recent providers section)
+      const providersResponse = await apiClient.get('/Providers?page=1&pageSize=3');
+      setProviders(providersResponse.data.items || providersResponse.data);
 
-  const notifications = [
-    { id: 1, message: 'DJ Groove Masters accepted your booking', time: '2 hours ago', read: false },
-    { id: 2, message: 'Your payment for Elite Catering was processed', time: '1 day ago', read: false },
-    { id: 3, message: 'Reminder: Wedding Anniversary in 5 days', time: '2 days ago', read: true },
-  ];
+      // Fetch notifications
+      try {
+        const notificationsResponse = await apiClient.get('/Notifications/me');
+        setNotifications(notificationsResponse.data);
+      } catch (error) {
+        console.log('Notifications not available:', error);
+        setNotifications([]);
+      }
+
+      // Calculate stats
+      setStats({
+        upcomingEvents: upcomingEvents.length,
+        pendingBookings: pendingBookings.length,
+        completedEvents: completedEvents.length,
+        favoriteProviders: 0, // You can implement favorites later
+      });
+
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      if (error.response?.status === 401) {
+        // Token expired or invalid, redirect to login
+        navigate('/login');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
+  const handleCreateEvent = () => {
+    navigate('/create-event');
+  };
 
   const statusColors = {
     confirmed: 'bg-green-100 text-green-800',
     pending: 'bg-yellow-100 text-yellow-800',
     draft: 'bg-gray-100 text-gray-800',
     cancelled: 'bg-red-100 text-red-800',
+    Confirmed: 'bg-green-100 text-green-800',
+    Pending: 'bg-yellow-100 text-yellow-800',
+    Draft: 'bg-gray-100 text-gray-800',
+    Cancelled: 'bg-red-100 text-red-800',
   };
+
+  const statsData = [
+    { icon: Calendar, label: 'Upcoming Events', value: stats.upcomingEvents, color: 'from-purple-500 to-indigo-500' },
+    { icon: Clock, label: 'Pending Bookings', value: stats.pendingBookings, color: 'from-yellow-500 to-orange-500' },
+    { icon: CheckCircle, label: 'Completed Events', value: stats.completedEvents, color: 'from-green-500 to-emerald-500' },
+    { icon: Heart, label: 'Favorite Providers', value: stats.favoriteProviders, color: 'from-pink-500 to-rose-500' },
+  ];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 font-medium">Loading your dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50">
@@ -80,15 +157,19 @@ export default function CustomerDashboard() {
             <div className="flex items-center space-x-4">
               <button className="relative text-gray-600 hover:text-purple-600">
                 <Bell className="w-6 h-6" />
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  2
-                </span>
+                {notifications.filter(n => !n.isRead).length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {notifications.filter(n => !n.isRead).length}
+                  </span>
+                )}
               </button>
               <div className="flex items-center space-x-2 cursor-pointer">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-semibold">
-                  JD
+                  {localStorage.getItem('userName')?.charAt(0).toUpperCase() || 'U'}
                 </div>
-                <span className="hidden md:inline text-gray-700 font-medium">John Doe</span>
+                <span className="hidden md:inline text-gray-700 font-medium">
+                  {localStorage.getItem('userName') || 'User'}
+                </span>
               </div>
             </div>
           </div>
@@ -125,7 +206,10 @@ export default function CustomerDashboard() {
                 <span className="font-medium">{item.label}</span>
               </button>
             ))}
-            <button className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all mt-8">
+            <button 
+              onClick={handleLogout}
+              className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all mt-8"
+            >
               <LogOut className="w-5 h-5" />
               <span className="font-medium">Logout</span>
             </button>
@@ -145,13 +229,15 @@ export default function CustomerDashboard() {
           <div className="max-w-7xl mx-auto">
             {/* Welcome Section */}
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-800 mb-2">Welcome back, John! 👋</h1>
+              <h1 className="text-3xl font-bold text-gray-800 mb-2">
+                Welcome back, {localStorage.getItem('userName') || 'User'}! 👋
+              </h1>
               <p className="text-gray-600">Here's what's happening with your events today.</p>
             </div>
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              {stats.map((stat, index) => (
+              {statsData.map((stat, index) => (
                 <div
                   key={index}
                   className="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1"
@@ -174,109 +260,156 @@ export default function CustomerDashboard() {
               <div className="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-xl font-bold text-gray-800">Upcoming Events</h2>
-                  <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:opacity-90 transition-all shadow-md">
+                  <button 
+                    onClick={handleCreateEvent}
+                    className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:opacity-90 transition-all shadow-md"
+                  >
                     <Plus className="w-4 h-4" />
                     <span>Create Event</span>
                   </button>
                 </div>
 
-                <div className="space-y-4">
-                  {upcomingEvents.map((event) => (
-                    <div
-                      key={event.id}
-                      className="border border-gray-200 rounded-lg p-4 hover:border-purple-300 hover:shadow-md transition-all cursor-pointer"
+                {events.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    <p className="text-gray-500">No upcoming events</p>
+                    <button 
+                      onClick={handleCreateEvent}
+                      className="mt-4 text-purple-600 hover:text-purple-700 font-medium"
                     >
-                      <div className="flex justify-between items-start mb-3">
-                        <div>
-                          <h3 className="font-semibold text-gray-800 text-lg">{event.name}</h3>
-                          <div className="flex items-center space-x-4 mt-2 text-sm text-gray-600">
-                            <div className="flex items-center space-x-1">
-                              <Calendar className="w-4 h-4" />
-                              <span>{new Date(event.date).toLocaleDateString()}</span>
-                            </div>
-                            <div className="flex items-center space-x-1">
-                              <MapPin className="w-4 h-4" />
-                              <span>{event.location}</span>
+                      Create your first event
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {events.slice(0, 3).map((event) => (
+                      <div
+                        key={event.id}
+                        className="border border-gray-200 rounded-lg p-4 hover:border-purple-300 hover:shadow-md transition-all cursor-pointer"
+                      >
+                        <div className="flex justify-between items-start mb-3">
+                          <div>
+                            <h3 className="font-semibold text-gray-800 text-lg">{event.eventName}</h3>
+                            <div className="flex items-center space-x-4 mt-2 text-sm text-gray-600">
+                              <div className="flex items-center space-x-1">
+                                <Calendar className="w-4 h-4" />
+                                <span>{new Date(event.eventDate).toLocaleDateString()}</span>
+                              </div>
+                              <div className="flex items-center space-x-1">
+                                <MapPin className="w-4 h-4" />
+                                <span>{event.location || 'TBD'}</span>
+                              </div>
                             </div>
                           </div>
+                          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColors[event.status] || 'bg-gray-100 text-gray-800'}`}>
+                            {event.status}
+                          </span>
                         </div>
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColors[event.status]}`}>
-                          {event.status.charAt(0).toUpperCase() + event.status.slice(1)}
-                        </span>
+                        <div className="flex justify-between items-center pt-3 border-t border-gray-100">
+                          <div className="text-sm text-gray-600">
+                            <span className="font-medium">Type:</span> {event.eventType}
+                          </div>
+                          {event.budget && (
+                            <div className="flex items-center space-x-1 text-purple-600 font-semibold">
+                              <DollarSign className="w-4 h-4" />
+                              <span>{event.budget}</span>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex justify-between items-center pt-3 border-t border-gray-100">
-                        <div className="text-sm text-gray-600">
-                          <span className="font-medium">Services:</span> {event.services}
-                        </div>
-                        <div className="flex items-center space-x-1 text-purple-600 font-semibold">
-                          <DollarSign className="w-4 h-4" />
-                          <span>{event.budget}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
-              {/* Recent Activity */}
+              {/* Recent Bookings */}
               <div className="bg-white rounded-xl shadow-md p-6">
-                <h2 className="text-xl font-bold text-gray-800 mb-6">Recent Activity</h2>
-                <div className="space-y-4">
-                  {recentActivity.map((activity) => (
-                    <div key={activity.id} className="flex space-x-3">
-                      <div className={`w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0`}>
-                        <activity.icon className={`w-4 h-4 ${activity.color}`} />
+                <h2 className="text-xl font-bold text-gray-800 mb-6">Recent Bookings</h2>
+                {bookings.length === 0 ? (
+                  <div className="text-center py-12">
+                    <CheckCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    <p className="text-gray-500 text-sm">No bookings yet</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {bookings.slice(0, 4).map((booking) => (
+                      <div key={booking.id} className="flex space-x-3 border-b border-gray-100 pb-3 last:border-0">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                          booking.status === 'Confirmed' ? 'bg-green-100' : 
+                          booking.status === 'Pending' ? 'bg-yellow-100' : 'bg-gray-100'
+                        }`}>
+                          {booking.status === 'Confirmed' ? (
+                            <CheckCircle className="w-4 h-4 text-green-600" />
+                          ) : (
+                            <Clock className="w-4 h-4 text-yellow-600" />
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-gray-800">Booking #{booking.id}</p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {new Date(booking.bookingDate).toLocaleDateString()}
+                          </p>
+                          <span className={`inline-block mt-2 px-2 py-1 rounded-full text-xs font-semibold ${statusColors[booking.status]}`}>
+                            {booking.status}
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <p className="text-sm text-gray-800">{activity.message}</p>
-                        <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Recent Providers */}
             <div className="mt-6 bg-white rounded-xl shadow-md p-6">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold text-gray-800">Recent Service Providers</h2>
-                <button className="text-purple-600 hover:text-purple-700 font-medium text-sm flex items-center space-x-1">
+                <h2 className="text-xl font-bold text-gray-800">Service Providers</h2>
+                <button 
+                  onClick={() => navigate('/providers')}
+                  className="text-purple-600 hover:text-purple-700 font-medium text-sm flex items-center space-x-1"
+                >
                   <span>View All</span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {recentProviders.map((provider) => (
-                  <div
-                    key={provider.id}
-                    className="border border-gray-200 rounded-lg p-4 hover:border-purple-300 hover:shadow-md transition-all cursor-pointer"
-                  >
-                    <div className="flex items-center space-x-3 mb-3">
-                      <img
-                        src={provider.image}
-                        alt={provider.name}
-                        className="w-14 h-14 rounded-full object-cover"
-                      />
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-gray-800">{provider.name}</h3>
-                        <p className="text-xs text-gray-500">{provider.category}</p>
+              {providers.length === 0 ? (
+                <div className="text-center py-12">
+                  <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500">No providers available</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {providers.map((provider) => (
+                    <div
+                      key={provider.id}
+                      className="border border-gray-200 rounded-lg p-4 hover:border-purple-300 hover:shadow-md transition-all cursor-pointer"
+                    >
+                      <div className="flex items-center space-x-3 mb-3">
+                        <div className="w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-xl">
+                          {provider.businessName?.charAt(0).toUpperCase() || 'P'}
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-800">{provider.businessName}</h3>
+                          <p className="text-xs text-gray-500">{provider.category || 'Service Provider'}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-1">
+                          <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                          <span className="text-sm font-medium">{provider.rating || '5.0'}</span>
+                        </div>
+                        <button 
+                          onClick={() => navigate(`/providers/${provider.id}`)}
+                          className="text-purple-600 hover:text-purple-700 text-sm font-medium"
+                        >
+                          View
+                        </button>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-1">
-                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                        <span className="text-sm font-medium">{provider.rating}</span>
-                        <span className="text-xs text-gray-500">({provider.reviews})</span>
-                      </div>
-                      <button className="text-purple-600 hover:text-purple-700 text-sm font-medium">
-                        View
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </main>

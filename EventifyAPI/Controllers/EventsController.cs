@@ -94,7 +94,7 @@ namespace EventifyAPI.Controllers
 
         // ------------------ CREATE EVENT ------------------
         [Authorize(Roles = "Customer")]
-        [HttpPost]
+        [HttpPost("create-event")]
         public async Task<IActionResult> CreateEvent(CreateEventDto dto)
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
