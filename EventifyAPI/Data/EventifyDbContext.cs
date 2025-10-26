@@ -138,6 +138,20 @@ namespace EventifyAPI.Data
                 .HasForeignKey(r => r.BookingId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Event ? ServiceCategory (many-to-many)
+            modelBuilder.Entity<EventServiceCategory>()
+                .HasKey(es => new { es.EventId, es.ServiceCategoryId });
+
+            modelBuilder.Entity<EventServiceCategory>()
+               .HasOne(es => es.Event)
+               .WithMany(e => e.ServicesNeeded)
+               .HasForeignKey(es => es.EventId);
+
+            modelBuilder.Entity<EventServiceCategory>()
+                .HasOne(es => es.ServiceCategory)
+                .WithMany()
+                .HasForeignKey(es => es.ServiceCategoryId);
+
             // -------------------------
             // SEED DATA
             // -------------------------

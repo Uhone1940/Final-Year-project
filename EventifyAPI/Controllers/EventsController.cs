@@ -25,6 +25,8 @@ namespace EventifyAPI.Controllers
         {
             var query = _context.Events
                 .Include(e => e.User)
+                .Include(e => e.EventServiceCategories)
+                    .ThenInclude(esc => esc.ServiceCategory)
                 .Include(e => e.Bookings)
                 .AsQueryable();
 
@@ -37,12 +39,19 @@ namespace EventifyAPI.Controllers
             {
                 EventId = e.EventId,
                 Name = e.Name,
+                EventType = e.EventType,
                 Date = e.Date,
-                Location = e.Location,
+                StartTime = e.StartTime,
+                EndTime = e.EndTime,
+                FullAddress = e.FullAddress,
+                ExpectedGuests = e.ExpectedGuests,
                 Description = e.Description,
                 UserId = e.UserId,
                 UserFullName = e.User.FullName,
-                BookingCount = e.Bookings?.Count ?? 0
+                BookingCount = e.Bookings?.Count ?? 0,
+                ServicesNeeded = e.EventServiceCategories
+                    .Select(s => s.ServiceCategory.Name)
+                    .ToList()
             }).ToList();
 
             return Ok(response);
@@ -55,6 +64,8 @@ namespace EventifyAPI.Controllers
             var e = await _context.Events
                 .Include(ev => ev.User)
                 .Include(ev => ev.Bookings)
+                .Include(ev => ev.ServicesNeeded)
+                    .ThenInclude(s => s.ServiceCategory)
                 .FirstOrDefaultAsync(ev => ev.EventId == id);
 
             if (e == null) return NotFound("Event not found.");
@@ -63,12 +74,19 @@ namespace EventifyAPI.Controllers
             {
                 EventId = e.EventId,
                 Name = e.Name,
+                EventType = e.EventType,
                 Date = e.Date,
-                Location = e.Location,
+                StartTime = e.StartTime,
+                EndTime = e.EndTime,
+                FullAddress = e.FullAddress,
+                ExpectedGuests = e.ExpectedGuests,
                 Description = e.Description,
                 UserId = e.UserId,
                 UserFullName = e.User.FullName,
-                BookingCount = e.Bookings?.Count ?? 0
+                BookingCount = e.Bookings?.Count ?? 0,
+                ServicesNeeded = e.ServicesNeeded?
+                    .Select(s => s.ServiceCategory.Name)
+                    .ToList() ?? new List<string>()
             };
 
             return Ok(response);
@@ -84,28 +102,34 @@ namespace EventifyAPI.Controllers
             var newEvent = new Event
             {
                 Name = dto.Name,
+                EventType = dto.EventType,
                 Date = dto.Date,
-                Location = dto.Location,
-                Description = dto.Description ?? string.Empty,
+                StartTime = dto.StartTime,
+                EndTime = dto.EndTime,
+                FullAddress = dto.FullAddress,
+                ExpectedGuests = dto.ExpectedGuests,
+                Description = dto.Description,
                 UserId = userId
             };
 
             _context.Events.Add(newEvent);
             await _context.SaveChangesAsync();
 
-            var response = new EventResponseDto
+            // Add selected service categories
+            if (dto.ServiceCategoryIds.Any())
             {
-                EventId = newEvent.EventId,
-                Name = newEvent.Name,
-                Date = newEvent.Date,
-                Location = newEvent.Location,
-                Description = newEvent.Description,
-                UserId = newEvent.UserId,
-                UserFullName = User.Identity?.Name ?? string.Empty,
-                BookingCount = 0
-            };
+                foreach (var catId in dto.ServiceCategoryIds)
+                {
+                    _context.Add(new EventServiceCategory
+                    {
+                        EventId = newEvent.EventId,
+                        ServiceCategoryId = catId
+                    });
+                }
+                await _context.SaveChangesAsync();
+            }
 
-            return Ok(new { Message = "Event created successfully.", Event = response });
+            return Ok(new { Message = "Event created successfully.", EventId = newEvent.EventId });
         }
 
         // ------------------ UPDATE EVENT ------------------
@@ -115,29 +139,35 @@ namespace EventifyAPI.Controllers
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            var e = await _context.Events.FirstOrDefaultAsync(ev => ev.EventId == id && ev.UserId == userId);
-            if (e == null) return NotFound("Event not found or you are not authorized.");
+            var e = await _context.Events
+                .Include(ev => ev.EventServiceCategories)
+                .FirstOrDefaultAsync(ev => ev.EventId == id && ev.UserId == userId);
 
-            e.Name = dto.Name ?? e.Name;
-            e.Date = dto.Date ?? e.Date;
-            e.Location = dto.Location ?? e.Location;
-            e.Description = dto.Description ?? e.Description;
+            if (e == null)
+                return NotFound("Event not found or you are not authorized.");
+
+            e.Name = dto.Name;
+            e.EventType = dto.EventType;
+            e.Date = dto.Date;
+            e.StartTime = dto.StartTime;
+            e.EndTime = dto.EndTime;
+            e.FullAddress = dto.FullAddress;
+            e.ExpectedGuests = dto.ExpectedGuests;
+            e.Description = dto.Description;
+
+            // Update service categories
+            e.EventServiceCategories.Clear();
+            foreach (var catId in dto.ServiceCategoryIds)
+            {
+                e.EventServiceCategories.Add(new EventServiceCategory
+                {
+                    EventId = id,
+                    ServiceCategoryId = catId
+                });
+            }
 
             await _context.SaveChangesAsync();
-
-            var response = new EventResponseDto
-            {
-                EventId = e.EventId,
-                Name = e.Name,
-                Date = e.Date,
-                Location = e.Location,
-                Description = e.Description,
-                UserId = e.UserId,
-                UserFullName = User.Identity?.Name ?? string.Empty,
-                BookingCount = e.Bookings?.Count ?? 0
-            };
-
-            return Ok(new { Message = "Event updated successfully.", Event = response });
+            return Ok(new { Message = "Event updated successfully." });
         }
 
         // ------------------ DELETE EVENT ------------------
@@ -148,7 +178,8 @@ namespace EventifyAPI.Controllers
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             var e = await _context.Events.FirstOrDefaultAsync(ev => ev.EventId == id && ev.UserId == userId);
-            if (e == null) return NotFound("Event not found or you are not authorized.");
+            if (e == null)
+                return NotFound("Event not found or you are not authorized.");
 
             _context.Events.Remove(e);
             await _context.SaveChangesAsync();
