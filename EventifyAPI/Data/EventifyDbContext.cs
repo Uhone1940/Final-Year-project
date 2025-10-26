@@ -145,12 +145,14 @@ namespace EventifyAPI.Data
             modelBuilder.Entity<EventServiceCategory>()
                .HasOne(es => es.Event)
                .WithMany(e => e.ServicesNeeded)
-               .HasForeignKey(es => es.EventId);
+               .HasForeignKey(es => es.EventId)
+               .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<EventServiceCategory>()
                 .HasOne(es => es.ServiceCategory)
                 .WithMany()
-                .HasForeignKey(es => es.ServiceCategoryId);
+                .HasForeignKey(es => es.ServiceCategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // -------------------------
             // SEED DATA
