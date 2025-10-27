@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import apiClient from '../../api/apiClient';
-import { Calendar, Clock, MapPin, Users, ChevronRight, ChevronLeft, PartyPopper, Heart, Building2,Shield , Camera, Music, UtensilsCrossed, X, Check } from 'lucide-react';
+import { Calendar, Clock, MapPin, Users, ChevronRight, ChevronLeft, PartyPopper, Heart, Building2, Shield, Camera, Music, UtensilsCrossed, X, Check } from 'lucide-react';
+
+// Helper function to get data from either localStorage or sessionStorage
+const getStorageItem = (key) => {
+  return localStorage.getItem(key) || sessionStorage.getItem(key);
+};
 
 export default function CreateEventForm() {
   const navigate = useNavigate();
@@ -9,6 +14,7 @@ export default function CreateEventForm() {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [selectedServices, setSelectedServices] = useState([]);
+  const [Categories, setCategories] = useState([]);
 
   const [formData, setFormData] = useState({
     eventName: '',
@@ -22,6 +28,70 @@ export default function CreateEventForm() {
     description: '',
   });
 
+  // Fetch service categories from backend on mount
+  useEffect(() => {
+    fetchCategories();
+    
+    // Check if user is authenticated
+    const token = getStorageItem('token') || getStorageItem('authToken');
+    if (!token) {
+      navigate('/login');
+    }
+  }, [navigate]);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await apiClient.get('/api/Categories');
+      const categories = response.data;
+      
+      // Map backend categories to our UI
+      const mappedCategories = categories.map(cat => ({
+        id: cat.id,
+        name: cat.categoryName || cat.name,
+        description: cat.description || '',
+        icon: getIconForCategory(cat.categoryName || cat.name),
+        color: getColorForCategory(cat.categoryName || cat.name)
+      }));
+      
+      setCategories(mappedCategories);
+    } catch (error) {
+      console.error('Error fetching service categories:', error);
+      // Use fallback categories if API fails
+      setCategories(fallbackCategories);
+    }
+  };
+
+  const getIconForCategory = (name) => {
+    const lowerName = name.toLowerCase();
+    if (lowerName.includes('venue') || lowerName.includes('location')) return Building2;
+    if (lowerName.includes('cater') || lowerName.includes('food')) return UtensilsCrossed;
+    if (lowerName.includes('photo') || lowerName.includes('video')) return Camera;
+    if (lowerName.includes('entertain') || lowerName.includes('music') || lowerName.includes('dj')) return Music;
+    if (lowerName.includes('decor') || lowerName.includes('flower')) return PartyPopper;
+    if (lowerName.includes('security')) return Shield;
+    return Building2; // default
+  };
+
+  const getColorForCategory = (name) => {
+    const lowerName = name.toLowerCase();
+    if (lowerName.includes('venue')) return 'from-blue-500 to-cyan-500';
+    if (lowerName.includes('cater')) return 'from-green-500 to-emerald-500';
+    if (lowerName.includes('photo')) return 'from-purple-500 to-pink-500';
+    if (lowerName.includes('entertain')) return 'from-orange-500 to-red-500';
+    if (lowerName.includes('decor')) return 'from-pink-500 to-rose-500';
+    if (lowerName.includes('security')) return 'from-gray-700 to-gray-900';
+    return 'from-indigo-500 to-purple-500'; // default
+  };
+
+  const fallbackCategories = [
+    { id: 1, name: 'Venue', icon: Building2, description: 'Event spaces and locations', color: 'from-blue-500 to-cyan-500' },
+    { id: 2, name: 'Catering', icon: UtensilsCrossed, description: 'Food and beverage services', color: 'from-green-500 to-emerald-500' },
+    { id: 3, name: 'Photography', icon: Camera, description: 'Professional photography', color: 'from-purple-500 to-pink-500' },
+    { id: 4, name: 'Entertainment', icon: Music, description: 'DJs, bands, performers', color: 'from-orange-500 to-red-500' },
+    { id: 5, name: 'Decoration', icon: PartyPopper, description: 'Flowers and decor', color: 'from-pink-500 to-rose-500' },
+    { id: 6, name: 'Security', icon: Shield, description: 'Security Services', color: 'from-gray-700 to-gray-900' },
+  ];
+
   const eventTypes = [
     { value: 'Birthday Party', icon: PartyPopper, color: 'from-pink-500 to-rose-500' },
     { value: 'Wedding', icon: Heart, color: 'from-red-500 to-pink-500' },
@@ -31,15 +101,6 @@ export default function CreateEventForm() {
     { value: 'Graduation', icon: PartyPopper, color: 'from-yellow-500 to-orange-500' },
     { value: 'Conference', icon: Building2, color: 'from-indigo-500 to-purple-500' },
     { value: 'Other', icon: Calendar, color: 'from-gray-500 to-slate-500' },
-  ];
-
-  const serviceCategories = [
-    { name: 'Venue', icon: Building2, description: 'Event spaces and locations', color: 'from-blue-500 to-cyan-500' },
-    { name: 'Catering', icon: UtensilsCrossed, description: 'Food and beverage services', color: 'from-green-500 to-emerald-500' },
-    { name: 'Photography', icon: Camera, description: 'Professional photography', color: 'from-purple-500 to-pink-500' },
-    { name: 'Entertainment', icon: Music, description: 'DJs, bands, performers', color: 'from-orange-500 to-red-500' },
-    { name: 'Decoration', icon: PartyPopper, description: 'Flowers and decor', color: 'from-pink-500 to-rose-500' },
-    { name: 'Security', icon: Shield, description: 'Security Services', color: 'from-gray-700 to-gray-900' },
   ];
 
   const handleChange = (e) => {
@@ -53,11 +114,11 @@ export default function CreateEventForm() {
     }
   };
 
-  const toggleService = (service) => {
+  const toggleService = (serviceId) => {
     setSelectedServices(prev =>
-      prev.includes(service)
-        ? prev.filter(s => s !== service)
-        : [...prev, service]
+      prev.includes(serviceId)
+        ? prev.filter(id => id !== serviceId)
+        : [...prev, serviceId]
     );
   };
 
@@ -99,28 +160,51 @@ export default function CreateEventForm() {
 
     setLoading(true);
     try {
+      
+      // Create ISO 8601 datetime string for the backend
+      const eventDateTime = new Date(`${formData.eventDate}T${formData.startTime}:00`).toISOString();
+
       const payload = {
-        eventName: formData.eventName,
+        name: formData.eventName,
         eventType: formData.eventType,
-        eventDate: formData.eventDate,
+        date: eventDateTime,
         startTime: formData.startTime,
         endTime: formData.endTime,
         location: formData.location,
-        address: formData.address,
-        guestCount: parseInt(formData.guestCount),
+        fullAddress: formData.address,
+        expectedGuests: parseInt(formData.guestCount),
         description: formData.description || '',
-        services: selectedServices.join(', '),
+        serviceCategoryIds: selectedServices, // Array of category IDs
       };
 
-      const response = await apiClient.post('/api/Events/create-event', payload);
+      console.log('Submitting event payload:', payload); // Debug log
+
+      const response = await apiClient.post('/Events/create-event', payload);
       
       if (response.status === 200 || response.status === 201) {
         alert('Event created successfully!');
-        navigate('/customer');
+        navigate('/CustomerDashboard');
       }
     } catch (error) {
       console.error('Error creating event:', error);
-      setErrors({ submit: error.response?.data?.message || 'Failed to create event' });
+      console.error('Error response:', error.response?.data); // Debug log
+      
+      // More detailed error message
+      let errorMessage = 'Failed to create event';
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.data?.errors) {
+        // Handle validation errors
+        const errorMessages = [];
+        for (const key in error.response.data.errors) {
+          errorMessages.push(...error.response.data.errors[key]);
+        }
+        errorMessage = errorMessages.join(', ');
+      } else if (error.response?.data?.title) {
+        errorMessage = error.response.data.title;
+      }
+      
+      setErrors({ submit: errorMessage });
     } finally {
       setLoading(false);
     }
@@ -310,53 +394,65 @@ export default function CreateEventForm() {
               <p className="text-gray-600">What services do you need for your event?</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {serviceCategories.map((category) => {
-                const Icon = category.icon;
-                const isSelected = selectedServices.includes(category.name);
-
-                return (
-                  <button
-                    key={category.name}
-                    type="button"
-                    onClick={() => toggleService(category.name)}
-                    className={`p-5 rounded-xl border-2 transition-all text-left ${
-                      isSelected
-                        ? 'border-purple-500 bg-purple-50 shadow-md'
-                        : 'border-gray-200 hover:border-purple-300 bg-white'
-                    }`}
-                  >
-                    <div className="flex items-start space-x-3">
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center flex-shrink-0`}>
-                        <Icon className="w-6 h-6 text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-gray-800">{category.name}</h4>
-                        <p className="text-sm text-gray-600 mt-1">{category.description}</p>
-                      </div>
-                      {isSelected && (
-                        <Check className="w-6 h-6 text-purple-600" />
-                      )}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            {selectedServices.length > 0 && (
-              <div className="p-5 bg-purple-50 rounded-xl border-2 border-purple-200">
-                <p className="font-semibold text-gray-800 mb-3">Selected Services:</p>
-                <div className="flex flex-wrap gap-2">
-                  {selectedServices.map((service) => (
-                    <span
-                      key={service}
-                      className="px-3 py-1 bg-white rounded-full text-sm font-medium text-gray-700 border border-purple-200"
-                    >
-                      {service}
-                    </span>
-                  ))}
-                </div>
+            {Categories.length === 0 ? (
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+                <p className="text-gray-600 mt-4">Loading service categories...</p>
               </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {Categories.map((category) => {
+                    const Icon = category.icon;
+                    const isSelected = selectedServices.includes(category.id);
+
+                    return (
+                      <button
+                        key={category.id}
+                        type="button"
+                        onClick={() => toggleService(category.id)}
+                        className={`p-5 rounded-xl border-2 transition-all text-left ${
+                          isSelected
+                            ? 'border-purple-500 bg-purple-50 shadow-md'
+                            : 'border-gray-200 hover:border-purple-300 bg-white'
+                        }`}
+                      >
+                        <div className="flex items-start space-x-3">
+                          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center flex-shrink-0`}>
+                            <Icon className="w-6 h-6 text-white" />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-gray-800">{category.name}</h4>
+                            <p className="text-sm text-gray-600 mt-1">{category.description}</p>
+                          </div>
+                          {isSelected && (
+                            <Check className="w-6 h-6 text-purple-600" />
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {selectedServices.length > 0 && (
+                  <div className="p-5 bg-purple-50 rounded-xl border-2 border-purple-200">
+                    <p className="font-semibold text-gray-800 mb-3">Selected Services:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedServices.map((serviceId) => {
+                        const category = Categories.find(c => c.id === serviceId);
+                        return (
+                          <span
+                            key={serviceId}
+                            className="px-3 py-1 bg-white rounded-full text-sm font-medium text-gray-700 border border-purple-200"
+                          >
+                            {category?.name}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </>
             )}
 
             <p className="text-sm text-gray-500 text-center">
@@ -376,7 +472,7 @@ export default function CreateEventForm() {
         {/* Header */}
         <div className="text-center mb-8">
           <button
-            onClick={() => navigate('/customer')}
+            onClick={() => navigate('/CustomerDashboard')}
             className="inline-flex items-center text-gray-600 hover:text-purple-600 mb-4"
           >
             <ChevronLeft className="w-5 h-5 mr-1" />
@@ -473,7 +569,7 @@ export default function CreateEventForm() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes fadeIn {
           from {
             opacity: 0;

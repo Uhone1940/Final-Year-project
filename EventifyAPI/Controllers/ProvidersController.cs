@@ -20,7 +20,7 @@ namespace EventifyAPI.Controllers
         }
 
         // ------------------ GET ALL PROVIDERS ------------------
-        [HttpGet]
+        [HttpGet("get-all-providers")]
         public async Task<ActionResult<IEnumerable<ProviderResponseDto>>> GetProviders()
         {
             var providers = await _context.EventServiceProviders

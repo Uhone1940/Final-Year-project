@@ -21,7 +21,7 @@ namespace EventifyAPI.Controllers
 
         // ------------------ CREATE BOOKING ------------------
         [Authorize(Roles = "Customer")]
-        [HttpPost]
+        [HttpPost("create-booking")]
         public async Task<IActionResult> CreateBooking(CreateBookingDto dto)
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));

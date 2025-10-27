@@ -16,7 +16,7 @@ namespace EventifyAPI.Controllers
         public AvailabilitiesController(EventifyDbContext context) => _context = context;
 
         // Provider creates availability
-        [HttpPost]
+        [HttpPost("create-availability")]
         [Authorize(Roles = "EventServiceProvider")]
         public async Task<IActionResult> CreateAvailability([FromBody] CreateAvailabilityDto dto)
         {

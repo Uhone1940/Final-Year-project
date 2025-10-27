@@ -7,6 +7,7 @@ namespace EventifyAPI.DTOs
         public DateTime Date { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
+        public string Location { get; set; } = string.Empty;
         public string FullAddress { get; set; }
         public int ExpectedGuests { get; set; }
         public string Description { get; set; }
@@ -23,6 +24,7 @@ namespace EventifyAPI.DTOs
         public DateTime Date { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
+        public string Location { get; set; }
         public string FullAddress { get; set; }
         public int ExpectedGuests { get; set; }
         public string Description { get; set; }

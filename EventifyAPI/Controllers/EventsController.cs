@@ -20,7 +20,7 @@ namespace EventifyAPI.Controllers
         }
 
         // ------------------ GET ALL EVENTS ------------------
-        [HttpGet]
+        [HttpGet("get-all-events")]
         public async Task<ActionResult<IEnumerable<EventResponseDto>>> GetEvents([FromQuery] int? userId = null)
         {
             var query = _context.Events
@@ -43,6 +43,7 @@ namespace EventifyAPI.Controllers
                 Date = e.Date,
                 StartTime = e.StartTime,
                 EndTime = e.EndTime,
+                Location = e.Location, 
                 FullAddress = e.FullAddress,
                 ExpectedGuests = e.ExpectedGuests,
                 Description = e.Description,
@@ -78,6 +79,7 @@ namespace EventifyAPI.Controllers
                 Date = e.Date,
                 StartTime = e.StartTime,
                 EndTime = e.EndTime,
+                Location = e.Location, 
                 FullAddress = e.FullAddress,
                 ExpectedGuests = e.ExpectedGuests,
                 Description = e.Description,
@@ -106,6 +108,7 @@ namespace EventifyAPI.Controllers
                 Date = dto.Date,
                 StartTime = dto.StartTime,
                 EndTime = dto.EndTime,
+                Location = dto.Location,
                 FullAddress = dto.FullAddress,
                 ExpectedGuests = dto.ExpectedGuests,
                 Description = dto.Description,
@@ -116,7 +119,7 @@ namespace EventifyAPI.Controllers
             await _context.SaveChangesAsync();
 
             // Add selected service categories
-            if (dto.ServiceCategoryIds.Any())
+            if (dto.ServiceCategoryIds != null && dto.ServiceCategoryIds.Any())
             {
                 foreach (var catId in dto.ServiceCategoryIds)
                 {
@@ -151,19 +154,23 @@ namespace EventifyAPI.Controllers
             e.Date = dto.Date;
             e.StartTime = dto.StartTime;
             e.EndTime = dto.EndTime;
+            e.Location = dto.Location; 
             e.FullAddress = dto.FullAddress;
             e.ExpectedGuests = dto.ExpectedGuests;
             e.Description = dto.Description;
 
             // Update service categories
             e.EventServiceCategories.Clear();
-            foreach (var catId in dto.ServiceCategoryIds)
+            if (dto.ServiceCategoryIds != null && dto.ServiceCategoryIds.Any())
             {
-                e.EventServiceCategories.Add(new EventServiceCategory
+                foreach (var catId in dto.ServiceCategoryIds)
                 {
-                    EventId = id,
-                    ServiceCategoryId = catId
-                });
+                    e.EventServiceCategories.Add(new EventServiceCategory
+                    {
+                        EventId = id,
+                        ServiceCategoryId = catId
+                    });
+                }
             }
 
             await _context.SaveChangesAsync();

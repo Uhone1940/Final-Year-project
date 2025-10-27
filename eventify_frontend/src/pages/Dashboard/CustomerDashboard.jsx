@@ -3,11 +3,25 @@ import { useNavigate } from 'react-router-dom';
 import apiClient from '../../api/apiClient';
 import { Calendar, Clock, MapPin, DollarSign, Bell, Search, Plus, CheckCircle, AlertCircle, MessageSquare, Heart, Star, Menu, LogOut, Settings, ChevronRight } from 'lucide-react';
 
+// Helper function to get data from either localStorage or sessionStorage
+const getStorageItem = (key) => {
+  return localStorage.getItem(key) || sessionStorage.getItem(key);
+};
+
+// Helper function to remove data from both storages
+const removeStorageItem = (key) => {
+  localStorage.removeItem(key);
+  sessionStorage.removeItem(key);
+};
+
 export default function CustomerDashboard() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(true);
+  
+  // Get user info from storage
+  const [userName, setUserName] = useState('');
   
   // Data states
   const [events, setEvents] = useState([]);
@@ -20,6 +34,28 @@ export default function CustomerDashboard() {
     completedEvents: 0,
     favoriteProviders: 0,
   });
+
+  // Load user info on mount
+  useEffect(() => {
+    const storedUserName = getStorageItem('userName');
+    if (storedUserName) {
+      setUserName(storedUserName);
+    } else {
+      // If no userName found, try to get from user object
+      const userObj = getStorageItem('user');
+      if (userObj) {
+        try {
+          const user = JSON.parse(userObj);
+          const name = user.fullName || user.name || user.email || 'User';
+          setUserName(name);
+        } catch (e) {
+          setUserName('User');
+        }
+      } else {
+        setUserName('User');
+      }
+    }
+  }, []);
 
   // Fetch all dashboard data
   useEffect(() => {
@@ -76,7 +112,7 @@ export default function CustomerDashboard() {
       console.error('Error fetching dashboard data:', error);
       if (error.response?.status === 401) {
         // Token expired or invalid, redirect to login
-        navigate('/login');
+        handleLogout();
       }
     } finally {
       setLoading(false);
@@ -84,7 +120,13 @@ export default function CustomerDashboard() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    // Remove from both storages
+    removeStorageItem('token');
+    removeStorageItem('authToken');
+    removeStorageItem('user');
+    removeStorageItem('userName');
+    removeStorageItem('userEmail');
+    removeStorageItem('userRole');
     navigate('/login');
   };
 
@@ -165,10 +207,10 @@ export default function CustomerDashboard() {
               </button>
               <div className="flex items-center space-x-2 cursor-pointer">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-semibold">
-                  {localStorage.getItem('userName')?.charAt(0).toUpperCase() || 'U'}
+                  {userName.charAt(0).toUpperCase()}
                 </div>
                 <span className="hidden md:inline text-gray-700 font-medium">
-                  {localStorage.getItem('userName') || 'User'}
+                  {userName}
                 </span>
               </div>
             </div>
@@ -230,7 +272,7 @@ export default function CustomerDashboard() {
             {/* Welcome Section */}
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-gray-800 mb-2">
-                Welcome back, {localStorage.getItem('userName') || 'User'}! 👋
+                Welcome back, {userName}! 👋
               </h1>
               <p className="text-gray-600">Here's what's happening with your events today.</p>
             </div>
