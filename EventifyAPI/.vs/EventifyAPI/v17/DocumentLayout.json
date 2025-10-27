@@ -242,8 +242,7 @@
               "RelativeToolTip": "Controllers\\BookingsController.cs",
               "ViewState": "AgIAADYAAAAAAAAAAAAAABcAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-19T02:45:19.754Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-19T02:45:19.754Z"
             },
             {
               "$type": "Document",
@@ -255,8 +254,7 @@
               "RelativeToolTip": "Controllers\\AvailabilitiesController.cs",
               "ViewState": "AgIAAG8AAAAAAAAAAAAAABIAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-01T23:07:31.92Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-01T23:07:31.92Z"
             },
             {
               "$type": "Document",
@@ -266,7 +264,7 @@
               "RelativeDocumentMoniker": "Controllers\\EventsController.cs",
               "ToolTip": "C:\\Users\\USER.DESKTOP-R2ESL0M\\Documents\\GitHub\\Final-Year-project\\EventifyAPI\\Controllers\\EventsController.cs",
               "RelativeToolTip": "Controllers\\EventsController.cs",
-              "ViewState": "AgIAAJsAAAAAAAAAAAAwwLUAAAAcAAAAAAAAAA==",
+              "ViewState": "AgIAAHQAAAAAAAAAAAAwwI8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-19T01:28:22.961Z",
               "EditorCaption": ""
@@ -281,8 +279,7 @@
               "RelativeToolTip": "Controllers\\ProvidersController.cs",
               "ViewState": "AgIAAC8AAAAAAAAAAAAAABYAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-13T23:54:17.456Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-13T23:54:17.456Z"
             },
             {
               "$type": "Document",
@@ -294,8 +291,7 @@
               "RelativeToolTip": "Controllers\\AuthController.cs",
               "ViewState": "AgIAAJAAAAAAAAAAAAAwwHgAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T00:38:57.547Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-07T00:38:57.547Z"
             },
             {
               "$type": "Document",
@@ -307,8 +303,7 @@
               "RelativeToolTip": "Data\\EventifyDbContext.cs",
               "ViewState": "AgIAAIwAAAAAAAAAAAAswJkAAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-03T00:52:41.68Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-03T00:52:41.68Z"
             },
             {
               "$type": "Document",
@@ -320,8 +315,7 @@
               "RelativeToolTip": "Models\\Event.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-03T23:35:15.42Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-03T23:35:15.42Z"
             },
             {
               "$type": "Document",
@@ -333,8 +327,7 @@
               "RelativeToolTip": "DTOs\\EventDtos.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACUAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-19T01:25:42.041Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-19T01:25:42.041Z"
             },
             {
               "$type": "Document",
