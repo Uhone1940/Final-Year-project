@@ -18,6 +18,8 @@ namespace EventifyAPI.Models
         // New property for Suspension
         public bool IsSuspended { get; set; } = false;
 
+        public DateTime CreatedAt { get; set; }
+
         // Navigation properties
         public ICollection<Event> Events { get; set; } = new List<Event>();
         public ICollection<Booking> Bookings { get; set; } = new List<Booking>();

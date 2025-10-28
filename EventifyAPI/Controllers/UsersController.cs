@@ -9,7 +9,7 @@ namespace EventifyAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,SystemAdmin")] // Allow both Admin roles
     public class UsersController : ControllerBase
     {
         private readonly EventifyDbContext _context;
@@ -44,22 +44,23 @@ namespace EventifyAPI.Controllers
                 "name" => query.OrderBy(u => u.FullName),
                 "email" => query.OrderBy(u => u.Email),
                 "role" => query.OrderBy(u => u.Role.Name),
-                _ => query.OrderBy(u => u.UserId)
+                _ => query.OrderByDescending(u => u.UserId) // Most recent first
             };
 
             var users = await query.ToListAsync();
 
-            var response = users.Select(u => new AdminUserResponseDto
+            var response = users.Select(u => new
             {
-                UserId = u.UserId,
-                FullName = u.FullName,
-                Email = u.Email,
-                Role = u.Role.Name,
-                IsSuspended = u.IsSuspended,
-                BusinessName = u.EventServiceProvider?.BusinessName,
-                CategoryName = u.EventServiceProvider?.ServiceCategory?.Name,
-                Location = u.EventServiceProvider?.Location,
-                PhoneNumber = u.EventServiceProvider?.PhoneNumber
+                id = u.UserId,
+                fullName = u.FullName,
+                email = u.Email,
+                role = u.Role.Name,
+                isSuspended = u.IsSuspended,
+                createdAt = u.CreatedAt, // Add this if you have it in your User model
+                businessName = u.EventServiceProvider?.BusinessName,
+                categoryName = u.EventServiceProvider?.ServiceCategory?.Name,
+                location = u.EventServiceProvider?.Location,
+                phoneNumber = u.EventServiceProvider?.PhoneNumber
             }).ToList();
 
             return Ok(response);
@@ -76,19 +77,20 @@ namespace EventifyAPI.Controllers
                 .FirstOrDefaultAsync(u => u.UserId == id);
 
             if (user == null)
-                return NotFound("User not found.");
+                return NotFound(new { message = "User not found." });
 
-            var response = new AdminUserResponseDto
+            var response = new
             {
-                UserId = user.UserId,
-                FullName = user.FullName,
-                Email = user.Email,
-                Role = user.Role.Name,
-                IsSuspended = user.IsSuspended,
-                BusinessName = user.EventServiceProvider?.BusinessName,
-                CategoryName = user.EventServiceProvider?.ServiceCategory?.Name,
-                Location = user.EventServiceProvider?.Location,
-                PhoneNumber = user.EventServiceProvider?.PhoneNumber
+                id = user.UserId,
+                fullName = user.FullName,
+                email = user.Email,
+                role = user.Role.Name,
+                isSuspended = user.IsSuspended,
+                createdAt = user.CreatedAt,
+                businessName = user.EventServiceProvider?.BusinessName,
+                categoryName = user.EventServiceProvider?.ServiceCategory?.Name,
+                location = user.EventServiceProvider?.Location,
+                phoneNumber = user.EventServiceProvider?.PhoneNumber
             };
 
             return Ok(response);
@@ -99,12 +101,16 @@ namespace EventifyAPI.Controllers
         public async Task<IActionResult> SuspendUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
-            if (user == null) return NotFound("User not found.");
+            if (user == null)
+                return NotFound(new { message = "User not found." });
+
+            if (user.IsSuspended)
+                return BadRequest(new { message = "User is already suspended." });
 
             user.IsSuspended = true;
             await _context.SaveChangesAsync();
 
-            return Ok(new { Message = "User suspended successfully." });
+            return Ok(new { message = "User suspended successfully." });
         }
 
         // ------------------ UNSUSPEND USER ------------------
@@ -112,12 +118,16 @@ namespace EventifyAPI.Controllers
         public async Task<IActionResult> UnsuspendUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
-            if (user == null) return NotFound("User not found.");
+            if (user == null)
+                return NotFound(new { message = "User not found." });
+
+            if (!user.IsSuspended)
+                return BadRequest(new { message = "User is not suspended." });
 
             user.IsSuspended = false;
             await _context.SaveChangesAsync();
 
-            return Ok(new { Message = "User unsuspended successfully." });
+            return Ok(new { message = "User unsuspended successfully." });
         }
 
         // ------------------ DELETE USER ------------------
@@ -127,23 +137,15 @@ namespace EventifyAPI.Controllers
             var user = await _context.Users
                 .Include(u => u.Role)
                 .Include(u => u.EventServiceProvider)
-                .ThenInclude(p => p.ServiceCategory)
                 .FirstOrDefaultAsync(u => u.UserId == id);
 
-            if (user == null) return NotFound("User not found.");
+            if (user == null)
+                return NotFound(new { message = "User not found." });
 
-            var response = new AdminUserResponseDto
-            {
-                UserId = user.UserId,
-                FullName = user.FullName,
-                Email = user.Email,
-                Role = user.Role.Name,
-                IsSuspended = user.IsSuspended,
-                BusinessName = user.EventServiceProvider?.BusinessName,
-                CategoryName = user.EventServiceProvider?.ServiceCategory?.Name,
-                Location = user.EventServiceProvider?.Location,
-                PhoneNumber = user.EventServiceProvider?.PhoneNumber
-            };
+            // Prevent admin from deleting themselves
+            var currentUserId = int.Parse(User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value ?? "0");
+            if (currentUserId == id)
+                return BadRequest(new { message = "You cannot delete your own account." });
 
             // Remove provider record if user is a provider
             if (user.Role.Name == "EventServiceProvider" && user.EventServiceProvider != null)
@@ -154,7 +156,27 @@ namespace EventifyAPI.Controllers
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
-            return Ok(new { Message = "User deleted successfully.", User = response });
+            return Ok(new { message = "User deleted successfully." });
+        }
+
+        // ------------------ GET STATISTICS ------------------
+        [HttpGet("statistics")]
+        public async Task<IActionResult> GetStatistics()
+        {
+            var totalUsers = await _context.Users.CountAsync();
+            var activeUsers = await _context.Users.CountAsync(u => !u.IsSuspended);
+            var suspendedUsers = await _context.Users.CountAsync(u => u.IsSuspended);
+            var customerCount = await _context.Users.CountAsync(u => u.Role.Name == "Customer");
+            var providerCount = await _context.Users.CountAsync(u => u.Role.Name == "EventServiceProvider");
+
+            return Ok(new
+            {
+                totalUsers,
+                activeUsers,
+                suspendedUsers,
+                customerCount,
+                providerCount
+            });
         }
     }
 }

@@ -8,6 +8,7 @@ namespace EventifyAPI.DTOs
         public string Role { get; set; } = string.Empty;
         public bool IsSuspended { get; set; }
 
+        public DateTime? CreatedAt { get; set; }
         // Provider-specific info (null for customers)
         public string? BusinessName { get; set; }
         public string? CategoryName { get; set; }

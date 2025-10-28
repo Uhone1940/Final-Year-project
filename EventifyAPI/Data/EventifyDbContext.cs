@@ -28,6 +28,21 @@ namespace EventifyAPI.Data
         {
             base.OnModelCreating(modelBuilder);
 
+
+            // -------------------------
+            // COLUMN CONFIGURATIONS
+            // -------------------------
+
+            // Fix Payment Amount decimal precision
+            modelBuilder.Entity<Payment>()
+                .Property(p => p.Amount)
+                .HasColumnType("decimal(18,2)");
+
+            // Set CreatedAt default value for User
+            modelBuilder.Entity<User>()
+                .Property(u => u.CreatedAt)
+                .HasDefaultValueSql("GETUTCDATE()");
+
             // -------------------------
             // RELATIONSHIPS
             // -------------------------
@@ -176,7 +191,10 @@ namespace EventifyAPI.Data
                     Email = "admin@eventify.com",
                     PasswordHash = adminPassword,
                     Phone = "0000000000",
-                    RoleId = 1
+                    RoleId = 1,
+                    IsSuspended = false,
+                    CreatedAt = new DateTime(2025, 10, 29, 0, 0, 0, DateTimeKind.Utc)
+                    // CreatedAt will be set by SQL Server default (GETUTCDATE())
                 }
             );
 
@@ -184,7 +202,7 @@ namespace EventifyAPI.Data
 
             modelBuilder.Entity<ServiceCategory>().HasData(
                 new ServiceCategory { ServiceCategoryId = 1, Name = "Catering" },
-                new ServiceCategory { ServiceCategoryId = 2, Name = "Photography" },
+                new ServiceCategory { ServiceCategoryId = 2, Name = "Photography / Videography" },
                 new ServiceCategory { ServiceCategoryId = 3, Name = "Music / DJ" },
                 new ServiceCategory { ServiceCategoryId = 4, Name = "Venue Decoration" },
                 new ServiceCategory { ServiceCategoryId = 5, Name = "Security" },
