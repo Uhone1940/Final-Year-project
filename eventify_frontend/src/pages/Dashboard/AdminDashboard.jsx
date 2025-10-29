@@ -68,8 +68,8 @@ export default function AdminDashboard() {
   const fetchDashboardData = async () => {
     setLoading(true);
     try {
-      // Fetch all users
-      const usersResponse = await apiClient.get('/Users');
+      // Fetch all users with the FIXED endpoint
+      const usersResponse = await apiClient.get('/api/Users');
       const allUsers = usersResponse.data;
       setUsers(allUsers);
 
@@ -83,15 +83,29 @@ export default function AdminDashboard() {
       const allProviders = providersResponse.data.items || providersResponse.data;
       setProviders(allProviders);
 
-      // Calculate stats
-      const activeProviders = allProviders.filter(p => !p.isSuspended).length;
-      
-      setStats({
-        totalUsers: allUsers.length,
-        totalEvents: allEvents.length,
-        activeProviders: activeProviders,
-        growthRate: 12.5, // This would come from backend analytics
-      });
+      // Fetch statistics from the dedicated endpoint (NEW!)
+      try {
+        const statsResponse = await apiClient.get('/api/Users/statistics');
+        const statsData = statsResponse.data;
+        
+        setStats({
+          totalUsers: statsData.totalUsers,
+          totalEvents: allEvents.length,
+          activeProviders: statsData.providerCount,
+          growthRate: 12.5, // This would come from backend analytics
+        });
+      } catch (statsError) {
+        // Fallback to calculating stats manually if endpoint fails
+        console.warn('Statistics endpoint not available, calculating manually:', statsError);
+        const activeProviders = allProviders.filter(p => !p.isSuspended).length;
+        
+        setStats({
+          totalUsers: allUsers.length,
+          totalEvents: allEvents.length,
+          activeProviders: activeProviders,
+          growthRate: 12.5,
+        });
+      }
 
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
@@ -123,7 +137,8 @@ export default function AdminDashboard() {
     }
 
     try {
-      await apiClient.delete(`/Users/${userId}`);
+      // FIXED endpoint with /api/ prefix
+      await apiClient.delete(`/api/Users/${userId}`);
       alert('User deleted successfully');
       fetchDashboardData(); // Refresh data
     } catch (error) {
@@ -139,7 +154,8 @@ export default function AdminDashboard() {
     }
 
     try {
-      await apiClient.put(`/Users/${userId}/${action}`);
+      // FIXED endpoint with /api/ prefix
+      await apiClient.put(`/api/Users/${userId}/${action}`);
       alert(`User ${action}ed successfully`);
       fetchDashboardData(); // Refresh data
     } catch (error) {
@@ -180,10 +196,10 @@ export default function AdminDashboard() {
   const recentUsers = users.slice(-4).reverse();
 
   const statsData = [
-    { title: "Total Users", value: stats.totalUsers.toString(), change: "+12%", icon: Users, color: "text-purple-600" },
-    { title: "Total Events", value: stats.totalEvents.toString(), change: "+18%", icon: Calendar, color: "text-blue-600" },
-    { title: "Active Providers", value: stats.activeProviders.toString(), change: "+5%", icon: Building2, color: "text-emerald-600" },
-    { title: "Growth Rate", value: `${stats.growthRate}%`, change: "+2.1%", icon: TrendingUp, color: "text-orange-600" }
+    { title: "Total Users", value: stats.totalUsers.toString(), change: "+0%", icon: Users, color: "text-purple-600" },
+    { title: "Total Events", value: stats.totalEvents.toString(), change: "+0%", icon: Calendar, color: "text-blue-600" },
+    { title: "Active Providers", value: stats.activeProviders.toString(), change: "+0%", icon: Building2, color: "text-emerald-600" },
+    { title: "Growth Rate", value: `${stats.growthRate}%`, change: "+0%", icon: TrendingUp, color: "text-orange-600" }
   ];
 
   if (loading) {

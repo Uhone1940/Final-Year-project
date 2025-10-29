@@ -103,10 +103,10 @@ namespace EventifyAPI.Controllers
                 .FirstOrDefaultAsync(u => u.Email == dto.Email);
 
             if (user == null || HashPassword(dto.Password) != user.PasswordHash)
-                return Unauthorized("Invalid email or password.");
+                return Unauthorized(new { message = "Invalid email or password." });
 
             if (user.IsSuspended)
-                return Unauthorized("Your account has been suspended. Contact support.");
+                return StatusCode(403, new { message = "Your account has been suspended. Contact support." });
 
             var token = GenerateJwtToken(user);
 

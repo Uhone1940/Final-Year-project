@@ -93,11 +93,33 @@ export default function LoginPage() {
       console.error("Login failed:", error);
       console.error("Error response:", error.response?.data);
       
-      setError(
-        error.response?.data?.message ||
-        error.response?.data?.title ||
-        "Invalid email or password. Please try again."
-      );
+      // IMPROVED ERROR HANDLING - Prioritize backend error messages
+      let errorMessage = "Invalid email or password. Please try again.";
+      
+      if (error.response?.data) {
+        // If response.data is a string, use it directly
+        if (typeof error.response.data === "string") {
+          errorMessage = error.response.data;
+        }
+        // If response.data is an object, check for message properties
+        else if (typeof error.response.data === "object") {
+          errorMessage = error.response.data.message ||
+          error.response.data.Message ||
+          error.response.data.title ||
+          error.response.data.error ||    
+          errorMessage;        
+
+      }
+    }
+      
+      // Fallback for status codes without custom messages
+      if (!error.response?.data && error.response?.status === 403) {
+        errorMessage = "Your account has been suspended. Contact support.";
+      } else if (!error.response?.data && error.response?.status === 500) {
+        errorMessage = "Server error. Please try again later.";
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

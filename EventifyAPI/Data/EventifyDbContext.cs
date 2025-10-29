@@ -194,7 +194,7 @@ namespace EventifyAPI.Data
                     RoleId = 1,
                     IsSuspended = false,
                     CreatedAt = new DateTime(2025, 10, 29, 0, 0, 0, DateTimeKind.Utc)
-                    // CreatedAt will be set by SQL Server default (GETUTCDATE())
+                    // CreatedAt 
                 }
             );
 

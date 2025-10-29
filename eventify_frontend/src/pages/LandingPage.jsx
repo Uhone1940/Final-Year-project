@@ -97,7 +97,7 @@ const LandingPage = () => {
             {[
               { icon: "fa-music", label: "DJs & Music", color: "bg-blue-100 text-blue-600", image: "https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=400&h=300&fit=crop" },
               { icon: "fa-utensils", label: "Catering", color: "bg-green-100 text-green-600", image: "https://images.unsplash.com/photo-1555244162-803834f70033?w=400&h=300&fit=crop" },
-              { icon: "fa-camera", label: "Photography", color: "bg-purple-100 text-purple-600", image: "https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=400&h=300&fit=crop" },
+              { icon: "fa-camera", label: "Photography / Videography", color: "bg-purple-100 text-purple-600", image: "https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=400&h=300&fit=crop" },
               { icon: "fa-building", label: "Venues", color: "bg-yellow-100 text-yellow-600", image: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&h=300&fit=crop" },
               { icon: "fa-paint-brush", label: "Decorators", color: "bg-pink-100 text-pink-600", image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&h=300&fit=crop" },
               { icon: "fa-clipboard-list", label: "Event Planning", color: "bg-indigo-100 text-indigo-600", image: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=400&h=300&fit=crop" },
