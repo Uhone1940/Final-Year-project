@@ -9,6 +9,6 @@
     "\\Models",
     "\\Services"
   ],
-  "SelectedNode": "\\Controllers\\AuthController.cs",
+  "SelectedNode": "\\DTOs\\ProviderResponseDto.cs",
   "PreviewInSolutionExplorer": false
 }
