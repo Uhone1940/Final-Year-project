@@ -166,8 +166,34 @@ namespace EventifyAPI.Controllers
             var totalUsers = await _context.Users.CountAsync();
             var activeUsers = await _context.Users.CountAsync(u => !u.IsSuspended);
             var suspendedUsers = await _context.Users.CountAsync(u => u.IsSuspended);
-            var customerCount = await _context.Users.CountAsync(u => u.Role.Name == "Customer");
-            var providerCount = await _context.Users.CountAsync(u => u.Role.Name == "EventServiceProvider");
+            var customerCount = await _context.Users
+                .Include(u => u.Role)
+                .CountAsync(u => u.Role.Name == "Customer");
+            var providerCount = await _context.Users
+                .Include(u => u.Role)
+                .CountAsync(u => u.Role.Name == "EventServiceProvider");
+
+            // Calculate growth rate (users created in last 30 days vs previous 30 days)
+            var now = DateTime.UtcNow;
+            var thirtyDaysAgo = now.AddDays(-30);
+            var sixtyDaysAgo = now.AddDays(-60);
+
+            var usersLastMonth = await _context.Users
+                .CountAsync(u => u.CreatedAt >= thirtyDaysAgo && u.CreatedAt < now);
+
+            var usersPreviousMonth = await _context.Users
+                .CountAsync(u => u.CreatedAt >= sixtyDaysAgo && u.CreatedAt < thirtyDaysAgo);
+
+            // Calculate percentage growth
+            double growthRate = 0;
+            if (usersPreviousMonth > 0)
+            {
+                growthRate = ((double)(usersLastMonth - usersPreviousMonth) / usersPreviousMonth) * 100;
+            }
+            else if (usersLastMonth > 0)
+            {
+                growthRate = 100; // 100% growth if we had 0 users before
+            }
 
             return Ok(new
             {
@@ -175,7 +201,10 @@ namespace EventifyAPI.Controllers
                 activeUsers,
                 suspendedUsers,
                 customerCount,
-                providerCount
+                providerCount,
+                growthRate = Math.Round(growthRate, 1), // Round to 1 decimal place
+                usersLastMonth,
+                usersPreviousMonth
             });
         }
     }

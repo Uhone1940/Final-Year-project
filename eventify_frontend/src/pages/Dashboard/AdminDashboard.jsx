@@ -36,7 +36,7 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(true);
   const [userName, setUserName] = useState('');
-  const [notificationTarget, setNotificationTarget] = useState('all'); // 'all', 'providers', 'customers'
+  const [notificationTarget, setNotificationTarget] = useState('all');
   
   // Data states
   const [users, setUsers] = useState([]);
@@ -65,57 +65,91 @@ export default function AdminDashboard() {
     fetchDashboardData();
   }, [navigate]);
 
-  const fetchDashboardData = async () => {
-    setLoading(true);
+const fetchDashboardData = async () => {
+  setLoading(true);
+  try {
+    let allUsers = [];
+    let allEvents = [];
+    let allProviders = [];
+
+    // Fetch all users with error handling
     try {
-      // Fetch all users with the FIXED endpoint
       const usersResponse = await apiClient.get('/api/Users');
-      const allUsers = usersResponse.data;
+      allUsers = usersResponse.data;
       setUsers(allUsers);
-
-      // Fetch all events
-      const eventsResponse = await apiClient.get('/Events');
-      const allEvents = eventsResponse.data;
-      setEvents(allEvents);
-
-      // Fetch all providers
-      const providersResponse = await apiClient.get('/Providers');
-      const allProviders = providersResponse.data.items || providersResponse.data;
-      setProviders(allProviders);
-
-      // Fetch statistics from the dedicated endpoint (NEW!)
-      try {
-        const statsResponse = await apiClient.get('/api/Users/statistics');
-        const statsData = statsResponse.data;
-        
-        setStats({
-          totalUsers: statsData.totalUsers,
-          totalEvents: allEvents.length,
-          activeProviders: statsData.providerCount,
-          growthRate: 12.5, // This would come from backend analytics
-        });
-      } catch (statsError) {
-        // Fallback to calculating stats manually if endpoint fails
-        console.warn('Statistics endpoint not available, calculating manually:', statsError);
-        const activeProviders = allProviders.filter(p => !p.isSuspended).length;
-        
-        setStats({
-          totalUsers: allUsers.length,
-          totalEvents: allEvents.length,
-          activeProviders: activeProviders,
-          growthRate: 12.5,
-        });
-      }
-
-    } catch (error) {
-      console.error('Error fetching dashboard data:', error);
-      if (error.response?.status === 401) {
-        handleLogout();
-      }
-    } finally {
-      setLoading(false);
+      console.log('All users fetched:', allUsers);
+    } catch (userError) {
+      console.error('Error fetching users:', userError);
     }
-  };
+
+    // Fetch all events with error handling
+    try {
+      const eventsResponse = await apiClient.get('/api/Events');
+      allEvents = eventsResponse.data;
+      setEvents(allEvents);
+      console.log('All events fetched:', allEvents);
+    } catch (eventError) {
+      console.warn('Events endpoint not available:', eventError);
+      // Continue without events data
+    }
+
+    // Fetch all providers with error handling
+    try {
+      const providersResponse = await apiClient.get('/api/Providers');
+      allProviders = providersResponse.data.items || providersResponse.data;
+      setProviders(allProviders);
+      console.log('All providers fetched:', allProviders);
+    } catch (providerError) {
+      console.warn('Providers endpoint not available:', providerError);
+      // Continue without providers data
+    }
+
+    // Calculate statistics from the fetched data
+    const providerUsers = allUsers.filter(u => 
+      u.role?.toLowerCase() === 'eventserviceprovider' || 
+      u.role?.toLowerCase() === 'provider'
+    );
+    
+    const activeProviderUsers = providerUsers.filter(p => !p.isSuspended);
+    
+    console.log('Provider users:', providerUsers.length);
+    console.log('Active provider users:', activeProviderUsers.length);
+    console.log('Total users:', allUsers.length);
+
+    // Fetch statistics from the dedicated endpoint
+    try {
+      const statsResponse = await apiClient.get('/api/Users/statistics');
+      const statsData = statsResponse.data;
+      
+      console.log('Statistics from backend:', statsData);
+      
+      setStats({
+        totalUsers: statsData.totalUsers || allUsers.length,
+        totalEvents: allEvents.length,
+        activeProviders: statsData.providerCount || activeProviderUsers.length,
+        growthRate: statsData.growthRate || 0,
+      });
+    } catch (statsError) {
+      // Fallback to calculating stats manually if endpoint fails
+      console.warn('Statistics endpoint not available, calculating manually:', statsError);
+      
+      setStats({
+        totalUsers: allUsers.length,
+        totalEvents: allEvents.length,
+        activeProviders: activeProviderUsers.length,
+        growthRate: 0,
+      });
+    }
+
+  } catch (error) {
+    console.error('Critical error in fetchDashboardData:', error);
+    if (error.response?.status === 401) {
+      handleLogout();
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleLogout = () => {
     removeStorageItem('token');
@@ -137,7 +171,6 @@ export default function AdminDashboard() {
     }
 
     try {
-      // FIXED endpoint with /api/ prefix
       await apiClient.delete(`/api/Users/${userId}`);
       alert('User deleted successfully');
       fetchDashboardData(); // Refresh data
@@ -154,7 +187,6 @@ export default function AdminDashboard() {
     }
 
     try {
-      // FIXED endpoint with /api/ prefix
       await apiClient.put(`/api/Users/${userId}/${action}`);
       alert(`User ${action}ed successfully`);
       fetchDashboardData(); // Refresh data
@@ -196,10 +228,35 @@ export default function AdminDashboard() {
   const recentUsers = users.slice(-4).reverse();
 
   const statsData = [
-    { title: "Total Users", value: stats.totalUsers.toString(), change: "+0%", icon: Users, color: "text-purple-600" },
-    { title: "Total Events", value: stats.totalEvents.toString(), change: "+0%", icon: Calendar, color: "text-blue-600" },
-    { title: "Active Providers", value: stats.activeProviders.toString(), change: "+0%", icon: Building2, color: "text-emerald-600" },
-    { title: "Growth Rate", value: `${stats.growthRate}%`, change: "+0%", icon: TrendingUp, color: "text-orange-600" }
+    { 
+      title: "Total Users", 
+      value: stats.totalUsers.toString(), 
+      change: "+0%", 
+      icon: Users, 
+      color: "text-purple-600" 
+    },
+    { 
+      title: "Total Events", 
+      value: stats.totalEvents.toString(), 
+      change: "+0%", 
+      icon: Calendar, 
+      color: "text-blue-600" 
+    },
+    { 
+      title: "Active Providers", 
+      value: stats.activeProviders.toString(), 
+      change: "+0%", 
+      icon: Building2, 
+      color: "text-emerald-600" 
+    },
+    { 
+      title: "Growth Rate", 
+      value: `${stats.growthRate >= 0 ? '+' : ''}${stats.growthRate}%`, 
+      change: "vs last month", 
+      icon: TrendingUp, 
+      color: "text-orange-600",
+      isGrowth: true
+    }
   ];
 
   if (loading) {
@@ -252,9 +309,19 @@ export default function AdminDashboard() {
                 </div>
               </div>
               <div className="text-3xl font-bold text-gray-800">{stat.value}</div>
-              <p className="text-xs text-emerald-600 flex items-center mt-2">
-                <TrendingUp className="h-3 w-3 mr-1" />
-                {stat.change} from last month
+              <p className={`text-xs flex items-center mt-2 ${
+                stat.isGrowth 
+                  ? (stats.growthRate >= 0 ? 'text-emerald-600' : 'text-red-600')
+                  : 'text-emerald-600'
+              }`}>
+                {stat.isGrowth && stats.growthRate >= 0 ? (
+                  <TrendingUp className="h-3 w-3 mr-1" />
+                ) : stat.isGrowth && stats.growthRate < 0 ? (
+                  <TrendingUp className="h-3 w-3 mr-1 rotate-180" />
+                ) : (
+                  <TrendingUp className="h-3 w-3 mr-1" />
+                )}
+                {stat.change}
               </p>
             </div>
           ))}
@@ -514,7 +581,11 @@ export default function AdminDashboard() {
                     <TrendingUp className="h-5 w-5 text-orange-600" />
                     <span className="font-medium text-gray-800">Growth Rate</span>
                   </div>
-                  <span className="font-bold text-orange-600 text-xl">{stats.growthRate}%</span>
+                  <span className={`font-bold text-xl ${
+                    stats.growthRate >= 0 ? 'text-emerald-600' : 'text-red-600'
+                  }`}>
+                    {stats.growthRate >= 0 ? '+' : ''}{stats.growthRate}%
+                  </span>
                 </div>
               </div>
             </div>
