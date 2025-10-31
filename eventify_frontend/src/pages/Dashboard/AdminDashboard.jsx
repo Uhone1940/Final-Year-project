@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import apiClient from '../../api/apiClient';
-import { 
-  Users, 
+import {
+  Users,
   Activity,
   TrendingUp,
   Eye,
@@ -17,7 +17,10 @@ import {
   ShieldOff,
   Calendar,
   Building2,
-  User
+  User,
+  Send,
+  CheckCircle,
+  Clock
 } from 'lucide-react';
 
 // Helper function to get data from storage
@@ -37,7 +40,8 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [userName, setUserName] = useState('');
   const [notificationTarget, setNotificationTarget] = useState('all');
-  
+  const [sentNotifications, setSentNotifications] = useState([]); //new update, check later
+
   // Data states
   const [users, setUsers] = useState([]);
   const [events, setEvents] = useState([]);
@@ -63,93 +67,104 @@ export default function AdminDashboard() {
     }
 
     fetchDashboardData();
+    fetchSentNotifications(); // just added this
   }, [navigate]);
 
-const fetchDashboardData = async () => {
-  setLoading(true);
-  try {
-    let allUsers = [];
-    let allEvents = [];
-    let allProviders = [];
-
-    // Fetch all users with error handling
+  const fetchDashboardData = async () => {
+    setLoading(true);
     try {
-      const usersResponse = await apiClient.get('/api/Users');
-      allUsers = usersResponse.data;
-      setUsers(allUsers);
-      console.log('All users fetched:', allUsers);
-    } catch (userError) {
-      console.error('Error fetching users:', userError);
-    }
+      let allUsers = [];
+      let allEvents = [];
+      let allProviders = [];
 
-    // Fetch all events with error handling
+      // Fetch all users with error handling
+      try {
+        const usersResponse = await apiClient.get('/api/Users');
+        allUsers = usersResponse.data;
+        setUsers(allUsers);
+        console.log('All users fetched:', allUsers);
+      } catch (userError) {
+        console.error('Error fetching users:', userError);
+      }
+
+      // Fetch all events with error handling
+      try {
+        const eventsResponse = await apiClient.get('/api/Events');
+        allEvents = eventsResponse.data;
+        setEvents(allEvents);
+        console.log('All events fetched:', allEvents);
+      } catch (eventError) {
+        console.warn('Events endpoint not available:', eventError);
+        // Continue without events data
+      }
+
+      // Fetch all providers with error handling
+      try {
+        const providersResponse = await apiClient.get('/api/Providers');
+        allProviders = providersResponse.data.items || providersResponse.data;
+        setProviders(allProviders);
+        console.log('All providers fetched:', allProviders);
+      } catch (providerError) {
+        console.warn('Providers endpoint not available:', providerError);
+        // Continue without providers data
+      }
+
+      // Calculate statistics from the fetched data
+      const providerUsers = allUsers.filter(u =>
+        u.role?.toLowerCase() === 'eventserviceprovider' ||
+        u.role?.toLowerCase() === 'provider'
+      );
+
+      const activeProviderUsers = providerUsers.filter(p => !p.isSuspended);
+
+      console.log('Provider users:', providerUsers.length);
+      console.log('Active provider users:', activeProviderUsers.length);
+      console.log('Total users:', allUsers.length);
+
+      // Fetch statistics from the dedicated endpoint
+      try {
+        const statsResponse = await apiClient.get('/api/Users/statistics');
+        const statsData = statsResponse.data;
+
+        console.log('Statistics from backend:', statsData);
+
+        setStats({
+          totalUsers: statsData.totalUsers || allUsers.length,
+          totalEvents: allEvents.length,
+          activeProviders: statsData.providerCount || activeProviderUsers.length,
+          growthRate: statsData.growthRate || 0,
+        });
+      } catch (statsError) {
+        // Fallback to calculating stats manually if endpoint fails
+        console.warn('Statistics endpoint not available, calculating manually:', statsError);
+
+        setStats({
+          totalUsers: allUsers.length,
+          totalEvents: allEvents.length,
+          activeProviders: activeProviderUsers.length,
+          growthRate: 0,
+        });
+      }
+
+    } catch (error) {
+      console.error('Critical error in fetchDashboardData:', error);
+      if (error.response?.status === 401) {
+        handleLogout();
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // just added this
+  const fetchSentNotifications = async () => {
     try {
-      const eventsResponse = await apiClient.get('/api/Events');
-      allEvents = eventsResponse.data;
-      setEvents(allEvents);
-      console.log('All events fetched:', allEvents);
-    } catch (eventError) {
-      console.warn('Events endpoint not available:', eventError);
-      // Continue without events data
+      const response = await apiClient.get('/api/Notifications/sent');
+      setSentNotifications(response.data);
+    } catch (error) {
+      console.error('Error fetching sent notifications:', error);
     }
-
-    // Fetch all providers with error handling
-    try {
-      const providersResponse = await apiClient.get('/api/Providers');
-      allProviders = providersResponse.data.items || providersResponse.data;
-      setProviders(allProviders);
-      console.log('All providers fetched:', allProviders);
-    } catch (providerError) {
-      console.warn('Providers endpoint not available:', providerError);
-      // Continue without providers data
-    }
-
-    // Calculate statistics from the fetched data
-    const providerUsers = allUsers.filter(u => 
-      u.role?.toLowerCase() === 'eventserviceprovider' || 
-      u.role?.toLowerCase() === 'provider'
-    );
-    
-    const activeProviderUsers = providerUsers.filter(p => !p.isSuspended);
-    
-    console.log('Provider users:', providerUsers.length);
-    console.log('Active provider users:', activeProviderUsers.length);
-    console.log('Total users:', allUsers.length);
-
-    // Fetch statistics from the dedicated endpoint
-    try {
-      const statsResponse = await apiClient.get('/api/Users/statistics');
-      const statsData = statsResponse.data;
-      
-      console.log('Statistics from backend:', statsData);
-      
-      setStats({
-        totalUsers: statsData.totalUsers || allUsers.length,
-        totalEvents: allEvents.length,
-        activeProviders: statsData.providerCount || activeProviderUsers.length,
-        growthRate: statsData.growthRate || 0,
-      });
-    } catch (statsError) {
-      // Fallback to calculating stats manually if endpoint fails
-      console.warn('Statistics endpoint not available, calculating manually:', statsError);
-      
-      setStats({
-        totalUsers: allUsers.length,
-        totalEvents: allEvents.length,
-        activeProviders: activeProviderUsers.length,
-        growthRate: 0,
-      });
-    }
-
-  } catch (error) {
-    console.error('Critical error in fetchDashboardData:', error);
-    if (error.response?.status === 401) {
-      handleLogout();
-    }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const handleLogout = () => {
     removeStorageItem('token');
@@ -196,6 +211,21 @@ const fetchDashboardData = async () => {
     }
   };
 
+  const handleDeleteNotification = async (notificationId, title) => {
+    if (!window.confirm(`Are you sure you want to delete the notification "${title}"? This will remove it from all recipients.`)) {
+      return;
+    }
+
+    try {
+      await apiClient.delete(`/api/Notifications/broadcast/${notificationId}`);
+      alert('Notification deleted successfully');
+      fetchSentNotifications(); // Refresh the list
+    } catch (error) {
+      console.error('Error deleting notification:', error);
+      alert('Failed to delete notification: ' + (error.response?.data?.message || error.message));
+    }
+  };
+
   const getBadgeClass = (status) => {
     switch (status?.toLowerCase()) {
       case 'active':
@@ -224,36 +254,47 @@ const fetchDashboardData = async () => {
     }
   };
 
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
   // Get recent users (last 4)
   const recentUsers = users.slice(-4).reverse();
 
   const statsData = [
-    { 
-      title: "Total Users", 
-      value: stats.totalUsers.toString(), 
-      change: "+0%", 
-      icon: Users, 
-      color: "text-purple-600" 
+    {
+      title: "Total Users",
+      value: stats.totalUsers.toString(),
+      change: "+0%",
+      icon: Users,
+      color: "text-purple-600"
     },
-    { 
-      title: "Total Events", 
-      value: stats.totalEvents.toString(), 
-      change: "+0%", 
-      icon: Calendar, 
-      color: "text-blue-600" 
+    {
+      title: "Total Events",
+      value: stats.totalEvents.toString(),
+      change: "+0%",
+      icon: Calendar,
+      color: "text-blue-600"
     },
-    { 
-      title: "Active Providers", 
-      value: stats.activeProviders.toString(), 
-      change: "+0%", 
-      icon: Building2, 
-      color: "text-emerald-600" 
+    {
+      title: "Active Providers",
+      value: stats.activeProviders.toString(),
+      change: "+0%",
+      icon: Building2,
+      color: "text-emerald-600"
     },
-    { 
-      title: "Growth Rate", 
-      value: `${stats.growthRate >= 0 ? '+' : ''}${stats.growthRate}%`, 
-      change: "vs last month", 
-      icon: TrendingUp, 
+    {
+      title: "Growth Rate",
+      value: `${stats.growthRate >= 0 ? '+' : ''}${stats.growthRate}%`,
+      change: "vs last month",
+      icon: TrendingUp,
       color: "text-orange-600",
       isGrowth: true
     }
@@ -299,21 +340,19 @@ const fetchDashboardData = async () => {
             <div key={index} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-all">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-gray-600 text-sm font-medium">{stat.title}</span>
-                <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${
-                  stat.color === 'text-purple-600' ? 'from-purple-100 to-purple-200' :
+                <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${stat.color === 'text-purple-600' ? 'from-purple-100 to-purple-200' :
                   stat.color === 'text-blue-600' ? 'from-blue-100 to-blue-200' :
-                  stat.color === 'text-emerald-600' ? 'from-emerald-100 to-emerald-200' :
-                  'from-orange-100 to-orange-200'
-                } flex items-center justify-center`}>
+                    stat.color === 'text-emerald-600' ? 'from-emerald-100 to-emerald-200' :
+                      'from-orange-100 to-orange-200'
+                  } flex items-center justify-center`}>
                   <stat.icon className={`w-5 h-5 ${stat.color}`} />
                 </div>
               </div>
               <div className="text-3xl font-bold text-gray-800">{stat.value}</div>
-              <p className={`text-xs flex items-center mt-2 ${
-                stat.isGrowth 
-                  ? (stats.growthRate >= 0 ? 'text-emerald-600' : 'text-red-600')
-                  : 'text-emerald-600'
-              }`}>
+              <p className={`text-xs flex items-center mt-2 ${stat.isGrowth
+                ? (stats.growthRate >= 0 ? 'text-emerald-600' : 'text-red-600')
+                : 'text-emerald-600'
+                }`}>
                 {stat.isGrowth && stats.growthRate >= 0 ? (
                   <TrendingUp className="h-3 w-3 mr-1" />
                 ) : stat.isGrowth && stats.growthRate < 0 ? (
@@ -331,33 +370,39 @@ const fetchDashboardData = async () => {
         <div className="bg-white rounded-lg shadow-md p-1 flex max-w-4xl">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`flex-1 px-8 py-3 rounded-md font-medium transition-all ${
-              activeTab === 'overview'
-                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
+            className={`flex-1 px-8 py-3 rounded-md font-medium transition-all ${activeTab === 'overview'
+              ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+              : 'text-gray-600 hover:bg-gray-100'
+              }`}
           >
             Overview
           </button>
           <button
             onClick={() => setActiveTab('users')}
-            className={`flex-1 px-8 py-3 rounded-md font-medium transition-all ${
-              activeTab === 'users'
-                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
+            className={`flex-1 px-8 py-3 rounded-md font-medium transition-all ${activeTab === 'users'
+              ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+              : 'text-gray-600 hover:bg-gray-100'
+              }`}
           >
             Users
           </button>
           <button
-            onClick={() => setActiveTab('reports')}
-            className={`flex-1 px-8 py-3 rounded-md font-medium transition-all ${
-              activeTab === 'reports'
-                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
+            onClick={() => setActiveTab('notifications')}
+            className={`flex-1 px-8 py-3 rounded-md font-medium transition-all ${activeTab === 'notifications'
+              ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+              : 'text-gray-600 hover:bg-gray-100'
+              }`}
           >
-            Reports & Notifications
+            Notifications
+          </button>
+          <button
+            onClick={() => setActiveTab('reports')}
+            className={`flex-1 px-8 py-3 rounded-md font-medium transition-all ${activeTab === 'reports'
+              ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+              : 'text-gray-600 hover:bg-gray-100'
+              }`}
+          >
+            Reports
           </button>
         </div>
 
@@ -481,11 +526,10 @@ const fetchDashboardData = async () => {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${
-                            user.isSuspended 
-                              ? 'bg-red-100 text-red-800 border-red-200' 
-                              : 'bg-green-100 text-green-800 border-green-200'
-                          }`}>
+                          <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${user.isSuspended
+                            ? 'bg-red-100 text-red-800 border-red-200'
+                            : 'bg-green-100 text-green-800 border-green-200'
+                            }`}>
                             {user.isSuspended ? 'Suspended' : 'Active'}
                           </span>
                         </td>
@@ -546,6 +590,102 @@ const fetchDashboardData = async () => {
           </div>
         )}
 
+        {activeTab === 'notifications' && (
+          <div className="space-y-6">
+            {/* Send New Notification Button */}
+            <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl shadow-lg p-6 text-white">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold mb-2">Send Notifications</h2>
+                  <p className="text-purple-100">Broadcast messages to your users</p>
+                </div>
+                <button
+                  onClick={() => navigate(`/create-notification?target=${notificationTarget}`)}
+                  className="px-6 py-3 bg-white text-purple-600 rounded-lg font-semibold hover:bg-purple-50 transition-all flex items-center gap-2 shadow-md"
+                >
+                  <Send className="w-5 h-5" />
+                  Create Notification
+                </button>
+              </div>
+            </div>
+
+            {/* Sent Notifications History */}
+            <div className="bg-white rounded-xl shadow-md overflow-hidden">
+              <div className="p-6 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-800">Sent Notifications</h2>
+                    <p className="text-gray-600 text-sm">View your notification history</p>
+                  </div>
+                  <span className="px-4 py-2 bg-purple-100 text-purple-800 rounded-lg font-semibold text-sm">
+                    {sentNotifications.length} Total
+                  </span>
+                </div>
+              </div>
+
+              <div className="divide-y divide-gray-200">
+                {sentNotifications.length === 0 ? (
+                  <div className="p-12 text-center">
+                    <Bell className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    <p className="text-gray-500 text-lg font-medium">No notifications sent yet</p>
+                    <p className="text-gray-400 text-sm mt-2">Start by creating your first notification</p>
+                  </div>
+                ) : (
+                  sentNotifications.map((notification) => (
+                    <div key={notification.id} className="p-6 hover:bg-gray-50 transition-colors">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          {/* Title with badges */}
+                          <div className="flex items-center gap-2 mb-3">
+                            <h3 className="text-lg font-bold text-gray-800">{notification.title}</h3>
+                            <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${notification.recipientType === 'all'
+                              ? 'bg-purple-100 text-purple-800 border-purple-200'
+                              : notification.recipientType === 'providers'
+                                ? 'bg-orange-100 text-orange-800 border-orange-200'
+                                : 'bg-blue-100 text-blue-800 border-blue-200'
+                              }`}>
+                              {notification.recipientType === 'all' ? 'All Users' :
+                                notification.recipientType === 'providers' ? 'Providers' : 'Customers'}
+                            </span>
+                            <span className="px-3 py-1 rounded-full text-xs font-semibold border bg-green-100 text-green-800 border-green-200 flex items-center gap-1">
+                              <CheckCircle className="w-3 h-3" />
+                              Sent
+                            </span>
+                          </div>
+
+                          {/* Message */}
+                          <p className="text-gray-600 mb-3">{notification.message}</p>
+
+                          {/* Meta info */}
+                          <div className="flex items-center gap-4 text-sm text-gray-500">
+                            <div className="flex items-center gap-1">
+                              <Users className="w-4 h-4" />
+                              <span>{notification.recipientCount} recipients</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Clock className="w-4 h-4" />
+                              <span>{formatDateTime(notification.sentAt)}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Delete button */}
+                        <button
+                          onClick={() => handleDeleteNotification(notification.id, notification.title)}
+                          className="p-2 hover:bg-red-50 rounded-lg transition-colors group"
+                          title="Delete notification"
+                        >
+                          <Trash2 className="w-5 h-5 text-gray-400 group-hover:text-red-600" />
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {activeTab === 'reports' && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Platform Analytics */}
@@ -581,9 +721,8 @@ const fetchDashboardData = async () => {
                     <TrendingUp className="h-5 w-5 text-orange-600" />
                     <span className="font-medium text-gray-800">Growth Rate</span>
                   </div>
-                  <span className={`font-bold text-xl ${
-                    stats.growthRate >= 0 ? 'text-emerald-600' : 'text-red-600'
-                  }`}>
+                  <span className={`font-bold text-xl ${stats.growthRate >= 0 ? 'text-emerald-600' : 'text-red-600'
+                    }`}>
                     {stats.growthRate >= 0 ? '+' : ''}{stats.growthRate}%
                   </span>
                 </div>
@@ -612,92 +751,6 @@ const fetchDashboardData = async () => {
               </div>
             </div>
 
-            {/* Notification Management */}
-            <div className="bg-white rounded-xl shadow-md p-6 lg:col-span-2">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-gray-800">Send Notifications</h2>
-                <p className="text-gray-600 text-sm">Broadcast messages to users</p>
-              </div>
-              
-              {/* Notification Target Selection */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-3">Select Target Audience</label>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <button
-                    onClick={() => setNotificationTarget('all')}
-                    className={`px-4 py-4 rounded-lg border-2 flex flex-col items-center justify-center gap-2 transition-all ${
-                      notificationTarget === 'all'
-                        ? 'border-purple-500 bg-purple-50 shadow-md'
-                        : 'border-gray-200 hover:border-purple-300 bg-white'
-                    }`}
-                  >
-                    <Users className={`w-6 h-6 ${notificationTarget === 'all' ? 'text-purple-600' : 'text-gray-600'}`} />
-                    <span className={`font-medium ${notificationTarget === 'all' ? 'text-purple-600' : 'text-gray-700'}`}>
-                      All Users
-                    </span>
-                    <span className="text-xs text-gray-500">{stats.totalUsers} users</span>
-                  </button>
-                  
-                  <button
-                    onClick={() => setNotificationTarget('providers')}
-                    className={`px-4 py-4 rounded-lg border-2 flex flex-col items-center justify-center gap-2 transition-all ${
-                      notificationTarget === 'providers'
-                        ? 'border-orange-500 bg-orange-50 shadow-md'
-                        : 'border-gray-200 hover:border-orange-300 bg-white'
-                    }`}
-                  >
-                    <Building2 className={`w-6 h-6 ${notificationTarget === 'providers' ? 'text-orange-600' : 'text-gray-600'}`} />
-                    <span className={`font-medium ${notificationTarget === 'providers' ? 'text-orange-600' : 'text-gray-700'}`}>
-                      Providers Only
-                    </span>
-                    <span className="text-xs text-gray-500">{stats.activeProviders} providers</span>
-                  </button>
-                  
-                  <button
-                    onClick={() => setNotificationTarget('customers')}
-                    className={`px-4 py-4 rounded-lg border-2 flex flex-col items-center justify-center gap-2 transition-all ${
-                      notificationTarget === 'customers'
-                        ? 'border-blue-500 bg-blue-50 shadow-md'
-                        : 'border-gray-200 hover:border-blue-300 bg-white'
-                    }`}
-                  >
-                    <User className={`w-6 h-6 ${notificationTarget === 'customers' ? 'text-blue-600' : 'text-gray-600'}`} />
-                    <span className={`font-medium ${notificationTarget === 'customers' ? 'text-blue-600' : 'text-gray-700'}`}>
-                      Customers Only
-                    </span>
-                    <span className="text-xs text-gray-500">
-                      {users.filter(u => u.role?.toLowerCase() === 'customer').length} customers
-                    </span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Selected Target Info */}
-              <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">Selected Target:</p>
-                    <p className="text-lg font-bold text-gray-800 capitalize mt-1">
-                      {notificationTarget === 'all' ? 'All Users' : 
-                       notificationTarget === 'providers' ? 'Service Providers' : 'Customers'}
-                    </p>
-                  </div>
-                  <Bell className={`w-8 h-8 ${
-                    notificationTarget === 'all' ? 'text-purple-600' :
-                    notificationTarget === 'providers' ? 'text-orange-600' : 'text-blue-600'
-                  }`} />
-                </div>
-              </div>
-
-              {/* Create Notification Button */}
-              <button
-                onClick={() => navigate(`/create-notification?target=${notificationTarget}`)}
-                className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:opacity-90 flex items-center justify-center gap-2 shadow-lg transition-all font-medium text-lg"
-              >
-                <Bell className="w-5 h-5" />
-                Create Notification
-              </button>
-            </div>
           </div>
         )}
       </div>
