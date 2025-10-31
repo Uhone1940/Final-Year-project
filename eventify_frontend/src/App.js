@@ -6,6 +6,7 @@ import AdminDashboard from "./pages/Dashboard/AdminDashboard";
 import CustomerDashboard from "./pages/Dashboard/CustomerDashboard";
 import ProviderDashboard from "./pages/Dashboard/ProviderDashboard";
 import CreateEventForm from "./pages/Events/CreateEventForm";
+import CreateNotificationForm from "./pages/Notifications/CreateNotificationForm";
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
         <Route path="/CustomerDashboard" element={<CustomerDashboard />} />
         <Route path="/ProviderDashboard" element={<ProviderDashboard />} />
         <Route path="/create-event" element={<CreateEventForm />} />
+        <Route path="/create-notification" element={<CreateNotificationForm />} />
+
       </Routes>
     </Router>
   );

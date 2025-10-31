@@ -691,7 +691,7 @@ const fetchDashboardData = async () => {
 
               {/* Create Notification Button */}
               <button
-                onClick={() => navigate(`/admin/create-notification?target=${notificationTarget}`)}
+                onClick={() => navigate(`/create-notification?target=${notificationTarget}`)}
                 className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:opacity-90 flex items-center justify-center gap-2 shadow-lg transition-all font-medium text-lg"
               >
                 <Bell className="w-5 h-5" />

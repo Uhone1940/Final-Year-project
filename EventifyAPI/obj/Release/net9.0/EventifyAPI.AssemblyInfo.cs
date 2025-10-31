@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EventifyAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0b30c8aefc5a7f6a11252c9ee0824eb28ff6fe4c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9931f141c3136e6fb5f6860ce335b8323e871e4d")]
 [assembly: System.Reflection.AssemblyProductAttribute("EventifyAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EventifyAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
