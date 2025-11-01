@@ -140,7 +140,7 @@ namespace EventifyAPI.Controllers
         }
 
         // ------------------ UPDATE LOGGED-IN PROVIDER PROFILE ------------------
-        [Authorize(Roles = "ServiceProvider")]
+        [Authorize(Roles = "ServiceProvider ,EventServiceProvider")]
         [HttpPut("update-profile")]
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateProviderProfileDto dto)
         {
