@@ -25,7 +25,7 @@ namespace EventifyAPI.Controllers
         {
             var query = _context.Events
                 .Include(e => e.User)
-                .Include(e => e.EventServiceCategories)
+                .Include(e => e.ServicesNeeded)
                     .ThenInclude(esc => esc.ServiceCategory)
                 .Include(e => e.Bookings)
                 .AsQueryable();
@@ -50,7 +50,7 @@ namespace EventifyAPI.Controllers
                 UserId = e.UserId,
                 UserFullName = e.User.FullName,
                 BookingCount = e.Bookings?.Count ?? 0,
-                ServicesNeeded = e.EventServiceCategories
+                ServicesNeeded = e.ServicesNeeded
                     .Select(s => s.ServiceCategory.Name)
                     .ToList()
             }).ToList();
@@ -143,7 +143,7 @@ namespace EventifyAPI.Controllers
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             var e = await _context.Events
-                .Include(ev => ev.EventServiceCategories)
+                .Include(ev => ev.ServicesNeeded)
                 .FirstOrDefaultAsync(ev => ev.EventId == id && ev.UserId == userId);
 
             if (e == null)
@@ -160,12 +160,12 @@ namespace EventifyAPI.Controllers
             e.Description = dto.Description;
 
             // Update service categories
-            e.EventServiceCategories.Clear();
+            e.ServicesNeeded.Clear();
             if (dto.ServiceCategoryIds != null && dto.ServiceCategoryIds.Any())
             {
                 foreach (var catId in dto.ServiceCategoryIds)
                 {
-                    e.EventServiceCategories.Add(new EventServiceCategory
+                    e.ServicesNeeded.Add(new EventServiceCategory
                     {
                         EventId = id,
                         ServiceCategoryId = catId

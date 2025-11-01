@@ -67,6 +67,61 @@ namespace EventifyAPI.Controllers
             return Ok(response);
         }
 
+        // ------------------ SEARCH PROVIDERS WITH FILTERS ------------------
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchProviders(
+            [FromQuery] string? searchTerm,
+            [FromQuery] int? categoryId,
+            [FromQuery] string? location,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 12)
+        {
+            var query = _context.EventServiceProviders
+                .Include(p => p.ServiceCategory)
+                .Include(p => p.User)
+                .Where(p => !p.IsDeleted)
+                .AsQueryable();
+
+            // Filter by search term (business name or description)
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(p =>
+                    p.BusinessName.Contains(searchTerm) ||
+                    (p.Description != null && p.Description.Contains(searchTerm)));
+            }
+
+            // Filter by category
+            if (categoryId.HasValue && categoryId.Value > 0)
+            {
+                query = query.Where(p => p.ServiceCategoryId == categoryId.Value);
+            }
+
+            // Filter by location
+            if (!string.IsNullOrEmpty(location))
+            {
+                query = query.Where(p => p.Location != null && p.Location.Contains(location));
+            }
+
+            var totalItems = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            var providers = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var response = providers.Select(MapToDto).ToList();
+
+            return Ok(new
+            {
+                Page = page,
+                PageSize = pageSize,
+                TotalItems = totalItems,
+                TotalPages = totalPages,
+                Items = response
+            });
+        }
+
         // ------------------ GET LOGGED-IN PROVIDER PROFILE ------------------
         [Authorize(Roles = "ServiceProvider")]
         [HttpGet("me")]

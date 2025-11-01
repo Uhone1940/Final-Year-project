@@ -13,16 +13,17 @@ namespace EventifyAPI.Models
         public int ExpectedGuests { get; set; }
         public string Description { get; set; } = string.Empty;
 
-        // Relationships
-        public ICollection<EventServiceCategory> EventServiceCategories { get; set; }
-        public ICollection<EventServiceCategory> ServicesNeeded { get; set; }
-
-
         // Foreign key
         public int UserId { get; set; }
         public User User { get; set; }
 
-        public ICollection<Booking> Bookings { get; set; }
+        // Relationships
+        public ICollection<EventServiceCategory> ServicesNeeded { get; set; } = new List<EventServiceCategory>();
+        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+
+
+
+
     }
 
 }

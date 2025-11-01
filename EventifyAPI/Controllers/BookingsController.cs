@@ -200,6 +200,51 @@ namespace EventifyAPI.Controllers
             return Ok(response);
         }
 
+        // ------------------ GET BOOKINGS FOR A SPECIFIC EVENT ------------------
+        [Authorize(Roles = "Customer")]
+        [HttpGet("event/{eventId}")]
+        public async Task<IActionResult> GetBookingsForEvent(int eventId)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            // Verify the event belongs to the user
+            var eventExists = await _context.Events
+                .AnyAsync(e => e.EventId == eventId && e.UserId == userId);
+
+            if (!eventExists)
+                return NotFound("Event not found or you don't have permission.");
+
+            var bookings = await _context.Bookings
+                .Include(b => b.Event)
+                .Include(b => b.EventServiceProvider)
+                    .ThenInclude(p => p.ServiceCategory)
+                .Include(b => b.EventServiceProvider.User)
+                .Include(b => b.User)
+                .Where(b => b.EventId == eventId)
+                .Select(b => new BookingsResponseDto
+                {
+                    BookingId = b.BookingId,
+                    BookingDate = b.BookingDate,
+                    Status = b.Status,
+
+                    EventId = b.EventId,
+                    EventName = b.Event.Name,
+                    EventDate = b.Event.Date,
+                    EventLocation = b.Event.Location,
+
+                    ProviderId = b.EventServiceProviderId,
+                    ProviderBusinessName = b.EventServiceProvider.BusinessName,
+                    ProviderEmail = b.EventServiceProvider.User.Email,
+
+                    CustomerId = b.UserId,
+                    CustomerFullName = b.User.FullName,
+                    CustomerEmail = b.User.Email
+                })
+                .ToListAsync();
+
+            return Ok(bookings);
+        }
+
         // ------------------ FILTER BOOKINGS ------------------
         [Authorize]
         [HttpGet("filter")]

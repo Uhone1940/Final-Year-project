@@ -165,9 +165,27 @@ namespace EventifyAPI.Data
 
             modelBuilder.Entity<EventServiceCategory>()
                 .HasOne(es => es.ServiceCategory)
-                .WithMany()
+                .WithMany(sc => sc.EventServiceCategories)
                 .HasForeignKey(es => es.ServiceCategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Add these at the end of OnModelCreating, after your existing query filters
+
+            // EventServiceCategory should only show if ServiceCategory is not deleted
+            modelBuilder.Entity<EventServiceCategory>()
+                .HasQueryFilter(esc => !esc.ServiceCategory.IsDeleted);
+
+            // Booking should only show if Provider is not deleted
+            modelBuilder.Entity<Booking>()
+                .HasQueryFilter(b => !b.EventServiceProvider.IsDeleted);
+
+            // Review should only show if Provider is not deleted
+            modelBuilder.Entity<Review>()
+                .HasQueryFilter(r => !r.EventServiceProvider.IsDeleted);
+
+            // Availability should only show if Provider is not deleted
+            modelBuilder.Entity<Availability>()
+                .HasQueryFilter(a => !a.EventServiceProvider.IsDeleted);
 
             // -------------------------
             // SEED DATA
