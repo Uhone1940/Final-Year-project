@@ -187,6 +187,10 @@ namespace EventifyAPI.Data
             modelBuilder.Entity<Availability>()
                 .HasQueryFilter(a => !a.EventServiceProvider.IsDeleted);
 
+            // Payment should only show if Booking is not deleted (if you soft-delete bookings in the future)
+            modelBuilder.Entity<Payment>()
+                .HasQueryFilter(p => !p.Booking.EventServiceProvider.IsDeleted);
+
             // -------------------------
             // SEED DATA
             // -------------------------
