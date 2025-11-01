@@ -9,6 +9,6 @@
     "\\Models",
     "\\Services"
   ],
-  "SelectedNode": "\\Models\\ServiceCategory.cs",
+  "SelectedNode": "\\DTOs\\UpdateProviderProfileDto.cs",
   "PreviewInSolutionExplorer": false
 }

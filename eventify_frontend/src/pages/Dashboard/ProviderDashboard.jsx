@@ -201,11 +201,11 @@ export default function ServiceProviderDashboard() {
                 )}
               </button>
               <button 
-                onClick={() => navigate('/settings')}
+                onClick={() => navigate('/update-profile')}
                 className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2 text-gray-700"
               >
                 <Settings className="w-4 h-4" />
-                Settings
+                Update Profile
               </button>
             </div>
           </div>
