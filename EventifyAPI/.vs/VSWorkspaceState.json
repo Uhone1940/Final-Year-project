@@ -9,6 +9,6 @@
     "\\Models",
     "\\Services"
   ],
-  "SelectedNode": "\\DTOs\\UpdateProviderProfileDto.cs",
+  "SelectedNode": "\\Controllers\\BookingsController.cs",
   "PreviewInSolutionExplorer": false
 }

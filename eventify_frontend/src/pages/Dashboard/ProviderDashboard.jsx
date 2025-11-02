@@ -132,8 +132,8 @@ export default function ServiceProviderDashboard() {
   const handleBookingAction = async (bookingId, action) => {
     try {
       const endpoint = action === 'accept' 
-        ? `/api/Bookings/${bookingId}/confirm`
-        : `/api/Bookings/${bookingId}/decline`;
+        ? `/Bookings/${bookingId}/confirm`
+        : `/Bookings/${bookingId}/decline`;
       
       await apiClient.put(endpoint);
       
