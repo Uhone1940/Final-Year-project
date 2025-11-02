@@ -179,7 +179,7 @@ export default function CreateEventForm() {
 
       console.log('Submitting event payload:', payload); // Debug log
 
-      const response = await apiClient.post('/Events/create-event', payload);
+      const response = await apiClient.post('/api/Events/create-event', payload);
       
       if (response.status === 200 || response.status === 201) {
         alert('Event created successfully!');

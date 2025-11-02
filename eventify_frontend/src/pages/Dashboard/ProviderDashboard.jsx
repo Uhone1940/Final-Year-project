@@ -80,7 +80,7 @@ export default function ServiceProviderDashboard() {
     setLoading(true);
     try {
       // Fetch bookings
-      const bookingsResponse = await apiClient.get('/Bookings/provider');
+      const bookingsResponse = await apiClient.get('/api/Bookings/my-bookings');
       const allBookings = bookingsResponse.data;
       setBookings(allBookings);
 
@@ -132,8 +132,8 @@ export default function ServiceProviderDashboard() {
   const handleBookingAction = async (bookingId, action) => {
     try {
       const endpoint = action === 'accept' 
-        ? `/Bookings/${bookingId}/confirm`
-        : `/Bookings/${bookingId}/decline`;
+        ? `/api/Bookings/${bookingId}/confirm`
+        : `/api/Bookings/${bookingId}/decline`;
       
       await apiClient.put(endpoint);
       
@@ -192,7 +192,10 @@ export default function ServiceProviderDashboard() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <button className="relative text-gray-600 hover:text-purple-600">
+              <button 
+                onClick={() => navigate('/notifications')}
+                className="relative text-gray-600 hover:text-purple-600 transition-colors"
+              >
                 <Bell className="w-6 h-6" />
                 {pendingBookings.length > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -202,10 +205,10 @@ export default function ServiceProviderDashboard() {
               </button>
               <button 
                 onClick={() => navigate('/update-profile')}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2 text-gray-700"
+                className="px-4 py-2 border border-purple-300 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 flex items-center gap-2 transition-all"
               >
-                <Settings className="w-4 h-4" />
-                Update Profile
+                <User className="w-4 h-4" />
+                My Profile
               </button>
             </div>
           </div>

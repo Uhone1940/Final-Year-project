@@ -51,8 +51,75 @@ namespace EventifyAPI.Controllers
             return Ok(new { Message = "Booking created successfully.", BookingId = booking.BookingId });
         }
 
+        // ------------------ CONFIRM/ACCEPT BOOKING (PROVIDER) ------------------
+        [Authorize(Roles = "EventServiceProvider")]
+        [HttpPut("{bookingId}/confirm")]
+        public async Task<IActionResult> ConfirmBooking(int bookingId)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            // Get the provider record for this user
+            var provider = await _context.EventServiceProviders
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (provider == null)
+                return Unauthorized(new { message = "Provider profile not found." });
+
+            // Get the booking
+            var booking = await _context.Bookings
+                .Include(b => b.Event)
+                .FirstOrDefaultAsync(b => b.BookingId == bookingId &&
+                                          b.EventServiceProviderId == provider.EventServiceProviderId);
+
+            if (booking == null)
+                return NotFound(new { message = "Booking not found or you don't have permission." });
+
+            if (booking.Status == "Confirmed")
+                return BadRequest(new { message = "Booking is already confirmed." });
+
+            // Update status
+            booking.Status = "Confirmed";
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Booking confirmed successfully.", status = booking.Status });
+        }
+
+        // ------------------ DECLINE BOOKING (PROVIDER) ------------------
+        [Authorize(Roles = "EventServiceProvider")]
+        [HttpPut("{bookingId}/decline")]
+        public async Task<IActionResult> DeclineBooking(int bookingId)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            // Get the provider record for this user
+            var provider = await _context.EventServiceProviders
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (provider == null)
+                return Unauthorized(new { message = "Provider profile not found." });
+
+            // Get the booking
+            var booking = await _context.Bookings
+                .Include(b => b.Event)
+                .FirstOrDefaultAsync(b => b.BookingId == bookingId &&
+                                          b.EventServiceProviderId == provider.EventServiceProviderId);
+
+            if (booking == null)
+                return NotFound(new { message = "Booking not found or you don't have permission." });
+
+            if (booking.Status == "Declined" || booking.Status == "Cancelled")
+                return BadRequest(new { message = "Booking is already declined or cancelled." });
+
+            // Update status
+            booking.Status = "Declined";
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Booking declined successfully.", status = booking.Status });
+        }
+
+
         // ------------------ UPDATE BOOKING STATUS ------------------
-        [Authorize(Roles = "EventServiceProvider,Admin")]
+        [Authorize(Roles = "EventServiceProvider")]
         [HttpPut("{bookingId}/status")]
         public async Task<IActionResult> UpdateBookingStatus(int bookingId, UpdateBookingStatusDto dto)
         {
