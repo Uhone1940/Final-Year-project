@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import apiClient from '../../api/apiClient';
-import { 
-  Calendar, 
-  Clock, 
-  MapPin, 
-  User, 
-  DollarSign, 
-  CheckCircle, 
+import {
+  Calendar,
+  Clock,
+  MapPin,
+  User,
+  DollarSign,
+  CheckCircle,
   XCircle,
   Star,
   TrendingUp,
@@ -39,7 +39,8 @@ export default function ServiceProviderDashboard() {
   const [loading, setLoading] = useState(true);
   const [userName, setUserName] = useState('');
   const [providerId, setProviderId] = useState(null);
-  
+  const [notifications, setNotifications] = useState([]);
+
   // Data states
   const [bookings, setBookings] = useState([]);
   const [services, setServices] = useState([]);
@@ -92,7 +93,7 @@ export default function ServiceProviderDashboard() {
       // Calculate stats
       const pending = allBookings.filter(b => b.status === 'Pending').length;
       const confirmed = allBookings.filter(b => b.status === 'Confirmed');
-      
+
       // Calculate monthly earnings (sum of confirmed bookings)
       const monthlyEarnings = confirmed.reduce((sum, booking) => {
         return sum + (parseFloat(booking.totalCost) || 0);
@@ -101,6 +102,15 @@ export default function ServiceProviderDashboard() {
       // Calculate average rating from services
       const totalRating = allServices.reduce((sum, service) => sum + (service.rating || 0), 0);
       const avgRating = allServices.length > 0 ? (totalRating / allServices.length).toFixed(1) : 0;
+
+      // Fetch notifications
+      try {
+        const notificationsResponse = await apiClient.get('/Notifications/me');
+        setNotifications(notificationsResponse.data);
+      } catch (error) {
+        console.log('Notifications not available:', error);
+        setNotifications([]);
+      }
 
       setStats({
         pendingBookings: pending,
@@ -131,15 +141,15 @@ export default function ServiceProviderDashboard() {
 
   const handleBookingAction = async (bookingId, action) => {
     try {
-      const endpoint = action === 'accept' 
+      const endpoint = action === 'accept'
         ? `/Bookings/${bookingId}/confirm`
         : `/Bookings/${bookingId}/decline`;
-      
+
       await apiClient.put(endpoint);
-      
+
       // Refresh bookings
       fetchDashboardData();
-      
+
       alert(`Booking ${action === 'accept' ? 'accepted' : 'declined'} successfully!`);
     } catch (error) {
       console.error(`Error ${action}ing booking:`, error);
@@ -192,18 +202,18 @@ export default function ServiceProviderDashboard() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <button 
+              <button
                 onClick={() => navigate('/notifications')}
                 className="relative text-gray-600 hover:text-purple-600 transition-colors"
               >
                 <Bell className="w-6 h-6" />
-                {pendingBookings.length > 0 && (
+                {notifications.filter(n => !n.isRead).length > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {pendingBookings.length}
+                    {notifications.filter(n => !n.isRead).length}
                   </span>
                 )}
               </button>
-              <button 
+              <button
                 onClick={() => navigate('/update-profile')}
                 className="px-4 py-2 border border-purple-300 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 flex items-center gap-2 transition-all"
               >
@@ -268,31 +278,28 @@ export default function ServiceProviderDashboard() {
           <div className="bg-white rounded-lg shadow-md p-1 inline-flex">
             <button
               onClick={() => setActiveTab('bookings')}
-              className={`px-6 py-2 rounded-md font-medium transition-all ${
-                activeTab === 'bookings'
+              className={`px-6 py-2 rounded-md font-medium transition-all ${activeTab === 'bookings'
                   ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
-              }`}
+                }`}
             >
               Booking Requests
             </button>
             <button
               onClick={() => setActiveTab('calendar')}
-              className={`px-6 py-2 rounded-md font-medium transition-all ${
-                activeTab === 'calendar'
+              className={`px-6 py-2 rounded-md font-medium transition-all ${activeTab === 'calendar'
                   ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
-              }`}
+                }`}
             >
               Calendar
             </button>
             <button
               onClick={() => setActiveTab('services')}
-              className={`px-6 py-2 rounded-md font-medium transition-all ${
-                activeTab === 'services'
+              className={`px-6 py-2 rounded-md font-medium transition-all ${activeTab === 'services'
                   ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
-              }`}
+                }`}
             >
               My Services
             </button>
@@ -462,7 +469,7 @@ export default function ServiceProviderDashboard() {
                 <h2 className="text-xl font-bold text-gray-800">My Services</h2>
                 <p className="text-gray-600 text-sm">Manage your service offerings and pricing</p>
               </div>
-              <button 
+              <button
                 onClick={() => navigate('/add-service')}
                 className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:opacity-90 flex items-center gap-2"
               >
@@ -475,7 +482,7 @@ export default function ServiceProviderDashboard() {
               <div className="text-center py-12">
                 <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <p className="text-gray-500 mb-4">No services added yet</p>
-                <button 
+                <button
                   onClick={() => navigate('/add-service')}
                   className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:opacity-90"
                 >
@@ -508,11 +515,10 @@ export default function ServiceProviderDashboard() {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          service.isActive || service.status === 'Active'
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${service.isActive || service.status === 'Active'
                             ? 'bg-green-100 text-green-800'
                             : 'bg-gray-100 text-gray-800'
-                        }`}>
+                          }`}>
                           {service.isActive || service.status === 'Active' ? 'Active' : 'Inactive'}
                         </span>
                         <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 flex items-center gap-2">

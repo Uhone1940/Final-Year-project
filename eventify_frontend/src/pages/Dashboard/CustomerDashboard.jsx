@@ -29,6 +29,7 @@ export default function CustomerDashboard() {
   const [events, setEvents] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [providers, setProviders] = useState([]);
+  const [notifications, setNotifications] = useState([]);
   const [serviceCategories, setServiceCategories] = useState([]);
   const [selectedEventBookings, setSelectedEventBookings] = useState([]);
 
@@ -94,6 +95,15 @@ export default function CustomerDashboard() {
       // Fetch service categories
       const categoriesResponse = await apiClient.get('/api/Categories');
       setServiceCategories(categoriesResponse.data);
+
+      // Fetch notifications
+      try {
+        const notificationsResponse = await apiClient.get('/api/Notifications/me');
+        setNotifications(notificationsResponse.data);
+      } catch (error) {
+        console.log('Notifications not available:', error);
+        setNotifications([]);
+      }
 
       setStats({
         upcomingEvents: upcomingEvents.length,
@@ -252,23 +262,30 @@ export default function CustomerDashboard() {
               </span>
             </div>
 
+            {/* Right Section */}
             <div className="flex items-center space-x-4">
-              <button className="relative text-gray-600 hover:text-purple-600 transition-colors">
+              <button
+                onClick={() => navigate('/notifications')}
+                className="relative text-gray-600 hover:text-purple-600 transition-colors"
+              >
                 <Bell className="w-6 h-6" />
-                {stats.pendingBookings > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold">
-                    {stats.pendingBookings}
+                {notifications.filter(n => !n.isRead).length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {notifications.filter(n => !n.isRead).length}
                   </span>
                 )}
               </button>
-              <div className="flex items-center space-x-2">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-semibold shadow-md">
+              <div className="flex items-center space-x-2 cursor-pointer">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-semibold">
                   {userName.charAt(0).toUpperCase()}
                 </div>
-                <span className="hidden md:inline text-gray-700 font-medium">{userName}</span>
+                <span className="hidden md:inline text-gray-700 font-medium">
+                  {userName}
+                </span>
               </div>
             </div>
           </div>
+
         </div>
       </nav>
 
