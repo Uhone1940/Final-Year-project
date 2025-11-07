@@ -142,8 +142,8 @@ export default function ServiceProviderDashboard() {
   const handleBookingAction = async (bookingId, action) => {
     try {
       const endpoint = action === 'accept'
-        ? `/Bookings/${bookingId}/confirm`
-        : `/Bookings/${bookingId}/decline`;
+        ? `/api/Bookings/${bookingId}/confirm`
+        : `/api/Bookings/${bookingId}/decline`;
 
       await apiClient.put(endpoint);
 
@@ -324,7 +324,7 @@ export default function ServiceProviderDashboard() {
               ) : (
                 <div className="space-y-4">
                   {pendingBookings.map((booking) => (
-                    <div key={booking.id} className="border border-gray-200 rounded-lg p-4 hover:border-purple-300 transition-all">
+                    <div key={booking.bookingId} className="border border-gray-200 rounded-lg p-4 hover:border-purple-300 transition-all">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <h4 className="font-semibold text-gray-800 text-lg mb-3">{booking.eventName || 'Event Booking'}</h4>
@@ -359,14 +359,14 @@ export default function ServiceProviderDashboard() {
                         </div>
                         <div className="flex items-center gap-2 ml-4">
                           <button
-                            onClick={() => handleBookingAction(booking.id, 'decline')}
+                            onClick={() => handleBookingAction(booking.bookingId, 'decline')}
                             className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 flex items-center gap-2 transition-all"
                           >
                             <XCircle className="w-4 h-4" />
                             Decline
                           </button>
                           <button
-                            onClick={() => handleBookingAction(booking.id, 'accept')}
+                            onClick={() => handleBookingAction(booking.bookingId, 'accept')}
                             className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:opacity-90 flex items-center gap-2 transition-all"
                           >
                             <CheckCircle className="w-4 h-4" />
@@ -395,7 +395,7 @@ export default function ServiceProviderDashboard() {
               ) : (
                 <div className="space-y-4">
                   {confirmedBookings.map((booking) => (
-                    <div key={booking.id} className="border border-green-200 bg-green-50 rounded-lg p-4">
+                    <div key={booking.bookingId} className="border border-green-200 bg-green-50 rounded-lg p-4">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <h4 className="font-semibold text-gray-800 text-lg mb-3">{booking.eventName || 'Event Booking'}</h4>
