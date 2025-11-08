@@ -51,6 +51,61 @@ namespace EventifyAPI.Controllers
             return CreatedAtAction(nameof(GetReview), new { id = resp.ReviewId }, resp);
         }
 
+        // Check if customer can review (event completed & booking confirmed)
+        [HttpGet("can-review/{bookingId}")]
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> CanReview(int bookingId)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var booking = await _context.Bookings
+                .Include(b => b.Event)
+                .FirstOrDefaultAsync(b => b.BookingId == bookingId && b.UserId == userId);
+
+            if (booking == null)
+                return NotFound(new { canReview = false, message = "Booking not found." });
+
+            if (booking.Status != "Confirmed")
+                return Ok(new { canReview = false, message = "Only confirmed bookings can be reviewed." });
+
+            if (booking.Event.Date >= DateTime.UtcNow)
+                return Ok(new { canReview = false, message = "Event must be completed before reviewing." });
+
+            // Check if review already exists
+            var existingReview = await _context.Reviews
+                .FirstOrDefaultAsync(r => r.UserId == userId &&
+                                          r.EventServiceProviderId == booking.EventServiceProviderId &&
+                                          r.BookingId == bookingId); // Assuming you add BookingId to Review model
+
+            if (existingReview != null)
+                return Ok(new { canReview = false, message = "You have already reviewed this provider." });
+
+            return Ok(new { canReview = true, message = "You can review this provider." });
+        }
+
+        // Get reviews by customer
+        [HttpGet("my-reviews")]
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> GetMyReviews()
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var reviews = await _context.Reviews
+                .Include(r => r.EventServiceProvider)
+                .Where(r => r.UserId == userId)
+                .Select(r => new ReviewDto
+                {
+                    ReviewId = r.ReviewId,
+                    Rating = r.Rating,
+                    Comment = r.Comment,
+                    UserId = r.UserId,
+                    EventServiceProviderId = r.EventServiceProviderId,
+                    ProviderBusinessName = r.EventServiceProvider.BusinessName
+                }).ToListAsync();
+
+            return Ok(reviews);
+        }
+
         // Get single review
         [HttpGet("{id}")]
         public async Task<IActionResult> GetReview(int id)

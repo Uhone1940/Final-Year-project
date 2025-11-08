@@ -4,22 +4,24 @@ namespace EventifyAPI.DTOs
     {
         public int ReviewId { get; set; }
         public int Rating { get; set; }
-        public string Comment { get; set; } = string.Empty;
+        public string? Comment { get; set; } = string.Empty;
         public int UserId { get; set; }
         public int EventServiceProviderId { get; set; }
+        public string? ProviderBusinessName { get; set; }
     }
 
     public class CreateReviewDto
     {
         public int Rating { get; set; }
-        public string Comment { get; set; } = string.Empty;
+        public string? Comment { get; set; } = string.Empty;
         public int UserId { get; set; }
         public int EventServiceProviderId { get; set; }
+        public int? BookingId { get; set; }
     }
 
     public class UpdateReviewDto
     {
         public int Rating { get; set; }
-        public string Comment { get; set; } = string.Empty;
+        public string? Comment { get; set; } = string.Empty;
     }
 }

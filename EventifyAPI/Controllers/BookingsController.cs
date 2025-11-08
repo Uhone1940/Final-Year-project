@@ -267,6 +267,33 @@ namespace EventifyAPI.Controllers
             return Ok(response);
         }
 
+        // ------------------ CANCEL BOOKING (CUSTOMER) ------------------
+        [Authorize(Roles = "Customer")]
+        [HttpPut("{bookingId}/cancel")]
+        public async Task<IActionResult> CancelBooking(int bookingId)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var booking = await _context.Bookings
+                .Include(b => b.Event)
+                .FirstOrDefaultAsync(b => b.BookingId == bookingId && b.UserId == userId);
+
+            if (booking == null)
+                return NotFound(new { message = "Booking not found or you don't have permission." });
+
+            if (booking.Status == "Cancelled")
+                return BadRequest(new { message = "Booking is already cancelled." });
+
+            // Optional: Check if event date has passed
+            if (booking.Event.Date < DateTime.UtcNow)
+                return BadRequest(new { message = "Cannot cancel booking for past events." });
+
+            booking.Status = "Cancelled";
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Booking cancelled successfully.", status = booking.Status });
+        }
+
         // ------------------ GET BOOKINGS FOR A SPECIFIC EVENT ------------------
         [Authorize(Roles = "Customer")]
         [HttpGet("event/{eventId}")]

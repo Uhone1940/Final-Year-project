@@ -4,11 +4,14 @@ namespace EventifyAPI.Models
     {
         public int ReviewId { get; set; }
         public int Rating { get; set; }
-        public string Comment { get; set; } = string.Empty;
+        public string? Comment { get; set; } = string.Empty;
 
         // Foreign keys
         public int UserId { get; set; }
         public User User { get; set; }
+
+        public int? BookingId { get; set; }
+        public Booking? Booking { get; set; }
 
         public int EventServiceProviderId { get; set; }
         public EventServiceProvider EventServiceProvider { get; set; }

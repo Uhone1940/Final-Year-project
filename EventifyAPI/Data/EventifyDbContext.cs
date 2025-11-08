@@ -103,6 +103,13 @@ namespace EventifyAPI.Data
                 .HasForeignKey(r => r.EventServiceProviderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Review -> Booking (Optional but recommended)
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.Booking)
+                .WithMany(b => b.Reviews)
+                .HasForeignKey(r => r.BookingId)
+                .OnDelete(DeleteBehavior.Cascade); // If booking is deleted, review should also be deleted
+
             // Availability -> EventServiceProvider
             modelBuilder.Entity<Availability>()
                 .HasOne(a => a.EventServiceProvider)

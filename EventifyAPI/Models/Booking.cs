@@ -18,5 +18,6 @@ namespace EventifyAPI.Models
 
         // Relationships
         public ICollection<Payment> Payments { get; set; }
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }

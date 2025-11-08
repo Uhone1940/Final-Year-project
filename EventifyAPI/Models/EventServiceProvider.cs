@@ -28,7 +28,7 @@ namespace EventifyAPI.Models
         // Navigation
         //public ICollection<ServicePackage> Packages { get; set; }, we don't have this yet, we can add it if we want
         public ICollection<Booking> Bookings { get; set; }
-        public ICollection<Review> Reviews { get; set; }
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
         public ICollection<Availability> Availabilities { get; set; }
 
     }
