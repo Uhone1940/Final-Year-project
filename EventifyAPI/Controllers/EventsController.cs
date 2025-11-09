@@ -19,9 +19,52 @@ namespace EventifyAPI.Controllers
             _context = context;
         }
 
-        // ------------------ GET ALL EVENTS ------------------
+        // ------------------ GET ALL EVENTS (MY EVENTS) ------------------
+        [Authorize(Roles = "Customer")]
         [HttpGet("get-all-events")]
-        public async Task<ActionResult<IEnumerable<EventResponseDto>>> GetEvents([FromQuery] int? userId = null)
+        public async Task<ActionResult<IEnumerable<EventResponseDto>>> GetEvents()
+        {
+            // Get the authenticated user's ID
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            // ALWAYS filter by the authenticated user
+            var events = await _context.Events
+                .Include(e => e.User)
+                .Include(e => e.ServicesNeeded)
+                    .ThenInclude(esc => esc.ServiceCategory)
+                .Include(e => e.Bookings)
+                .Where(e => e.UserId == userId)  // ? CRITICAL: Only get user's own events
+                .OrderByDescending(e => e.Date)
+                .ToListAsync();
+
+            var response = events.Select(e => new EventResponseDto
+            {
+                EventId = e.EventId,
+                Name = e.Name,
+                EventType = e.EventType,
+                Date = e.Date,
+                StartTime = e.StartTime,
+                EndTime = e.EndTime,
+                Location = e.Location,
+                FullAddress = e.FullAddress,
+                ExpectedGuests = e.ExpectedGuests,
+                Description = e.Description,
+                UserId = e.UserId,
+                UserFullName = e.User.FullName,
+                BookingCount = e.Bookings?.Count ?? 0,
+                ServicesNeeded = e.ServicesNeeded
+                    .Select(s => s.ServiceCategory.Name)
+                    .ToList()
+            }).ToList();
+
+            return Ok(response);
+        }
+
+
+        // ------------------ GET ALL EVENTS (ADMIN ONLY) ------------------
+        [Authorize(Roles = "Admin,SystemAdmin")]
+        [HttpGet("admin/all-events")]
+        public async Task<ActionResult<IEnumerable<EventResponseDto>>> GetAllEventsAdmin([FromQuery] int? userId = null)
         {
             var query = _context.Events
                 .Include(e => e.User)
@@ -33,7 +76,7 @@ namespace EventifyAPI.Controllers
             if (userId.HasValue)
                 query = query.Where(e => e.UserId == userId.Value);
 
-            var events = await query.ToListAsync();
+            var events = await query.OrderByDescending(e => e.Date).ToListAsync();
 
             var response = events.Select(e => new EventResponseDto
             {
@@ -43,7 +86,7 @@ namespace EventifyAPI.Controllers
                 Date = e.Date,
                 StartTime = e.StartTime,
                 EndTime = e.EndTime,
-                Location = e.Location, 
+                Location = e.Location,
                 FullAddress = e.FullAddress,
                 ExpectedGuests = e.ExpectedGuests,
                 Description = e.Description,
@@ -59,17 +102,21 @@ namespace EventifyAPI.Controllers
         }
 
         // ------------------ GET SINGLE EVENT ------------------
+        [Authorize(Roles = "Customer")]
         [HttpGet("{id}")]
         public async Task<ActionResult<EventResponseDto>> GetEvent(int id)
         {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
             var e = await _context.Events
                 .Include(ev => ev.User)
                 .Include(ev => ev.Bookings)
                 .Include(ev => ev.ServicesNeeded)
                     .ThenInclude(s => s.ServiceCategory)
-                .FirstOrDefaultAsync(ev => ev.EventId == id);
+                .FirstOrDefaultAsync(ev => ev.EventId == id && ev.UserId == userId);  // ? Check ownership
 
-            if (e == null) return NotFound("Event not found.");
+            if (e == null)
+                return NotFound(new { message = "Event not found or you don't have permission." });
 
             var response = new EventResponseDto
             {
@@ -79,7 +126,7 @@ namespace EventifyAPI.Controllers
                 Date = e.Date,
                 StartTime = e.StartTime,
                 EndTime = e.EndTime,
-                Location = e.Location, 
+                Location = e.Location,
                 FullAddress = e.FullAddress,
                 ExpectedGuests = e.ExpectedGuests,
                 Description = e.Description,
