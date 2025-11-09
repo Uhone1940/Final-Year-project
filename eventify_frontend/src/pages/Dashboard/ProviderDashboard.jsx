@@ -62,6 +62,7 @@ export default function ServiceProviderDashboard() {
     setLoadingCalendar(true);
     try {
       const response = await apiClient.get('/api/Availabilities/me');
+      console.log('Availabilities Response:', response.data); // 🔍 DEBUG
       setAvailabilities(response.data);
     } catch (error) {
       console.error('Error fetching availabilities:', error);
@@ -522,7 +523,7 @@ export default function ServiceProviderDashboard() {
                 <DollarSign className="w-5 h-5 text-green-600" />
               </div>
             </div>
-            <div className="text-3xl font-bold text-green-600">R{(stats.monthlyEarnings|| 0).toFixed(2)}</div>
+            <div className="text-3xl font-bold text-green-600">R{(stats.monthlyEarnings || 0).toFixed(2)}</div>
             <p className="text-xs text-gray-500 mt-1">This month's revenue</p>
           </div>
 
@@ -892,11 +893,18 @@ export default function ServiceProviderDashboard() {
                     }
 
                     const dateStr = date.toISOString().split('T')[0];
-                    const availability = availabilities.find(a => a.AvailableDate.split('T')[0] === dateStr);
+
+                    // ✅ FIX: Check if availableDate exists before calling split
+                    const availability = availabilities.find(a =>
+                      a.availableDate && a.availableDate.split('T')[0] === dateStr
+                    );
+
+                    // ✅ FIX: Use camelCase for eventDate and status
                     const hasBooking = bookings.some(b =>
                       b.eventDate && b.eventDate.split('T')[0] === dateStr &&
                       (b.status === 'Confirmed' || b.status === 'Pending')
                     );
+
                     const isPast = date < new Date(new Date().setHours(0, 0, 0, 0));
                     const isToday = dateStr === new Date().toISOString().split('T')[0];
 
@@ -906,6 +914,7 @@ export default function ServiceProviderDashboard() {
                         onClick={() => {
                           if (isPast) return;
                           if (availability) {
+                            // ✅ FIX: Use camelCase
                             if (availability.isBooked) {
                               alert('Cannot remove availability for a booked date');
                             } else {
@@ -917,18 +926,18 @@ export default function ServiceProviderDashboard() {
                         }}
                         disabled={isPast}
                         className={`aspect-square rounded-lg border-2 p-2 text-sm font-semibold transition-all relative ${isPast
-                          ? 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
-                          : availability?.isBooked
-                            ? 'bg-red-100 border-red-300 text-red-700 cursor-not-allowed'
-                            : availability
-                              ? 'bg-green-100 border-green-400 text-green-800 hover:bg-green-200'
-                              : hasBooking
-                                ? 'bg-orange-100 border-orange-300 text-orange-700'
-                                : 'bg-white border-gray-300 text-gray-700 hover:border-purple-400 hover:bg-purple-50'
+                            ? 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
+                            : availability?.isBooked // ✅ FIX: camelCase
+                              ? 'bg-red-100 border-red-300 text-red-700 cursor-not-allowed'
+                              : availability
+                                ? 'bg-green-100 border-green-400 text-green-800 hover:bg-green-200'
+                                : hasBooking
+                                  ? 'bg-orange-100 border-orange-300 text-orange-700'
+                                  : 'bg-white border-gray-300 text-gray-700 hover:border-purple-400 hover:bg-purple-50'
                           } ${isToday ? 'ring-2 ring-purple-600' : ''}`}
                         title={
                           isPast ? 'Past date' :
-                            availability?.isBooked ? 'Booked (cannot be removed)' :
+                            availability?.isBooked ? 'Booked (cannot be removed)' : // ✅ FIX: camelCase
                               availability ? 'Click to remove availability' :
                                 hasBooking ? 'Has pending/confirmed booking' :
                                   'Click to add availability'
@@ -937,7 +946,7 @@ export default function ServiceProviderDashboard() {
                         <div className="text-center">
                           {date.getDate()}
                         </div>
-                        {hasBooking && !availability?.isBooked && (
+                        {hasBooking && !availability?.isBooked && ( // ✅ FIX: camelCase
                           <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2">
                             <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
                           </div>
