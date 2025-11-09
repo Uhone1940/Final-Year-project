@@ -12,6 +12,10 @@ namespace EventifyAPI.DTOs
         public DateTime EventDate { get; set; }
         public string EventLocation { get; set; }
 
+        // new fields added
+        public TimeSpan? StartTime { get; set; }
+        public TimeSpan? EndTime { get; set; }
+
         // Provider details
         public int ProviderId { get; set; }
         public string ProviderBusinessName { get; set; }

@@ -284,5 +284,100 @@ namespace EventifyAPI.Controllers
                 return StatusCode(500, new { message = "Error deleting notification." });
             }
         }
+
+        // ========== NEW METHODS FOR BOOKING & REVIEW NOTIFICATIONS ==========
+
+        // Create notification for booking/review events (used internally by other controllers)
+        [HttpPost("create-event")]
+        [Authorize]
+        public async Task<IActionResult> CreateEventNotification([FromBody] CreateEventNotificationDto dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.Title))
+                return BadRequest(new { message = "Title is required." });
+
+            if (string.IsNullOrWhiteSpace(dto.Message))
+                return BadRequest(new { message = "Message is required." });
+
+            var user = await _context.Users.FindAsync(dto.UserId);
+            if (user == null) return BadRequest(new { message = "User not found." });
+
+            var note = new Notification
+            {
+                UserId = dto.UserId,
+                Title = dto.Title,
+                Message = dto.Message,
+                SentAt = DateTime.UtcNow,
+                IsRead = false,
+                Type = dto.Type, // "booking", "cancellation", "review"
+                RelatedEntityId = dto.RelatedEntityId
+            };
+
+            _context.Notifications.Add(note);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Notification created.", notificationId = note.NotificationId });
+        }
+
+        // Mark all notifications as read for current user
+        [HttpPut("mark-all-read")]
+        [Authorize]
+        public async Task<IActionResult> MarkAllAsRead()
+        {
+            var uid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(uid, out var userId)) return Unauthorized();
+
+            var notifications = await _context.Notifications
+                .Where(n => n.UserId == userId && !n.IsRead)
+                .ToListAsync();
+
+            foreach (var notification in notifications)
+            {
+                notification.IsRead = true;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = $"{notifications.Count} notifications marked as read." });
+        }
+
+        // Get unread count
+        [HttpGet("unread-count")]
+        [Authorize]
+        public async Task<IActionResult> GetUnreadCount()
+        {
+            var uid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(uid, out var userId)) return Unauthorized();
+
+            var count = await _context.Notifications
+                .CountAsync(n => n.UserId == userId && !n.IsRead);
+
+            return Ok(new { unreadCount = count });
+        }
+
+        // Get notifications by type
+        [HttpGet("by-type/{type}")]
+        [Authorize]
+        public async Task<IActionResult> GetNotificationsByType(string type)
+        {
+            var uid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(uid, out var userId)) return Unauthorized();
+
+            var list = await _context.Notifications
+                .Where(n => n.UserId == userId && n.Type == type)
+                .OrderByDescending(n => n.SentAt)
+                .Select(n => new NotificationDto
+                {
+                    NotificationId = n.NotificationId,
+                    Title = n.Title,
+                    Message = n.Message,
+                    SentAt = n.SentAt,
+                    IsRead = n.IsRead,
+                    UserId = n.UserId,
+                    Type = n.Type,
+                    RelatedEntityId = n.RelatedEntityId
+                }).ToListAsync();
+
+            return Ok(list);
+        }
     }
 }

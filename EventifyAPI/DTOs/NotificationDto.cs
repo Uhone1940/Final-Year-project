@@ -8,6 +8,8 @@ namespace EventifyAPI.DTOs
         public DateTime SentAt { get; set; }
         public bool IsRead { get; set; }
         public int UserId { get; set; }
+        public string? Type { get; set; }
+        public int? RelatedEntityId { get; set; }
     }
 
     public class CreateNotificationDto
@@ -21,6 +23,16 @@ namespace EventifyAPI.DTOs
     {
         public bool IsRead { get; set; }
     }
+
+    public class CreateEventNotificationDto
+    {
+        public int UserId { get; set; }
+        public string Title { get; set; }
+        public string Message { get; set; }
+        public string Type { get; set; } // "booking", "cancellation", "review"
+        public int? RelatedEntityId { get; set; }
+    }
+
 
     public class CreateBulkNotificationDto
     {

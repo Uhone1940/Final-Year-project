@@ -16,6 +16,10 @@ namespace EventifyAPI.Models
         public int EventServiceProviderId { get; set; }
         public EventServiceProvider EventServiceProvider { get; set; }
 
+        //added this
+        public TimeSpan? StartTime { get; set; }
+        public TimeSpan? EndTime { get; set; }
+
         // Relationships
         public ICollection<Payment> Payments { get; set; }
         public ICollection<Review> Reviews { get; set; } = new List<Review>();

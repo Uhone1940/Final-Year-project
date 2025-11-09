@@ -41,6 +41,88 @@ export default function ServiceProviderDashboard() {
   const [providerId, setProviderId] = useState(null);
   const [notifications, setNotifications] = useState([]);
 
+  // Added this for Booking History
+  const [bookingFilter, setBookingFilter] = useState('active');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
+
+  // Add these states at the top
+  const [availabilities, setAvailabilities] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState(new Date());
+  const [loadingCalendar, setLoadingCalendar] = useState(false);
+
+  // Fetch availabilities
+  const fetchAvailabilities = async () => {
+    setLoadingCalendar(true);
+    try {
+      const response = await apiClient.get('/api/Availabilities/me');
+      setAvailabilities(response.data);
+    } catch (error) {
+      console.error('Error fetching availabilities:', error);
+      setAvailabilities([]);
+    } finally {
+      setLoadingCalendar(false);
+    }
+  };
+
+  // Create availability
+  const createAvailability = async (date) => {
+    try {
+      await apiClient.post('/api/Availabilities/create-availability', {
+        AvailableDate: date.toISOString(),
+        EventServiceProviderId: 0 // Will use logged-in provider
+      });
+      fetchAvailabilities();
+      alert('Availability added successfully!');
+    } catch (error) {
+      console.error('Error creating availability:', error);
+      alert('Failed to add availability');
+    }
+  };
+
+  // Delete availability
+  const deleteAvailability = async (availabilityId) => {
+    try {
+      await apiClient.delete(`/api/Availabilities/${availabilityId}`);
+      fetchAvailabilities();
+      alert('Availability removed successfully!');
+    } catch (error) {
+      console.error('Error deleting availability:', error);
+      const errorMsg = error.response?.data?.Message || 'Failed to remove availability';
+      alert(errorMsg);
+    }
+  };
+
+  // Call fetchAvailabilities when calendar tab is opened
+  useEffect(() => {
+    if (activeTab === 'calendar') {
+      fetchAvailabilities();
+    }
+  }, [activeTab]);
+
+  // Helper function to get calendar days
+  const getCalendarDays = () => {
+    const year = selectedMonth.getFullYear();
+    const month = selectedMonth.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startingDayOfWeek = firstDay.getDay();
+
+    const days = [];
+
+    // Add empty slots for days before month starts
+    for (let i = 0; i < startingDayOfWeek; i++) {
+      days.push(null);
+    }
+
+    // Add all days in month
+    for (let day = 1; day <= daysInMonth; day++) {
+      days.push(new Date(year, month, day));
+    }
+
+    return days;
+  };
+
   // Data states
   const [bookings, setBookings] = useState([]);
   const [services, setServices] = useState([]);
@@ -50,6 +132,23 @@ export default function ServiceProviderDashboard() {
     averageRating: 0,
     activeServices: 0,
   });
+
+  const getFilteredBookings = () => {
+    switch (bookingFilter) {
+      case 'pending':
+        return bookings.filter(b => b.Status === 'Pending');
+      case 'confirmed':
+        return bookings.filter(b => b.Status === 'Confirmed');
+      case 'completed':
+        return bookings.filter(b => b.Status === 'Completed');
+      case 'cancelled':
+        return bookings.filter(b => b.Status === 'Cancelled' || b.Status === 'Declined');
+      case 'active':
+        return bookings.filter(b => b.Status === 'Pending' || b.Status === 'Confirmed');
+      default:
+        return bookings;
+    }
+  };
 
   // Load user info and fetch data on mount
   useEffect(() => {
@@ -175,6 +274,21 @@ export default function ServiceProviderDashboard() {
   const pendingBookings = bookings.filter(b => b.status === 'Pending');
   const confirmedBookings = bookings.filter(b => b.status === 'Confirmed');
 
+  const handleDeleteBooking = async (bookingId) => {
+    try {
+      // Use the provider-specific delete endpoint
+      await apiClient.delete(`/api/Bookings/provider/${bookingId}`);
+
+      fetchDashboardData();
+      setShowDeleteConfirm(null);
+      alert('Booking deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting booking:', error);
+      const errorMsg = error.response?.data?.message || 'Failed to delete booking. Only completed or cancelled bookings can be deleted.';
+      alert(errorMsg);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 flex items-center justify-center">
@@ -279,8 +393,8 @@ export default function ServiceProviderDashboard() {
             <button
               onClick={() => setActiveTab('bookings')}
               className={`px-6 py-2 rounded-md font-medium transition-all ${activeTab === 'bookings'
-                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+                : 'text-gray-600 hover:bg-gray-100'
                 }`}
             >
               Booking Requests
@@ -288,8 +402,8 @@ export default function ServiceProviderDashboard() {
             <button
               onClick={() => setActiveTab('calendar')}
               className={`px-6 py-2 rounded-md font-medium transition-all ${activeTab === 'calendar'
-                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+                : 'text-gray-600 hover:bg-gray-100'
                 }`}
             >
               Calendar
@@ -297,8 +411,8 @@ export default function ServiceProviderDashboard() {
             <button
               onClick={() => setActiveTab('services')}
               className={`px-6 py-2 rounded-md font-medium transition-all ${activeTab === 'services'
-                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+                : 'text-gray-600 hover:bg-gray-100'
                 }`}
             >
               My Services
@@ -309,69 +423,207 @@ export default function ServiceProviderDashboard() {
         {/* Tab Content */}
         {activeTab === 'bookings' && (
           <div className="space-y-6">
-            {/* Pending Requests */}
+            {/* Filter Buttons */}
+            <div className="bg-white rounded-xl shadow-md p-4">
+              <div className="flex items-center gap-4 flex-wrap">
+                <Filter className="w-5 h-5 text-gray-500" />
+                <div className="flex gap-2 flex-wrap">
+                  <button
+                    onClick={() => setBookingFilter('active')}
+                    className={`px-4 py-2 rounded-lg font-medium transition-all ${bookingFilter === 'active'
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                  >
+                    Active ({bookings.filter(b => b.Status === 'Pending' || b.Status === 'Confirmed').length})
+                  </button>
+                  <button
+                    onClick={() => setBookingFilter('pending')}
+                    className={`px-4 py-2 rounded-lg font-medium transition-all ${bookingFilter === 'pending'
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                  >
+                    Pending ({bookings.filter(b => b.Status === 'Pending').length})
+                  </button>
+                  <button
+                    onClick={() => setBookingFilter('confirmed')}
+                    className={`px-4 py-2 rounded-lg font-medium transition-all ${bookingFilter === 'confirmed'
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                  >
+                    Confirmed ({bookings.filter(b => b.Status === 'Confirmed').length})
+                  </button>
+                  <button
+                    onClick={() => setBookingFilter('completed')}
+                    className={`px-4 py-2 rounded-lg font-medium transition-all ${bookingFilter === 'completed'
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                  >
+                    Completed ({bookings.filter(b => b.Status === 'Completed').length})
+                  </button>
+                  <button
+                    onClick={() => setBookingFilter('cancelled')}
+                    className={`px-4 py-2 rounded-lg font-medium transition-all ${bookingFilter === 'cancelled'
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                  >
+                    Cancelled ({bookings.filter(b => b.Status === 'Cancelled' || b.Status === 'Declined').length})
+                  </button>
+                  <button
+                    onClick={() => setBookingFilter('all')}
+                    className={`px-4 py-2 rounded-lg font-medium transition-all ${bookingFilter === 'all'
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                  >
+                    All History ({bookings.length})
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Bookings List */}
             <div className="bg-white rounded-xl shadow-md p-6">
               <div className="mb-6">
-                <h2 className="text-xl font-bold text-gray-800">Pending Booking Requests</h2>
-                <p className="text-gray-600 text-sm">Review and respond to new booking requests</p>
+                <h2 className="text-xl font-bold text-gray-800">
+                  {bookingFilter === 'active' ? 'Active Bookings' :
+                    bookingFilter === 'pending' ? 'Pending Requests' :
+                      bookingFilter === 'confirmed' ? 'Confirmed Bookings' :
+                        bookingFilter === 'completed' ? 'Completed Bookings' :
+                          bookingFilter === 'cancelled' ? 'Cancelled Bookings' :
+                            'All Booking History'}
+                </h2>
+                <p className="text-gray-600 text-sm">
+                  {getFilteredBookings().length} booking(s) found
+                </p>
               </div>
 
-              {pendingBookings.length === 0 ? (
+              {getFilteredBookings().length === 0 ? (
                 <div className="text-center py-12">
-                  <Clock className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500">No pending booking requests</p>
+                  <History className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500">No bookings found</p>
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {pendingBookings.map((booking) => (
-                    <div key={booking.bookingId} className="border border-gray-200 rounded-lg p-4 hover:border-purple-300 transition-all">
+                  {getFilteredBookings().map((booking) => (
+                    <div
+                      key={booking.BookingId}
+                      className={`border-2 rounded-lg p-5 transition-all ${booking.Status === 'Pending' ? 'border-orange-200 bg-orange-50' :
+                        booking.Status === 'Confirmed' ? 'border-green-200 bg-green-50' :
+                          booking.Status === 'Completed' ? 'border-blue-200 bg-blue-50' :
+                            'border-gray-200 bg-gray-50'
+                        }`}
+                    >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h4 className="font-semibold text-gray-800 text-lg mb-3">{booking.eventName || 'Event Booking'}</h4>
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-gray-600">
-                            <div className="flex items-center gap-2">
-                              <User className="w-4 h-4 text-gray-400" />
-                              <span>{booking.customerName || 'Customer'}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Calendar className="w-4 h-4 text-gray-400" />
-                              <span>{booking.bookingDate ? new Date(booking.bookingDate).toLocaleDateString() : 'TBD'}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Clock className="w-4 h-4 text-gray-400" />
-                              <span>{booking.startTime || 'TBD'}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <MapPin className="w-4 h-4 text-gray-400" />
-                              <span className="truncate">{booking.location || 'TBD'}</span>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 mt-3">
-                            <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getStatusBadgeClass(booking.status)}`}>
-                              {booking.status}
+                          <div className="flex items-center gap-3 mb-3">
+                            <h4 className="font-bold text-gray-800 text-lg">
+                              {booking.EventName || 'Event Booking'}
+                            </h4>
+                            <span className={`px-3 py-1 rounded-full text-xs font-bold border-2 ${getStatusBadgeClass(booking.Status)}`}>
+                              {booking.Status}
                             </span>
-                            {booking.totalCost && (
-                              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800 border border-green-200">
-                                R{parseFloat(booking.totalCost).toFixed(2)}
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                            <div className="flex items-center gap-2 text-gray-700">
+                              <User className="w-4 h-4 text-gray-400" />
+                              <span className="font-medium">Customer:</span>
+                              <span>{booking.CustomerFullName || booking.CustomerEmail}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-gray-700">
+                              <Mail className="w-4 h-4 text-gray-400" />
+                              <span>{booking.CustomerEmail}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-gray-700">
+                              <Calendar className="w-4 h-4 text-gray-400" />
+                              <span className="font-medium">Event Date:</span>
+                              <span>{new Date(booking.EventDate).toLocaleDateString('en-ZA', {
+                                weekday: 'short',
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric'
+                              })}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-gray-700">
+                              <Clock className="w-4 h-4 text-gray-400" />
+                              <span>
+                                {booking.StartTime
+                                  ? `${booking.StartTime}${booking.EndTime ? ` - ${booking.EndTime}` : ''}`
+                                  : new Date(booking.EventDate).toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' })}
                               </span>
+                            </div>
+                            <div className="flex items-center gap-2 text-gray-700 md:col-span-2">
+                              <MapPin className="w-4 h-4 text-gray-400" />
+                              <span className="font-medium">Location:</span>
+                              <span>{booking.EventLocation || 'Location TBD'}</span>
+                            </div>
+                            {booking.TotalCost && (
+                              <div className="flex items-center gap-2 text-gray-700">
+                                <DollarSign className="w-4 h-4 text-gray-400" />
+                                <span className="font-medium">Amount:</span>
+                                <span className="font-bold text-green-600">R{parseFloat(booking.TotalCost).toFixed(2)}</span>
+                              </div>
                             )}
                           </div>
                         </div>
+
+                        {/* Action Buttons */}
                         <div className="flex items-center gap-2 ml-4">
-                          <button
-                            onClick={() => handleBookingAction(booking.bookingId, 'decline')}
-                            className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 flex items-center gap-2 transition-all"
-                          >
-                            <XCircle className="w-4 h-4" />
-                            Decline
-                          </button>
-                          <button
-                            onClick={() => handleBookingAction(booking.bookingId, 'accept')}
-                            className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:opacity-90 flex items-center gap-2 transition-all"
-                          >
-                            <CheckCircle className="w-4 h-4" />
-                            Accept
-                          </button>
+                          {booking.Status === 'Pending' && (
+                            <>
+                              <button
+                                onClick={() => handleBookingAction(booking.BookingId, 'decline')}
+                                className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 flex items-center gap-2 transition-all"
+                                title="Decline this booking"
+                              >
+                                <XCircle className="w-4 h-4" />
+                                Decline
+                              </button>
+                              <button
+                                onClick={() => handleBookingAction(booking.BookingId, 'accept')}
+                                className="px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:opacity-90 flex items-center gap-2 transition-all"
+                                title="Accept this booking"
+                              >
+                                <CheckCircle className="w-4 h-4" />
+                                Accept
+                              </button>
+                            </>
+                          )}
+
+                          {booking.Status === 'Confirmed' && (
+                            <>
+                              <button
+                                onClick={() => window.location.href = `tel:${booking.CustomerEmail}`}
+                                className="px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 flex items-center gap-2"
+                                title="Contact customer"
+                              >
+                                <Phone className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => window.location.href = `mailto:${booking.CustomerEmail}`}
+                                className="px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 flex items-center gap-2"
+                                title="Email customer"
+                              >
+                                <Mail className="w-4 h-4" />
+                              </button>
+                            </>
+                          )}
+
+                          {(booking.Status === 'Completed' || booking.Status === 'Cancelled' || booking.Status === 'Declined') && (
+                            <button
+                              onClick={() => setShowDeleteConfirm(booking.BookingId)}
+                              className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 flex items-center gap-2 transition-all"
+                              title="Delete from history"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                              Delete
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -380,87 +632,222 @@ export default function ServiceProviderDashboard() {
               )}
             </div>
 
-            {/* Confirmed Bookings */}
-            <div className="bg-white rounded-xl shadow-md p-6">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-gray-800">Confirmed Bookings</h2>
-                <p className="text-gray-600 text-sm">Your upcoming confirmed events</p>
-              </div>
-
-              {confirmedBookings.length === 0 ? (
-                <div className="text-center py-12">
-                  <CheckCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500">No confirmed bookings yet</p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {confirmedBookings.map((booking) => (
-                    <div key={booking.bookingId} className="border border-green-200 bg-green-50 rounded-lg p-4">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-gray-800 text-lg mb-3">{booking.eventName || 'Event Booking'}</h4>
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-gray-600">
-                            <div className="flex items-center gap-2">
-                              <User className="w-4 h-4 text-gray-400" />
-                              <span>{booking.customerName || 'Customer'}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Calendar className="w-4 h-4 text-gray-400" />
-                              <span>{booking.bookingDate ? new Date(booking.bookingDate).toLocaleDateString() : 'TBD'}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Clock className="w-4 h-4 text-gray-400" />
-                              <span>{booking.startTime || 'TBD'}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <MapPin className="w-4 h-4 text-gray-400" />
-                              <span className="truncate">{booking.location || 'TBD'}</span>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 mt-3">
-                            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-600 text-white">
-                              Confirmed
-                            </span>
-                            {booking.totalCost && (
-                              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-white text-green-800 border border-green-200">
-                                R{parseFloat(booking.totalCost).toFixed(2)}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2 ml-4">
-                          <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 flex items-center gap-2">
-                            <Phone className="w-4 h-4" />
-                            Contact
-                          </button>
-                          <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 flex items-center gap-2">
-                            <Mail className="w-4 h-4" />
-                            Message
-                          </button>
-                        </div>
-                      </div>
+            {/* Delete Confirmation Modal */}
+            {showDeleteConfirm && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setShowDeleteConfirm(null)}>
+                <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                      <AlertCircle className="w-6 h-6 text-red-600" />
                     </div>
-                  ))}
+                    <h3 className="text-xl font-bold text-gray-800">Delete Booking?</h3>
+                  </div>
+                  <p className="text-gray-600 mb-6">
+                    This action cannot be undone. The booking will be permanently removed from your history.
+                  </p>
+                  <div className="flex gap-3 justify-end">
+                    <button
+                      onClick={() => setShowDeleteConfirm(null)}
+                      className="px-5 py-2 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-all"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={() => handleDeleteBooking(showDeleteConfirm)}
+                      className="px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-all flex items-center gap-2"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Delete Permanently
+                    </button>
+                  </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         )}
 
         {activeTab === 'calendar' && (
           <div className="bg-white rounded-xl shadow-md p-6">
-            <div className="mb-6">
-              <h2 className="text-xl font-bold text-gray-800">Calendar View</h2>
-              <p className="text-gray-600 text-sm">Your schedule and availability</p>
-            </div>
-            <div className="h-96 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
-              <div className="text-center">
-                <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">Calendar integration coming soon</p>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-xl font-bold text-gray-800">Availability Calendar</h2>
+                <p className="text-gray-600 text-sm">Manage your available dates for bookings</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setSelectedMonth(new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() - 1))}
+                  className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                >
+                  ←
+                </button>
+                <span className="px-4 py-2 font-semibold text-gray-700">
+                  {selectedMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                </span>
+                <button
+                  onClick={() => setSelectedMonth(new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1))}
+                  className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                >
+                  →
+                </button>
               </div>
             </div>
+
+            {loadingCalendar ? (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-purple-600 mx-auto mb-4"></div>
+                <p className="text-gray-600">Loading calendar...</p>
+              </div>
+            ) : (
+              <>
+                {/* Calendar Grid */}
+                <div className="grid grid-cols-7 gap-2 mb-6">
+                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                    <div key={day} className="text-center font-bold text-gray-700 text-sm py-2 border-b-2 border-gray-200">
+                      {day}
+                    </div>
+                  ))}
+
+                  {getCalendarDays().map((date, index) => {
+                    if (!date) {
+                      return <div key={`empty-${index}`} className="aspect-square"></div>;
+                    }
+
+                    const dateStr = date.toISOString().split('T')[0];
+                    const availability = availabilities.find(a => a.AvailableDate.split('T')[0] === dateStr);
+                    const hasBooking = bookings.some(b =>
+                      b.EventDate && b.EventDate.split('T')[0] === dateStr &&
+                      (b.Status === 'Confirmed' || b.Status === 'Pending')
+                    );
+                    const isPast = date < new Date(new Date().setHours(0, 0, 0, 0));
+                    const isToday = dateStr === new Date().toISOString().split('T')[0];
+
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          if (isPast) return;
+                          if (availability) {
+                            if (availability.IsBooked) {
+                              alert('Cannot remove availability for a booked date');
+                            } else {
+                              deleteAvailability(availability.AvailabilityId);
+                            }
+                          } else {
+                            createAvailability(date);
+                          }
+                        }}
+                        disabled={isPast}
+                        className={`aspect-square rounded-lg border-2 p-2 text-sm font-semibold transition-all relative ${isPast
+                            ? 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
+                            : availability?.IsBooked
+                              ? 'bg-red-100 border-red-300 text-red-700 cursor-not-allowed'
+                              : availability
+                                ? 'bg-green-100 border-green-400 text-green-800 hover:bg-green-200'
+                                : hasBooking
+                                  ? 'bg-orange-100 border-orange-300 text-orange-700'
+                                  : 'bg-white border-gray-300 text-gray-700 hover:border-purple-400 hover:bg-purple-50'
+                          } ${isToday ? 'ring-2 ring-purple-600' : ''}`}
+                        title={
+                          isPast ? 'Past date' :
+                            availability?.IsBooked ? 'Booked (cannot be removed)' :
+                              availability ? 'Click to remove availability' :
+                                hasBooking ? 'Has pending/confirmed booking' :
+                                  'Click to add availability'
+                        }
+                      >
+                        <div className="text-center">
+                          {date.getDate()}
+                        </div>
+                        {hasBooking && !availability?.IsBooked && (
+                          <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2">
+                            <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Legend */}
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-3 text-sm mb-6 p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-white border-2 border-gray-300 rounded"></div>
+                    <span className="text-gray-600">Not Available</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-green-100 border-2 border-green-400 rounded"></div>
+                    <span className="text-gray-600">Available</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-red-100 border-2 border-red-300 rounded"></div>
+                    <span className="text-gray-600">Booked</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-orange-100 border-2 border-orange-300 rounded flex items-center justify-center">
+                      <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                    </div>
+                    <span className="text-gray-600">Has Booking</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-white border-2 border-purple-600 rounded"></div>
+                    <span className="text-gray-600">Today</span>
+                  </div>
+                </div>
+
+                {/* Upcoming Bookings List */}
+                <div className="border-t pt-6">
+                  <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <Calendar className="w-5 h-5 text-purple-600" />
+                    Upcoming Bookings
+                  </h3>
+                  <div className="space-y-2 max-h-64 overflow-y-auto">
+                    {bookings
+                      .filter(b => new Date(b.EventDate) >= new Date() && (b.Status === 'Confirmed' || b.Status === 'Pending'))
+                      .sort((a, b) => new Date(a.EventDate) - new Date(b.EventDate))
+                      .slice(0, 10)
+                      .map(booking => (
+                        <div key={booking.BookingId} className="flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-200 hover:shadow-md transition-all">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-2 h-2 rounded-full ${booking.Status === 'Confirmed' ? 'bg-green-500' : 'bg-orange-500'}`}></div>
+                            <div>
+                              <p className="font-semibold text-gray-800 text-sm">{booking.EventName}</p>
+                              <div className="flex items-center gap-4 text-xs text-gray-600 mt-1">
+                                <span className="flex items-center gap-1">
+                                  <Calendar className="w-3 h-3" />
+                                  {new Date(booking.EventDate).toLocaleDateString('en-ZA', { month: 'short', day: 'numeric' })}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <User className="w-3 h-3" />
+                                  {booking.CustomerFullName}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <MapPin className="w-3 h-3" />
+                                  {booking.EventLocation}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <span className={`text-xs font-bold px-3 py-1 rounded-full ${booking.Status === 'Confirmed'
+                              ? 'bg-green-100 text-green-700 border border-green-300'
+                              : 'bg-orange-100 text-orange-700 border border-orange-300'
+                            }`}>
+                            {booking.Status}
+                          </span>
+                        </div>
+                      ))}
+                    {bookings.filter(b => new Date(b.EventDate) >= new Date() && (b.Status === 'Confirmed' || b.Status === 'Pending')).length === 0 && (
+                      <div className="text-center py-8 text-gray-500">
+                        <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-2" />
+                        <p>No upcoming bookings</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         )}
+
 
         {activeTab === 'services' && (
           <div className="bg-white rounded-xl shadow-md p-6">
@@ -516,8 +903,8 @@ export default function ServiceProviderDashboard() {
                       </div>
                       <div className="flex items-center gap-2">
                         <span className={`px-3 py-1 rounded-full text-xs font-semibold ${service.isActive || service.status === 'Active'
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-gray-100 text-gray-800'
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-gray-100 text-gray-800'
                           }`}>
                           {service.isActive || service.status === 'Active' ? 'Active' : 'Inactive'}
                         </span>

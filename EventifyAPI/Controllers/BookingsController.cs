@@ -79,6 +79,16 @@ namespace EventifyAPI.Controllers
 
             // Update status
             booking.Status = "Confirmed";
+
+            // Create notification for customer
+            await CreateNotificationAsync(
+                booking.UserId,
+                "Booking Confirmed! ",
+                $"Great news! Your booking for '{booking.Event.Name}' on {booking.Event.Date:MMM dd, yyyy} has been confirmed by {provider.BusinessName}.",
+                "booking",
+                bookingId
+            );
+
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Booking confirmed successfully.", status = booking.Status });
@@ -112,6 +122,16 @@ namespace EventifyAPI.Controllers
 
             // Update status
             booking.Status = "Declined";
+
+            // Create notification for customer
+            await CreateNotificationAsync(
+                booking.UserId,
+                "Booking Declined",
+                $"Unfortunately, your booking for '{booking.Event.Name}' on {booking.Event.Date:MMM dd, yyyy} has been declined by {provider.BusinessName}. Please try another provider.",
+                "booking",
+                bookingId
+            );
+
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Booking declined successfully.", status = booking.Status });
@@ -165,6 +185,8 @@ namespace EventifyAPI.Controllers
                     EventName = b.Event.Name,
                     EventDate = b.Event.Date,
                     EventLocation = b.Event.Location,
+                    StartTime = b.StartTime,
+                    EndTime = b.EndTime,
 
                     ProviderId = b.EventServiceProvider.EventServiceProviderId,
                     ProviderBusinessName = b.EventServiceProvider.BusinessName,
@@ -200,6 +222,8 @@ namespace EventifyAPI.Controllers
                     EventName = b.Event.Name,
                     EventDate = b.Event.Date,
                     EventLocation = b.Event.Location,
+                    StartTime = b.StartTime,
+                    EndTime = b.EndTime,
 
                     ProviderId = b.EventServiceProvider.EventServiceProviderId,
                     ProviderBusinessName = b.EventServiceProvider.BusinessName,
@@ -289,9 +313,90 @@ namespace EventifyAPI.Controllers
                 return BadRequest(new { message = "Cannot cancel booking for past events." });
 
             booking.Status = "Cancelled";
+
+            // Create notification for provider
+            await CreateNotificationAsync(
+                booking.EventServiceProvider.UserId,
+                "Booking Cancelled by Customer",
+                $"{booking.User.FullName} has cancelled their booking for '{booking.Event.Name}' scheduled for {booking.Event.Date:MMM dd, yyyy}.",
+                "cancellation",
+                bookingId
+            );
+
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Booking cancelled successfully.", status = booking.Status });
+        }
+
+        // ------------------ DELETE BOOKING (PROVIDER - for completed/cancelled bookings) ------------------
+        [Authorize(Roles = "EventServiceProvider")]
+        [HttpDelete("provider/{bookingId}")]
+        public async Task<IActionResult> DeleteBookingAsProvider(int bookingId)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var provider = await _context.EventServiceProviders
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (provider == null)
+                return Unauthorized(new { message = "Provider profile not found." });
+
+            var booking = await _context.Bookings
+                .FirstOrDefaultAsync(b => b.BookingId == bookingId &&
+                                          b.EventServiceProviderId == provider.EventServiceProviderId &&
+                                          (b.Status == "Completed" || b.Status == "Cancelled" || b.Status == "Declined"));
+
+            if (booking == null)
+                return NotFound(new { message = "Booking not found or cannot be deleted." });
+
+            _context.Bookings.Remove(booking);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Message = "Booking deleted successfully." });
+        }
+
+        // NEW: Complete Booking (mark as completed)
+        [Authorize(Roles = "EventServiceProvider")]
+        [HttpPut("{bookingId}/complete")]
+        public async Task<IActionResult> CompleteBooking(int bookingId)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var provider = await _context.EventServiceProviders
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (provider == null)
+                return Unauthorized(new { message = "Provider profile not found." });
+
+            var booking = await _context.Bookings
+                .Include(b => b.Event)
+                .Include(b => b.User)
+                .FirstOrDefaultAsync(b => b.BookingId == bookingId &&
+                                          b.EventServiceProviderId == provider.EventServiceProviderId);
+
+            if (booking == null)
+                return NotFound(new { message = "Booking not found or you don't have permission." });
+
+            if (booking.Status == "Completed")
+                return BadRequest(new { message = "Booking is already completed." });
+
+            if (booking.Status != "Confirmed")
+                return BadRequest(new { message = "Only confirmed bookings can be marked as completed." });
+
+            booking.Status = "Completed";
+
+            // Create notification for customer
+            await CreateNotificationAsync(
+                booking.UserId,
+                "Service Completed ",
+                $"Thank you for using {provider.BusinessName}! Your event '{booking.Event.Name}' has been completed. We'd love to hear your feedback!",
+                "booking",
+                bookingId
+            );
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Booking marked as completed.", status = booking.Status });
         }
 
         // ------------------ GET BOOKINGS FOR A SPECIFIC EVENT ------------------
@@ -325,6 +430,8 @@ namespace EventifyAPI.Controllers
                     EventName = b.Event.Name,
                     EventDate = b.Event.Date,
                     EventLocation = b.Event.Location,
+                    StartTime = b.StartTime,
+                    EndTime = b.EndTime,
 
                     ProviderId = b.EventServiceProviderId,
                     ProviderBusinessName = b.EventServiceProvider.BusinessName,
@@ -403,6 +510,8 @@ namespace EventifyAPI.Controllers
                     EventName = b.Event.Name,
                     EventDate = b.Event.Date,
                     EventLocation = b.Event.Location,
+                    StartTime = b.StartTime,
+                    EndTime = b.EndTime,
                     ProviderId = b.EventServiceProvider.EventServiceProviderId,
                     ProviderBusinessName = b.EventServiceProvider.BusinessName,
                     ProviderEmail = b.EventServiceProvider.User.Email,
@@ -420,6 +529,24 @@ namespace EventifyAPI.Controllers
                 TotalPages = totalPages,
                 Bookings = bookings
             });
+        }
+
+        // Add this private helper method at the bottom of your BookingsController class
+        private async Task CreateNotificationAsync(int userId, string title, string message, string type, int? relatedEntityId = null)
+        {
+            var notification = new Notification
+            {
+                UserId = userId,
+                Title = title,
+                Message = message,
+                Type = type,
+                RelatedEntityId = relatedEntityId,
+                IsRead = false,
+                SentAt = DateTime.UtcNow
+            };
+
+            _context.Notifications.Add(notification);
+            // Note: SaveChangesAsync will be called by the calling method
         }
 
     }
