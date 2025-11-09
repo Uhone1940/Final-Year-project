@@ -89,7 +89,7 @@ export default function AdminDashboard() {
 
       // Fetch all events with error handling
       try {
-        const eventsResponse = await apiClient.get('/api/Events/get-all-events');
+        const eventsResponse = await apiClient.get('/api/Events/admin/all-events');
         allEvents = eventsResponse.data;
         setEvents(allEvents);
         console.log('All events fetched:', allEvents);
@@ -100,7 +100,7 @@ export default function AdminDashboard() {
 
       // Fetch all providers with error handling
       try {
-        const providersResponse = await apiClient.get('/api/Providers');
+        const providersResponse = await apiClient.get('/api/Providers/get-all-providers');
         allProviders = providersResponse.data.items || providersResponse.data;
         setProviders(allProviders);
         console.log('All providers fetched:', allProviders);

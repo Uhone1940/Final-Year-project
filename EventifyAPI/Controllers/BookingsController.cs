@@ -318,7 +318,7 @@ namespace EventifyAPI.Controllers
                 return BadRequest(new { message = "Booking is already cancelled." });
 
             // Optional: Check if event date has passed
-            if (booking.Event.Date < DateTime.UtcNow)
+            if (booking.Event != null && booking.Event.Date < DateTime.UtcNow)
                 return BadRequest(new { message = "Cannot cancel booking for past events." });
 
             booking.Status = "Cancelled";
