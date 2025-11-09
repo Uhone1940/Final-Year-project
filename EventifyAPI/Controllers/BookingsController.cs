@@ -185,8 +185,10 @@ namespace EventifyAPI.Controllers
                     EventName = b.Event.Name,
                     EventDate = b.Event.Date,
                     EventLocation = b.Event.Location,
-                    StartTime = b.StartTime,
-                    EndTime = b.EndTime,
+                    StartTime = b.Event.StartTime,
+                    EndTime = b.Event.EndTime,
+                    EventType = b.Event.EventType,
+
 
                     ProviderId = b.EventServiceProvider.EventServiceProviderId,
                     ProviderBusinessName = b.EventServiceProvider.BusinessName,
@@ -194,7 +196,8 @@ namespace EventifyAPI.Controllers
 
                     CustomerId = b.User.UserId,
                     CustomerFullName = b.User.FullName,
-                    CustomerEmail = b.User.Email
+                    CustomerEmail = b.User.Email,
+                    
                 })
                 .ToListAsync();
 
@@ -222,8 +225,9 @@ namespace EventifyAPI.Controllers
                     EventName = b.Event.Name,
                     EventDate = b.Event.Date,
                     EventLocation = b.Event.Location,
-                    StartTime = b.StartTime,
-                    EndTime = b.EndTime,
+                    StartTime = b.Event.StartTime,
+                    EndTime = b.Event.EndTime,
+                    EventType = b.Event.EventType,
 
                     ProviderId = b.EventServiceProvider.EventServiceProviderId,
                     ProviderBusinessName = b.EventServiceProvider.BusinessName,
@@ -231,7 +235,8 @@ namespace EventifyAPI.Controllers
 
                     CustomerId = b.User.UserId,
                     CustomerFullName = b.User.FullName,
-                    CustomerEmail = b.User.Email
+                    CustomerEmail = b.User.Email,
+                    
                 })
                 .ToListAsync();
 
@@ -278,6 +283,9 @@ namespace EventifyAPI.Controllers
                 EventName = booking.Event.Name,
                 EventDate = booking.Event.Date,
                 EventLocation = booking.Event.Location,
+                StartTime = booking.Event.StartTime,
+                EndTime = booking.Event.EndTime,
+                EventType = booking.Event.EventType,
 
                 ProviderId = booking.EventServiceProvider.EventServiceProviderId,
                 ProviderBusinessName = booking.EventServiceProvider.BusinessName,
@@ -285,7 +293,8 @@ namespace EventifyAPI.Controllers
 
                 CustomerId = booking.User.UserId,
                 CustomerFullName = booking.User.FullName,
-                CustomerEmail = booking.User.Email
+                CustomerEmail = booking.User.Email,
+                
             };
 
             return Ok(response);
@@ -430,8 +439,9 @@ namespace EventifyAPI.Controllers
                     EventName = b.Event.Name,
                     EventDate = b.Event.Date,
                     EventLocation = b.Event.Location,
-                    StartTime = b.StartTime,
-                    EndTime = b.EndTime,
+                    StartTime = b.Event.StartTime,
+                    EndTime = b.Event.EndTime,
+                    EventType = b.Event.EventType,
 
                     ProviderId = b.EventServiceProviderId,
                     ProviderBusinessName = b.EventServiceProvider.BusinessName,
@@ -439,7 +449,8 @@ namespace EventifyAPI.Controllers
 
                     CustomerId = b.UserId,
                     CustomerFullName = b.User.FullName,
-                    CustomerEmail = b.User.Email
+                    CustomerEmail = b.User.Email,
+                    
                 })
                 .ToListAsync();
 
@@ -510,14 +521,16 @@ namespace EventifyAPI.Controllers
                     EventName = b.Event.Name,
                     EventDate = b.Event.Date,
                     EventLocation = b.Event.Location,
-                    StartTime = b.StartTime,
-                    EndTime = b.EndTime,
+                    StartTime = b.Event.StartTime,
+                    EndTime = b.Event.EndTime,
+                    EventType = b.Event.EventType,
                     ProviderId = b.EventServiceProvider.EventServiceProviderId,
                     ProviderBusinessName = b.EventServiceProvider.BusinessName,
                     ProviderEmail = b.EventServiceProvider.User.Email,
                     CustomerId = b.User.UserId,
                     CustomerFullName = b.User.FullName,
-                    CustomerEmail = b.User.Email
+                    CustomerEmail = b.User.Email,
+                    
                 })
                 .ToListAsync();
 

@@ -89,7 +89,7 @@ export default function AdminDashboard() {
 
       // Fetch all events with error handling
       try {
-        const eventsResponse = await apiClient.get('/api/Events');
+        const eventsResponse = await apiClient.get('/api/Events/get-all-events');
         allEvents = eventsResponse.data;
         setEvents(allEvents);
         console.log('All events fetched:', allEvents);

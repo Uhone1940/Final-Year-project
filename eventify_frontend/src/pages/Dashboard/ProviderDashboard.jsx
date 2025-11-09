@@ -143,15 +143,15 @@ export default function ServiceProviderDashboard() {
   const getFilteredBookings = () => {
     switch (bookingFilter) {
       case 'pending':
-        return bookings.filter(b => b.Status === 'Pending');
+        return bookings.filter(b => b.status === 'Pending');
       case 'confirmed':
-        return bookings.filter(b => b.Status === 'Confirmed');
+        return bookings.filter(b => b.status === 'Confirmed');
       case 'completed':
-        return bookings.filter(b => b.Status === 'Completed');
+        return bookings.filter(b => b.status === 'Completed');
       case 'cancelled':
-        return bookings.filter(b => b.Status === 'Cancelled' || b.Status === 'Declined');
+        return bookings.filter(b => b.status === 'Cancelled' || b.status === 'Declined');
       case 'active':
-        return bookings.filter(b => b.Status === 'Pending' || b.Status === 'Confirmed');
+        return bookings.filter(b => b.status === 'Pending' || b.status === 'Confirmed');
       default:
         return bookings;
     }
@@ -168,6 +168,7 @@ export default function ServiceProviderDashboard() {
     if (userStr) {
       try {
         const user = JSON.parse(userStr);
+        console.log('User Data:', user); // DEBUG
         setProviderId(user.id || user.providerId || user.userId);
       } catch (e) {
         console.error('Error parsing user data:', e);
@@ -176,6 +177,7 @@ export default function ServiceProviderDashboard() {
 
     // Check if user is authenticated
     const token = getStorageItem('token') || getStorageItem('authToken');
+    console.log('Token exists:', !!token); // DEBUG
     if (!token) {
       navigate('/login');
     }
@@ -188,17 +190,18 @@ export default function ServiceProviderDashboard() {
     try {
       // Fetch bookings
       const bookingsResponse = await apiClient.get('/api/Bookings/my-bookings');
+      console.log('Bookings Response:', bookingsResponse.data); // DEBUG
       const allBookings = bookingsResponse.data;
       setBookings(allBookings);
 
       // Fetch provider services
-      const servicesResponse = await apiClient.get('/ProviderServices/my-services');
-      const allServices = servicesResponse.data;
-      setServices(allServices);
+      //const servicesResponse = await apiClient.get('/ProviderServices/my-services');
+      //const allServices = servicesResponse.data;
+      //setServices(allServices);
 
       // Calculate stats
-      const pending = allBookings.filter(b => b.Status === 'Pending').length;
-      const confirmed = allBookings.filter(b => b.Status === 'Confirmed');
+      const pending = allBookings.filter(b => b.status === 'Pending').length;
+      const confirmed = allBookings.filter(b => b.status === 'Confirmed');
 
       // Calculate monthly earnings (sum of confirmed bookings)
       const monthlyEarnings = confirmed.reduce((sum, booking) => {
@@ -206,12 +209,13 @@ export default function ServiceProviderDashboard() {
       }, 0);
 
       // Calculate average rating from services
-      const totalRating = allServices.reduce((sum, service) => sum + (service.rating || 0), 0);
-      const avgRating = allServices.length > 0 ? (totalRating / allServices.length).toFixed(1) : 0;
+      //const totalRating = allServices.reduce((sum, service) => sum + (service.rating || 0), 0);
+      //const avgRating = allServices.length > 0 ? (totalRating / allServices.length).toFixed(1) : 0;
 
       // Fetch notifications
       try {
-        const notificationsResponse = await apiClient.get('/Notifications/me');
+        const notificationsResponse = await apiClient.get('/api/Notifications/me');
+        console.log('Notifications Response:', notificationsResponse.data); // DEBUG
         setNotifications(notificationsResponse.data);
       } catch (error) {
         console.log('Notifications not available:', error);
@@ -221,12 +225,13 @@ export default function ServiceProviderDashboard() {
       setStats({
         pendingBookings: pending,
         monthlyEarnings: monthlyEarnings,
-        averageRating: parseFloat(avgRating),
-        activeServices: allServices.filter(s => s.isActive || s.status === 'Active').length,
+        averageRating: 0,
+        activeServices: 0,
       });
 
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
+      console.error('Error details:', error.response?.data); // DEBUG
       if (error.response?.status === 401) {
         handleLogout();
       }
@@ -360,9 +365,9 @@ export default function ServiceProviderDashboard() {
                   className="relative text-gray-600 hover:text-purple-600 transition-colors p-2 rounded-lg hover:bg-purple-50"
                 >
                   <Bell className="w-6 h-6" />
-                  {notifications.filter(n => !n.IsRead).length > 0 && (
+                  {notifications.filter(n => !n.isRead).length > 0 && (
                     <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold animate-pulse">
-                      {notifications.filter(n => !n.IsRead).length}
+                      {notifications.filter(n => !n.isRead).length}
                     </span>
                   )}
                 </button>
@@ -383,9 +388,9 @@ export default function ServiceProviderDashboard() {
                       </div>
                       <div className="flex items-center justify-between text-sm">
                         <p className="text-gray-600">
-                          {notifications.filter(n => !n.IsRead).length} unread
+                          {notifications.filter(n => !n.isRead).length} unread
                         </p>
-                        {notifications.filter(n => !n.IsRead).length > 0 && (
+                        {notifications.filter(n => !n.isRead).length > 0 && (
                           <button
                             onClick={markAllNotificationsAsRead}
                             className="text-purple-600 hover:text-purple-700 font-medium"
@@ -407,13 +412,13 @@ export default function ServiceProviderDashboard() {
                       ) : (
                         notifications.slice(0, 20).map((notification) => (
                           <div
-                            key={notification.NotificationId}
+                            key={notification.notificationId}
                             onClick={() => {
-                              if (!notification.IsRead) {
-                                markNotificationAsRead(notification.NotificationId);
+                              if (!notification.isRead) {
+                                markNotificationAsRead(notification.notificationId);
                               }
                             }}
-                            className={`p-4 hover:bg-gray-50 cursor-pointer transition-all ${!notification.IsRead ? 'bg-purple-50 border-l-4 border-purple-500' : ''
+                            className={`p-4 hover:bg-gray-50 cursor-pointer transition-all ${!notification.isRead ? 'bg-purple-50 border-l-4 border-purple-500' : ''
                               }`}
                           >
                             <div className="flex items-start gap-3">
@@ -439,15 +444,15 @@ export default function ServiceProviderDashboard() {
 
                               {/* Content */}
                               <div className="flex-1 min-w-0">
-                                <p className={`text-sm ${!notification.IsRead ? 'font-bold text-gray-900' : 'font-semibold text-gray-800'}`}>
-                                  {notification.Title}
+                                <p className={`text-sm ${!notification.isRead ? 'font-bold text-gray-900' : 'font-semibold text-gray-800'}`}>
+                                  {notification.title}
                                 </p>
                                 <p className="text-gray-600 text-xs mt-1 line-clamp-2">
-                                  {notification.Message}
+                                  {notification.message}
                                 </p>
                                 <p className="text-gray-400 text-xs mt-2 flex items-center gap-1">
                                   <Clock className="w-3 h-3" />
-                                  {new Date(notification.SentAt).toLocaleDateString('en-ZA', {
+                                  {new Date(notification.sentAt).toLocaleDateString('en-ZA', {
                                     month: 'short',
                                     day: 'numeric',
                                     hour: '2-digit',
@@ -457,7 +462,7 @@ export default function ServiceProviderDashboard() {
                               </div>
 
                               {/* Unread indicator */}
-                              {!notification.IsRead && (
+                              {!notification.isRead && (
                                 <div className="w-2 h-2 bg-purple-600 rounded-full flex-shrink-0 mt-2"></div>
                               )}
                             </div>
@@ -506,7 +511,7 @@ export default function ServiceProviderDashboard() {
                 <Clock className="w-5 h-5 text-orange-600" />
               </div>
             </div>
-            <div className="text-3xl font-bold text-orange-600">{stats.pendingBookings}</div>
+            <div className="text-3xl font-bold text-orange-600">{stats.pendingBookings || 0}</div>
             <p className="text-xs text-gray-500 mt-1">Awaiting response</p>
           </div>
 
@@ -517,7 +522,7 @@ export default function ServiceProviderDashboard() {
                 <DollarSign className="w-5 h-5 text-green-600" />
               </div>
             </div>
-            <div className="text-3xl font-bold text-green-600">R{stats.monthlyEarnings.toFixed(2)}</div>
+            <div className="text-3xl font-bold text-green-600">R{(stats.monthlyEarnings|| 0).toFixed(2)}</div>
             <p className="text-xs text-gray-500 mt-1">This month's revenue</p>
           </div>
 
@@ -528,7 +533,7 @@ export default function ServiceProviderDashboard() {
                 <Star className="w-5 h-5 text-yellow-600" />
               </div>
             </div>
-            <div className="text-3xl font-bold text-yellow-600">{stats.averageRating}</div>
+            <div className="text-3xl font-bold text-yellow-600">{(stats.averageRating || 0).toFixed(1)}</div>
             <p className="text-xs text-gray-500 mt-1">Based on reviews</p>
           </div>
 
@@ -539,7 +544,7 @@ export default function ServiceProviderDashboard() {
                 <TrendingUp className="w-5 h-5 text-purple-600" />
               </div>
             </div>
-            <div className="text-3xl font-bold text-purple-600">{stats.activeServices}</div>
+            <div className="text-3xl font-bold text-purple-600">{stats.activeServices || 0}</div>
             <p className="text-xs text-gray-500 mt-1">Services available</p>
           </div>
         </div>
@@ -592,7 +597,7 @@ export default function ServiceProviderDashboard() {
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
                   >
-                    Active ({bookings.filter(b => b.Status === 'Pending' || b.Status === 'Confirmed').length})
+                    Active ({bookings.filter(b => b.status === 'Pending' || b.status === 'Confirmed').length})
                   </button>
                   <button
                     onClick={() => setBookingFilter('pending')}
@@ -601,7 +606,7 @@ export default function ServiceProviderDashboard() {
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
                   >
-                    Pending ({bookings.filter(b => b.Status === 'Pending').length})
+                    Pending ({bookings.filter(b => b.status === 'Pending').length})
                   </button>
                   <button
                     onClick={() => setBookingFilter('confirmed')}
@@ -610,7 +615,7 @@ export default function ServiceProviderDashboard() {
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
                   >
-                    Confirmed ({bookings.filter(b => b.Status === 'Confirmed').length})
+                    Confirmed ({bookings.filter(b => b.status === 'Confirmed').length})
                   </button>
                   <button
                     onClick={() => setBookingFilter('completed')}
@@ -619,7 +624,7 @@ export default function ServiceProviderDashboard() {
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
                   >
-                    Completed ({bookings.filter(b => b.Status === 'Completed').length})
+                    Completed ({bookings.filter(b => b.status === 'Completed').length})
                   </button>
                   <button
                     onClick={() => setBookingFilter('cancelled')}
@@ -628,7 +633,7 @@ export default function ServiceProviderDashboard() {
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
                   >
-                    Cancelled ({bookings.filter(b => b.Status === 'Cancelled' || b.Status === 'Declined').length})
+                    Cancelled ({bookings.filter(b => b.status === 'Cancelled' || b.status === 'Declined').length})
                   </button>
                   <button
                     onClick={() => setBookingFilter('all')}
@@ -668,10 +673,10 @@ export default function ServiceProviderDashboard() {
                 <div className="space-y-4">
                   {getFilteredBookings().map((booking) => (
                     <div
-                      key={booking.BookingId}
-                      className={`border-2 rounded-lg p-5 transition-all ${booking.Status === 'Pending' ? 'border-orange-200 bg-orange-50' :
-                        booking.Status === 'Confirmed' ? 'border-green-200 bg-green-50' :
-                          booking.Status === 'Completed' ? 'border-blue-200 bg-blue-50' :
+                      key={booking.bookingId}
+                      className={`border-2 rounded-lg p-5 transition-all ${booking.status === 'Pending' ? 'border-orange-200 bg-orange-50' :
+                        booking.status === 'Confirmed' ? 'border-green-200 bg-green-50' :
+                          booking.status === 'Completed' ? 'border-blue-200 bg-blue-50' :
                             'border-gray-200 bg-gray-50'
                         }`}
                     >
@@ -679,10 +684,10 @@ export default function ServiceProviderDashboard() {
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-3">
                             <h4 className="font-bold text-gray-800 text-lg">
-                              {booking.EventName || 'Event Booking'}
+                              {booking.eventName || 'Event Booking'}
                             </h4>
-                            <span className={`px-3 py-1 rounded-full text-xs font-bold border-2 ${getStatusBadgeClass(booking.Status)}`}>
-                              {booking.Status}
+                            <span className={`px-3 py-1 rounded-full text-xs font-bold border-2 ${getStatusBadgeClass(booking.status)}`}>
+                              {booking.status}
                             </span>
                           </div>
 
@@ -690,16 +695,16 @@ export default function ServiceProviderDashboard() {
                             <div className="flex items-center gap-2 text-gray-700">
                               <User className="w-4 h-4 text-gray-400" />
                               <span className="font-medium">Customer:</span>
-                              <span>{booking.CustomerFullName || booking.CustomerEmail}</span>
+                              <span>{booking.customerFullName || booking.customerEmail}</span>
                             </div>
                             <div className="flex items-center gap-2 text-gray-700">
                               <Mail className="w-4 h-4 text-gray-400" />
-                              <span>{booking.CustomerEmail}</span>
+                              <span>{booking.customerEmail}</span>
                             </div>
                             <div className="flex items-center gap-2 text-gray-700">
                               <Calendar className="w-4 h-4 text-gray-400" />
                               <span className="font-medium">Event Date:</span>
-                              <span>{new Date(booking.EventDate).toLocaleDateString('en-ZA', {
+                              <span>{new Date(booking.eventDate).toLocaleDateString('en-ZA', {
                                 weekday: 'short',
                                 year: 'numeric',
                                 month: 'short',
@@ -709,21 +714,21 @@ export default function ServiceProviderDashboard() {
                             <div className="flex items-center gap-2 text-gray-700">
                               <Clock className="w-4 h-4 text-gray-400" />
                               <span>
-                                {booking.StartTime
-                                  ? `${booking.StartTime}${booking.EndTime ? ` - ${booking.EndTime}` : ''}`
-                                  : new Date(booking.EventDate).toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' })}
+                                {booking.startTime
+                                  ? `${booking.startTime}${booking.endTime ? ` - ${booking.endTime}` : ''}`
+                                  : new Date(booking.eventDate).toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' })}
                               </span>
                             </div>
                             <div className="flex items-center gap-2 text-gray-700 md:col-span-2">
                               <MapPin className="w-4 h-4 text-gray-400" />
                               <span className="font-medium">Location:</span>
-                              <span>{booking.EventLocation || 'Location TBD'}</span>
+                              <span>{booking.eventLocation || 'Location TBD'}</span>
                             </div>
-                            {booking.TotalCost && (
+                            {booking.totalCost && (
                               <div className="flex items-center gap-2 text-gray-700">
                                 <DollarSign className="w-4 h-4 text-gray-400" />
                                 <span className="font-medium">Amount:</span>
-                                <span className="font-bold text-green-600">R{parseFloat(booking.TotalCost).toFixed(2)}</span>
+                                <span className="font-bold text-green-600">R{parseFloat(booking.totalCost).toFixed(2)}</span>
                               </div>
                             )}
                           </div>
@@ -731,10 +736,10 @@ export default function ServiceProviderDashboard() {
 
                         {/* Action Buttons */}
                         <div className="flex items-center gap-2 ml-4">
-                          {booking.Status === 'Pending' && (
+                          {booking.status === 'Pending' && (
                             <>
                               <button
-                                onClick={() => handleBookingAction(booking.BookingId, 'decline')}
+                                onClick={() => handleBookingAction(booking.bookingId, 'decline')}
                                 className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 flex items-center gap-2 transition-all"
                                 title="Decline this booking"
                               >
@@ -742,7 +747,7 @@ export default function ServiceProviderDashboard() {
                                 Decline
                               </button>
                               <button
-                                onClick={() => handleBookingAction(booking.BookingId, 'accept')}
+                                onClick={() => handleBookingAction(booking.bookingId, 'accept')}
                                 className="px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:opacity-90 flex items-center gap-2 transition-all"
                                 title="Accept this booking"
                               >
@@ -752,12 +757,12 @@ export default function ServiceProviderDashboard() {
                             </>
                           )}
 
-                          {booking.Status === 'Confirmed' && (
+                          {booking.status === 'Confirmed' && (
                             <>
                               <button
                                 onClick={async () => {
                                   try {
-                                    await apiClient.put(`/api/Bookings/${booking.BookingId}/complete`);
+                                    await apiClient.put(`/api/Bookings/${booking.bookingId}/complete`);
                                     fetchDashboardData();
                                     alert('Booking marked as completed!');
                                   } catch (error) {
@@ -772,14 +777,14 @@ export default function ServiceProviderDashboard() {
                                 Complete
                               </button>
                               <button
-                                onClick={() => window.location.href = `mailto:${booking.CustomerEmail}`}
+                                onClick={() => window.location.href = `mailto:${booking.customerEmail}`}
                                 className="px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 flex items-center gap-2"
                                 title="Email customer"
                               >
                                 <Mail className="w-4 h-4" />
                               </button>
                               <button
-                                onClick={() => window.location.href = `tel:${booking.CustomerEmail}`}
+                                onClick={() => window.location.href = `tel:${booking.customerEmail}`}
                                 className="px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 flex items-center gap-2"
                                 title="Contact customer"
                               >
@@ -788,9 +793,9 @@ export default function ServiceProviderDashboard() {
                             </>
                           )}
 
-                          {(booking.Status === 'Completed' || booking.Status === 'Cancelled' || booking.Status === 'Declined') && (
+                          {(booking.status === 'Completed' || booking.status === 'Cancelled' || booking.status === 'Declined') && (
                             <button
-                              onClick={() => setShowDeleteConfirm(booking.BookingId)}
+                              onClick={() => setShowDeleteConfirm(booking.bookingId)}
                               className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 flex items-center gap-2 transition-all"
                               title="Delete from history"
                             >
@@ -889,8 +894,8 @@ export default function ServiceProviderDashboard() {
                     const dateStr = date.toISOString().split('T')[0];
                     const availability = availabilities.find(a => a.AvailableDate.split('T')[0] === dateStr);
                     const hasBooking = bookings.some(b =>
-                      b.EventDate && b.EventDate.split('T')[0] === dateStr &&
-                      (b.Status === 'Confirmed' || b.Status === 'Pending')
+                      b.eventDate && b.eventDate.split('T')[0] === dateStr &&
+                      (b.status === 'Confirmed' || b.status === 'Pending')
                     );
                     const isPast = date < new Date(new Date().setHours(0, 0, 0, 0));
                     const isToday = dateStr === new Date().toISOString().split('T')[0];
@@ -901,10 +906,10 @@ export default function ServiceProviderDashboard() {
                         onClick={() => {
                           if (isPast) return;
                           if (availability) {
-                            if (availability.IsBooked) {
+                            if (availability.isBooked) {
                               alert('Cannot remove availability for a booked date');
                             } else {
-                              deleteAvailability(availability.AvailabilityId);
+                              deleteAvailability(availability.availabilityId);
                             }
                           } else {
                             createAvailability(date);
@@ -913,7 +918,7 @@ export default function ServiceProviderDashboard() {
                         disabled={isPast}
                         className={`aspect-square rounded-lg border-2 p-2 text-sm font-semibold transition-all relative ${isPast
                           ? 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
-                          : availability?.IsBooked
+                          : availability?.isBooked
                             ? 'bg-red-100 border-red-300 text-red-700 cursor-not-allowed'
                             : availability
                               ? 'bg-green-100 border-green-400 text-green-800 hover:bg-green-200'
@@ -923,7 +928,7 @@ export default function ServiceProviderDashboard() {
                           } ${isToday ? 'ring-2 ring-purple-600' : ''}`}
                         title={
                           isPast ? 'Past date' :
-                            availability?.IsBooked ? 'Booked (cannot be removed)' :
+                            availability?.isBooked ? 'Booked (cannot be removed)' :
                               availability ? 'Click to remove availability' :
                                 hasBooking ? 'Has pending/confirmed booking' :
                                   'Click to add availability'
@@ -932,7 +937,7 @@ export default function ServiceProviderDashboard() {
                         <div className="text-center">
                           {date.getDate()}
                         </div>
-                        {hasBooking && !availability?.IsBooked && (
+                        {hasBooking && !availability?.isBooked && (
                           <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2">
                             <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
                           </div>
@@ -976,40 +981,40 @@ export default function ServiceProviderDashboard() {
                   </h3>
                   <div className="space-y-2 max-h-64 overflow-y-auto">
                     {bookings
-                      .filter(b => new Date(b.EventDate) >= new Date() && (b.Status === 'Confirmed' || b.Status === 'Pending'))
-                      .sort((a, b) => new Date(a.EventDate) - new Date(b.EventDate))
+                      .filter(b => new Date(b.eventDate) >= new Date() && (b.status === 'Confirmed' || b.status === 'Pending'))
+                      .sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate))
                       .slice(0, 10)
                       .map(booking => (
-                        <div key={booking.BookingId} className="flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-200 hover:shadow-md transition-all">
+                        <div key={booking.bookingId} className="flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-200 hover:shadow-md transition-all">
                           <div className="flex items-center gap-3">
-                            <div className={`w-2 h-2 rounded-full ${booking.Status === 'Confirmed' ? 'bg-green-500' : 'bg-orange-500'}`}></div>
+                            <div className={`w-2 h-2 rounded-full ${booking.status === 'Confirmed' ? 'bg-green-500' : 'bg-orange-500'}`}></div>
                             <div>
-                              <p className="font-semibold text-gray-800 text-sm">{booking.EventName}</p>
+                              <p className="font-semibold text-gray-800 text-sm">{booking.eventName}</p>
                               <div className="flex items-center gap-4 text-xs text-gray-600 mt-1">
                                 <span className="flex items-center gap-1">
                                   <Calendar className="w-3 h-3" />
-                                  {new Date(booking.EventDate).toLocaleDateString('en-ZA', { month: 'short', day: 'numeric' })}
+                                  {new Date(booking.eventDate).toLocaleDateString('en-ZA', { month: 'short', day: 'numeric' })}
                                 </span>
                                 <span className="flex items-center gap-1">
                                   <User className="w-3 h-3" />
-                                  {booking.CustomerFullName}
+                                  {booking.customerFullName}
                                 </span>
                                 <span className="flex items-center gap-1">
                                   <MapPin className="w-3 h-3" />
-                                  {booking.EventLocation}
+                                  {booking.eventLocation}
                                 </span>
                               </div>
                             </div>
                           </div>
-                          <span className={`text-xs font-bold px-3 py-1 rounded-full ${booking.Status === 'Confirmed'
+                          <span className={`text-xs font-bold px-3 py-1 rounded-full ${booking.status === 'Confirmed'
                             ? 'bg-green-100 text-green-700 border border-green-300'
                             : 'bg-orange-100 text-orange-700 border border-orange-300'
                             }`}>
-                            {booking.Status}
+                            {booking.status}
                           </span>
                         </div>
                       ))}
-                    {bookings.filter(b => new Date(b.EventDate) >= new Date() && (b.Status === 'Confirmed' || b.Status === 'Pending')).length === 0 && (
+                    {bookings.filter(b => new Date(b.eventDate) >= new Date() && (b.status === 'Confirmed' || b.status === 'Pending')).length === 0 && (
                       <div className="text-center py-8 text-gray-500">
                         <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-2" />
                         <p>No upcoming bookings</p>
