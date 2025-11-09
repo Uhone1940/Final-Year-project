@@ -26,6 +26,7 @@ export default function CreateEventForm() {
     address: '',
     guestCount: 0,
     description: '',
+    serviceCategoryIds: []
   });
 
   // Fetch service categories from backend on mount
