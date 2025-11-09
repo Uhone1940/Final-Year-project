@@ -19,7 +19,11 @@ import {
   Bell,
   Plus,
   Edit,
-  Package
+  Package,
+  Filter,
+  History,
+  Trash2,
+  AlertCircle
 } from 'lucide-react';
 
 // Helper function to get data from either localStorage or sessionStorage
@@ -49,6 +53,9 @@ export default function ServiceProviderDashboard() {
   const [availabilities, setAvailabilities] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(new Date());
   const [loadingCalendar, setLoadingCalendar] = useState(false);
+  const [showNotificationPanel, setShowNotificationPanel] = useState(false);
+
+
 
   // Fetch availabilities
   const fetchAvailabilities = async () => {
@@ -190,8 +197,8 @@ export default function ServiceProviderDashboard() {
       setServices(allServices);
 
       // Calculate stats
-      const pending = allBookings.filter(b => b.status === 'Pending').length;
-      const confirmed = allBookings.filter(b => b.status === 'Confirmed');
+      const pending = allBookings.filter(b => b.Status === 'Pending').length;
+      const confirmed = allBookings.filter(b => b.Status === 'Confirmed');
 
       // Calculate monthly earnings (sum of confirmed bookings)
       const monthlyEarnings = confirmed.reduce((sum, booking) => {
@@ -227,6 +234,38 @@ export default function ServiceProviderDashboard() {
       setLoading(false);
     }
   };
+
+  // Update markNotificationAsRead to use correct endpoint
+  const markNotificationAsRead = async (notificationId) => {
+    try {
+      await apiClient.put(`/api/Notifications/${notificationId}/mark-read`);
+      fetchDashboardData();
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
+  };
+
+  const markAllNotificationsAsRead = async () => {
+    try {
+      await apiClient.put('/api/Notifications/mark-all-read');
+      fetchDashboardData();
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+    }
+  };
+
+  // Add click outside handler
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showNotificationPanel && !event.target.closest('.notification-panel')) {
+        setShowNotificationPanel(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showNotificationPanel]);
+
 
   const handleLogout = () => {
     removeStorageItem('token');
@@ -271,9 +310,6 @@ export default function ServiceProviderDashboard() {
     }
   };
 
-  const pendingBookings = bookings.filter(b => b.status === 'Pending');
-  const confirmedBookings = bookings.filter(b => b.status === 'Confirmed');
-
   const handleDeleteBooking = async (bookingId) => {
     try {
       // Use the provider-specific delete endpoint
@@ -288,6 +324,7 @@ export default function ServiceProviderDashboard() {
       alert(errorMsg);
     }
   };
+
 
   if (loading) {
     return (
@@ -316,17 +353,137 @@ export default function ServiceProviderDashboard() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <button
-                onClick={() => navigate('/notifications')}
-                className="relative text-gray-600 hover:text-purple-600 transition-colors"
-              >
-                <Bell className="w-6 h-6" />
-                {notifications.filter(n => !n.isRead).length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {notifications.filter(n => !n.isRead).length}
-                  </span>
+              {/* Enhanced Notification Panel */}
+              <div className="relative notification-panel">
+                <button
+                  onClick={() => setShowNotificationPanel(!showNotificationPanel)}
+                  className="relative text-gray-600 hover:text-purple-600 transition-colors p-2 rounded-lg hover:bg-purple-50"
+                >
+                  <Bell className="w-6 h-6" />
+                  {notifications.filter(n => !n.IsRead).length > 0 && (
+                    <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold animate-pulse">
+                      {notifications.filter(n => !n.IsRead).length}
+                    </span>
+                  )}
+                </button>
+
+                {/* Notification Dropdown */}
+                {showNotificationPanel && (
+                  <div className="absolute right-0 mt-2 w-96 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 max-h-[32rem] overflow-hidden">
+                    {/* Header */}
+                    <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-purple-50 to-pink-50">
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-bold text-gray-800 text-lg">Notifications</h3>
+                        <button
+                          onClick={() => setShowNotificationPanel(false)}
+                          className="text-gray-500 hover:text-gray-700"
+                        >
+                          <XCircle className="w-5 h-5" />
+                        </button>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <p className="text-gray-600">
+                          {notifications.filter(n => !n.IsRead).length} unread
+                        </p>
+                        {notifications.filter(n => !n.IsRead).length > 0 && (
+                          <button
+                            onClick={markAllNotificationsAsRead}
+                            className="text-purple-600 hover:text-purple-700 font-medium"
+                          >
+                            Mark all as read
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Notifications List */}
+                    <div className="divide-y divide-gray-100 overflow-y-auto max-h-96">
+                      {notifications.length === 0 ? (
+                        <div className="p-8 text-center">
+                          <Bell className="w-16 h-16 text-gray-300 mx-auto mb-3" />
+                          <p className="text-gray-500 font-medium">No notifications yet</p>
+                          <p className="text-gray-400 text-sm mt-1">We'll notify you about bookings and reviews</p>
+                        </div>
+                      ) : (
+                        notifications.slice(0, 20).map((notification) => (
+                          <div
+                            key={notification.NotificationId}
+                            onClick={() => {
+                              if (!notification.IsRead) {
+                                markNotificationAsRead(notification.NotificationId);
+                              }
+                            }}
+                            className={`p-4 hover:bg-gray-50 cursor-pointer transition-all ${!notification.IsRead ? 'bg-purple-50 border-l-4 border-purple-500' : ''
+                              }`}
+                          >
+                            <div className="flex items-start gap-3">
+                              {/* Icon based on type */}
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${notification.Type === 'review'
+                                ? 'bg-yellow-100'
+                                : notification.Type === 'cancellation'
+                                  ? 'bg-red-100'
+                                  : notification.Type === 'booking'
+                                    ? 'bg-green-100'
+                                    : 'bg-purple-100'
+                                }`}>
+                                {notification.Type === 'review' ? (
+                                  <Star className="w-5 h-5 text-yellow-600" />
+                                ) : notification.Type === 'cancellation' ? (
+                                  <XCircle className="w-5 h-5 text-red-600" />
+                                ) : notification.Type === 'booking' ? (
+                                  <CheckCircle className="w-5 h-5 text-green-600" />
+                                ) : (
+                                  <Bell className="w-5 h-5 text-purple-600" />
+                                )}
+                              </div>
+
+                              {/* Content */}
+                              <div className="flex-1 min-w-0">
+                                <p className={`text-sm ${!notification.IsRead ? 'font-bold text-gray-900' : 'font-semibold text-gray-800'}`}>
+                                  {notification.Title}
+                                </p>
+                                <p className="text-gray-600 text-xs mt-1 line-clamp-2">
+                                  {notification.Message}
+                                </p>
+                                <p className="text-gray-400 text-xs mt-2 flex items-center gap-1">
+                                  <Clock className="w-3 h-3" />
+                                  {new Date(notification.SentAt).toLocaleDateString('en-ZA', {
+                                    month: 'short',
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                  })}
+                                </p>
+                              </div>
+
+                              {/* Unread indicator */}
+                              {!notification.IsRead && (
+                                <div className="w-2 h-2 bg-purple-600 rounded-full flex-shrink-0 mt-2"></div>
+                              )}
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+
+                    {/* Footer */}
+                    {notifications.length > 0 && (
+                      <div className="p-3 border-t border-gray-200 bg-gray-50 text-center">
+                        <button
+                          onClick={() => {
+                            setShowNotificationPanel(false);
+                            navigate('/notifications');
+                          }}
+                          className="text-purple-600 text-sm font-semibold hover:text-purple-700"
+                        >
+                          View All Notifications →
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 )}
-              </button>
+              </div>
+
               <button
                 onClick={() => navigate('/update-profile')}
                 className="px-4 py-2 border border-purple-300 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 flex items-center gap-2 transition-all"
@@ -598,11 +755,21 @@ export default function ServiceProviderDashboard() {
                           {booking.Status === 'Confirmed' && (
                             <>
                               <button
-                                onClick={() => window.location.href = `tel:${booking.CustomerEmail}`}
-                                className="px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 flex items-center gap-2"
-                                title="Contact customer"
+                                onClick={async () => {
+                                  try {
+                                    await apiClient.put(`/api/Bookings/${booking.BookingId}/complete`);
+                                    fetchDashboardData();
+                                    alert('Booking marked as completed!');
+                                  } catch (error) {
+                                    console.error('Error completing booking:', error);
+                                    alert('Failed to mark booking as completed.');
+                                  }
+                                }}
+                                className="px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:opacity-90 flex items-center gap-2"
+                                title="Mark as completed"
                               >
-                                <Phone className="w-4 h-4" />
+                                <CheckCircle className="w-4 h-4" />
+                                Complete
                               </button>
                               <button
                                 onClick={() => window.location.href = `mailto:${booking.CustomerEmail}`}
@@ -610,6 +777,13 @@ export default function ServiceProviderDashboard() {
                                 title="Email customer"
                               >
                                 <Mail className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => window.location.href = `tel:${booking.CustomerEmail}`}
+                                className="px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 flex items-center gap-2"
+                                title="Contact customer"
+                              >
+                                <Phone className="w-4 h-4" />
                               </button>
                             </>
                           )}
@@ -738,14 +912,14 @@ export default function ServiceProviderDashboard() {
                         }}
                         disabled={isPast}
                         className={`aspect-square rounded-lg border-2 p-2 text-sm font-semibold transition-all relative ${isPast
-                            ? 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
-                            : availability?.IsBooked
-                              ? 'bg-red-100 border-red-300 text-red-700 cursor-not-allowed'
-                              : availability
-                                ? 'bg-green-100 border-green-400 text-green-800 hover:bg-green-200'
-                                : hasBooking
-                                  ? 'bg-orange-100 border-orange-300 text-orange-700'
-                                  : 'bg-white border-gray-300 text-gray-700 hover:border-purple-400 hover:bg-purple-50'
+                          ? 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
+                          : availability?.IsBooked
+                            ? 'bg-red-100 border-red-300 text-red-700 cursor-not-allowed'
+                            : availability
+                              ? 'bg-green-100 border-green-400 text-green-800 hover:bg-green-200'
+                              : hasBooking
+                                ? 'bg-orange-100 border-orange-300 text-orange-700'
+                                : 'bg-white border-gray-300 text-gray-700 hover:border-purple-400 hover:bg-purple-50'
                           } ${isToday ? 'ring-2 ring-purple-600' : ''}`}
                         title={
                           isPast ? 'Past date' :
@@ -828,8 +1002,8 @@ export default function ServiceProviderDashboard() {
                             </div>
                           </div>
                           <span className={`text-xs font-bold px-3 py-1 rounded-full ${booking.Status === 'Confirmed'
-                              ? 'bg-green-100 text-green-700 border border-green-300'
-                              : 'bg-orange-100 text-orange-700 border border-orange-300'
+                            ? 'bg-green-100 text-green-700 border border-green-300'
+                            : 'bg-orange-100 text-orange-700 border border-orange-300'
                             }`}>
                             {booking.Status}
                           </span>
