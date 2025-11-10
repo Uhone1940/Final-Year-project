@@ -58,10 +58,12 @@ export default function CustomerDashboard() {
 
   // Helper function to check if booking can be reviewed
   const canReviewBooking = (booking) => {
-    return (
-      booking.status === 'Confirmed' &&
-      isEventPast(booking.eventDate)
-    );
+    // Check if booking is confirmed AND event has passed
+    // OR if booking status is "Completed"
+    const isCompleted = booking.status === 'Completed';
+    const isConfirmedAndPast = booking.status === 'Confirmed' && isEventPast(booking.eventDate);
+
+    return isCompleted || isConfirmedAndPast;
   };
 
   // Data states
@@ -855,7 +857,10 @@ export default function CustomerDashboard() {
                             )}
                             {canReviewBooking(booking) && (
                               <button
-                                onClick={() => handleOpenReviewModal(booking)}
+                                onClick={() => {
+                                  console.log('Opening review modal for:', booking); // 🔍 DEBUG
+                                  handleOpenReviewModal(booking)
+                                }}
                                 className="flex items-center space-x-2 px-4 py-2 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100 transition-all"
                               >
                                 <Star className="w-4 h-4" />
