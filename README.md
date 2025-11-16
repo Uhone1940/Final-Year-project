@@ -128,9 +128,6 @@ A comprehensive `OnModelCreating` configuration ensures:
 ## 🏗️ Installation & Setup
 
 ### 1️⃣ Clone repository
-```
-git clone https://github.com/yourusername/Eventify.git
-```
 
 ### 2️⃣ Navigate to API folder
 ```
