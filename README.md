@@ -106,6 +106,10 @@ A comprehensive `OnModelCreating` configuration ensures:
 
 ## 🖥️ Tech Stack
 
+### **Architecture**
+
+    React Frontend → ASP.NET Core REST API → SQL Server Database
+
 ### **Backend**
 - ASP.NET Core 8 Web API  
 - Entity Framework Core  
