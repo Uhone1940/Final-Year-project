@@ -60,7 +60,7 @@ Each provider has:
 - Status workflow: *Pending → Confirmed → Completed / Cancelled*  
 - Linked to payments and reviews  
 
-### 📌 **6. Payments** (to be implemented)
+### 📌 **6. Payments**
 - Linked directly to bookings  
 - Payment method  
 - Payment date  
